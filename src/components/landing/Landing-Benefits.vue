@@ -2,12 +2,8 @@
   <div class="landing-benefits">
     <div class="landing-benefits_row-1">
       <div class="landing-benefits_row-1_col-1">
-        <h2>Lerne effizienter mit KI-Unterstützung</h2>
-        <p>
-          Wir helfen dir, schneller zu verstehen, gezielt zu wiederholen und
-          dein Wissen aktiv zu festigen. So lernst du nicht nur effektiver,
-          sondern auch zeitsparender.
-        </p>
+        <h2>⚡ {{ heading }}</h2>
+        <p>{{ subheading }}</p>
       </div>
     </div>
 
@@ -32,6 +28,9 @@ export default {
   name: "BenefitsSection",
   data() {
     return {
+      heading: "Lerne effizienter mit KI-Unterstützung",
+      subheading:
+        "Wir helfen dir, schneller zu verstehen, gezielt zu wiederholen und dein Wissen aktiv zu festigen. So lernst du nicht nur effektiver, sondern auch zeitsparender.",
       benefits: [
         {
           title: "🚀 Schnelle Zusammenfassungen in wenigen Sekunden",

@@ -2,19 +2,27 @@
   <div class="landing-faq">
     <div class="landing-faq_row">
       <div class="landing-faq_row_col-1">
-        <h2>Hast du Fragen? Unsere FAQs helfen dir weiter!</h2>
-        <p>
-          Hier findest du Antworten auf die häufigsten Fragen rund um unser
-          Angebot.
-        </p>
+        <h2>🔍 {{ heading }}</h2>
+        <p>{{ subheading }}</p>
       </div>
       <div class="landing-faq_row_col-2">
-        <div class="faq-item" v-for="(faq, index) in faqs" :key="index">
+        <div
+          class="faq-item"
+          :class="{ active: activeIndex === index }"
+          v-for="(faq, index) in faqs"
+          :key="index"
+        >
           <div class="faq-question" @click="toggleFAQ(index)">
-            <h3>{{ faq.question }}</h3>
-            <span :class="{ rotated: activeIndex === index }"
-              ><i class="fa-solid fa-chevron-down"></i
-            ></span>
+            <h3>
+              {{ faq.question }}
+            </h3>
+            <i
+              :class="[
+                'fa-solid',
+                activeIndex === index ? 'fa-minus' : 'fa-plus',
+                'icon-transition',
+              ]"
+            ></i>
           </div>
           <div class="faq-answer" v-if="activeIndex === index">
             <p>{{ faq.answer }}</p>
@@ -30,6 +38,9 @@ export default {
   name: "FAQSection",
   data() {
     return {
+      heading: "Hast du Fragen? Unsere FAQs helfen dir weiter!",
+      subheading:
+        "Hier findest du Antworten auf die häufigsten Fragen rund um unser Angebot.",
       activeIndex: null,
       faqs: [
         {
@@ -61,7 +72,7 @@ export default {
         {
           question: "Bietet die Plattform Unterstützung für mehrere Sprachen?",
           answer:
-            "Zurzeit ist die Plattform auf die deutsche Sprache ausgerichtet. Wir planen jedoch, in Zukunft zusätzliche Sprachunterstützung anzubieten.",
+            "Zurzeit ist die Plattform auf die deutsche Sprache ausgerichtet. Zusätzliche Sprachunterstützung ist geplant.",
         },
       ],
     };
@@ -117,11 +128,16 @@ export default {
 }
 
 .faq-item {
-  margin: 0 0 25px 0;
-  padding: 0 0 7.5px 0;
+  padding: 15px;
   border-bottom: 1px solid #ccc;
-
+  box-sizing: border-box;
+  transition: transform 0.3s ease;
   cursor: pointer;
+
+  &.active {
+    background-color: $color-dark-blue;
+    color: #fff;
+  }
 }
 
 .faq-question {
@@ -129,18 +145,19 @@ export default {
   justify-content: space-between;
   align-items: center;
 
-  // margin: 0 0 5px 0;
-
   & h3 {
-    margin: 0 0 0 0;
+    margin: 0;
     padding: 0;
-    // font-weight: bold;
+  }
+
+  .icon-transition {
+    transition: transform 0.3s ease;
   }
 }
 
 .faq-answer {
   & p {
-    margin: 15px 0;
+    margin: 15px 0 25px 0;
     padding: 0;
     font-size: $font-size-p-lg;
     line-height: $line-height;

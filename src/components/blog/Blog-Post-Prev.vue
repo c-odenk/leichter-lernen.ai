@@ -42,7 +42,7 @@ export default {
   & img {
     width: 100%;
     height: auto;
-    border-bottom: 7.5px solid $color-orange;
+    border-bottom: 7.5px solid lighten($color-dark-blue, 15%);
 
     @include respond(tablet) {
       height: auto;
@@ -88,7 +88,7 @@ export default {
     line-height: $line-height;
     letter-spacing: $letter-spacing;
     font-weight: 500;
-    color: $color-orange;
+    color: lighten($color-dark-blue, 15%);
 
     @include respond(tablet) {
       padding: 0 20px;

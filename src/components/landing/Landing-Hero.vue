@@ -74,17 +74,20 @@ export default {
       & a {
         display: inline-block;
         margin: 0;
-        padding: 15px 50px;
-        font-size: 18px;
+        padding: 15px 60px;
         text-decoration: none;
-        font-weight: bold;
+        // font-weight: bold;
         // color: $color-orange;
-        color: #fff;
-        background-color: $color-orange;
+        // background-color: $color-orange;
         // background-color: $color-img-platzhalter;
         // background-color: $color-teal;
+        background-color: $color-dark-blue;
         border-radius: 8px;
         transition: background-color 0.3s ease;
+        font-size: $font-size-p-lg;
+        line-height: $line-height;
+        letter-spacing: $letter-spacing;
+        color: #fff;
 
         &:hover {
           // background-color: lighten($color-orange, 10%);

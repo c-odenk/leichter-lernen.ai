@@ -1,11 +1,8 @@
 <template>
   <div class="landing-cta">
     <div class="landing-cta_row">
-      <h2>Effizienter lernen, weniger Zeit verschwenden!</h2>
-      <p>
-        Nutze künstliche Intelligenz, um deine Lernzeit zu optimieren und Wissen
-        effizienter zu verinnerlichen.
-      </p>
+      <h2>⚡ {{ heading }}</h2>
+      <p>{{ subheading }}</p>
       <router-link to="/#"> Start now </router-link>
     </div>
   </div>
@@ -14,6 +11,13 @@
 <script>
 export default {
   name: "CTASection",
+  data() {
+    return {
+      heading: "Effizienter lernen, weniger Zeit verschwenden!",
+      subheading:
+        "Nutze künstliche Intelligenz, um deine Lernzeit zu optimieren und Wissen effizienter zu verinnerlichen.",
+    };
+  },
 };
 </script>
 
@@ -30,8 +34,7 @@ export default {
     padding: 190px 0;
     text-align: center;
     border-radius: 15px;
-
-    background-color: $color-orange;
+    background-color: $color-dark-blue;
 
     @include respond(laptop) {
     }
@@ -45,6 +48,7 @@ export default {
     & h2 {
       margin: 0;
       padding: 0;
+      color: #fff;
     }
 
     & p {
@@ -53,6 +57,7 @@ export default {
       font-size: $font-size-p-lg;
       line-height: $line-height;
       letter-spacing: $letter-spacing;
+      color: #fff;
     }
 
     & a {
@@ -61,14 +66,13 @@ export default {
       padding: 15px 50px;
       font-size: 18px;
       text-decoration: none;
-      font-weight: bold;
       color: #fff;
-      background-color: darken($color-orange, 10%);
+      background-color: $color-light-blue;
       border-radius: 8px;
       transition: background-color 0.3s ease;
 
       &:hover {
-        background-color: lighten($color-orange, 10%);
+        background-color: darken($color-light-blue, 10%);
       }
 
       @include respond(laptop) {

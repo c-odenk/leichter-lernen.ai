@@ -1,21 +1,21 @@
 <template>
   <div class="view-login">
-    <Header />
-    <h1>Login</h1>
-    <Footer />
+    <div class="view-login_row">
+      <div class="view-login_row_col-1"><LoginWallpaper /></div>
+      <div class="view-login_row_col-2"><LoginUserLogin /></div>
+    </div>
   </div>
 </template>
 
 <script>
-import Header from "@/components/header/Header.vue";
-
-import Footer from "@/components/footer/Footer.vue";
+import LoginWallpaper from "@/components/login/Login-Wallpaper.vue";
+import LoginUserLogin from "@/components/login/Login-User-Login.vue";
 
 export default {
   name: "ViewLogin",
   components: {
-    Header,
-    Footer,
+    LoginWallpaper,
+    LoginUserLogin,
   },
 };
 </script>
@@ -24,5 +24,20 @@ export default {
 @import "@/variables/Variables.scss";
 
 .view-login {
+  width: 100vw;
+  &_row {
+    display: flex;
+    flex-direction: row;
+
+    &_col-1 {
+      width: 50vw;
+      height: 100vh;
+    }
+
+    &_col-2 {
+      width: 50vw;
+      height: 100vh;
+    }
+  }
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="landing-testimonials">
     <div class="landing-testimonials_row">
-      <h2>{{ heading }}</h2>
+      <h2>💬 {{ heading }}</h2>
       <p>{{ paragraph }}</p>
 
       <div class="landing-testimonials_row_testimonials">

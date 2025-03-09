@@ -21,7 +21,8 @@ export default {
     width: $width-desktop;
     margin: 0 auto;
     height: 600px;
-    background-color: $color-orange;
+    background-color: $color-dark-blue;
+    border-radius: 15px;
 
     @include respond(laptop) {
     }
