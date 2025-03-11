@@ -90,7 +90,7 @@ $scale-ratio: 1.25;
 // Desktop/Large Screens
 $font-size-h1-logo-lg: 2.5rem; // Für das Logo auf großen Bildschirmen
 $font-size-h1-lg: 1.8rem; // Hauptüberschriften auf Desktop
-$font-size-h2-lg: 1.6rem; // Unterüberschriften auf Desktop
+$font-size-h2-lg: 1.4rem; // Unterüberschriften auf Desktop
 $font-size-h3-lg: 1.2rem; // Abschnittsüberschriften auf Desktop
 
 // Tablet/Medium Screens
@@ -223,9 +223,11 @@ $blog-post-padding-bottom: $spacing-lg;
 @mixin primary-button {
   @include button-base;
   background-color: $color-light-blue;
-  font-size: calc($font-size-p-lg - 2px);
+  font-size: calc($font-size-p-lg - 2.5px);
+  font-weight: 500;
   line-height: $line-height;
-  letter-spacing: $letter-spacing;
+  // letter-spacing: $letter-spacing;
+  letter-spacing: 1px;
   color: $color-text-white;
   padding: 15px 40px;
   border-radius: 10px;

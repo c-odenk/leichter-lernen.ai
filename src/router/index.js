@@ -42,6 +42,21 @@ const routes = [
     name: "Impressum",
     component: () => import("../views/View-Impressum.vue"),
   },
+  {
+    path: "/privacy",
+    name: "Privacy",
+    component: () => import("../views/View-Privacy.vue"),
+  },
+  {
+    path: "/terms",
+    name: "Terms",
+    component: () => import("../views/View-Terms.vue"),
+  },
+  {
+    path: "/pitch",
+    name: "Pitch",
+    component: () => import("../views/View-Pitch.vue"),
+  },
 ];
 
 const router = createRouter({

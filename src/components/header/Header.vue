@@ -123,7 +123,7 @@ export default {
 
         h2 {
           margin-left: $spacing-sm;
-          font-size: $font-size-h1-logo-lg;
+          font-size: 25px;
           line-height: $line-height;
           letter-spacing: $letter-spacing;
           color: $color-dark-blue;

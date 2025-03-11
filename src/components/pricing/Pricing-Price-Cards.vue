@@ -24,8 +24,11 @@
         <p>
           <span class="preis">{{ plan.price }}</span> {{ plan.priceModel }}
         </p>
-        <!-- Call-to-Action Button -->
-        <router-link to="/#"> Jetzt loslegen </router-link>
+        <!-- Call-to-Action Button, abhängig von der Verfügbarkeit -->
+        <span v-if="!plan.available" class="disabled-button"
+          >Bald verfügbar</span
+        >
+        <router-link v-else to="/login">Jetzt loslegen</router-link>
         <!-- Liste der Features für diesen Preisplan -->
         <ul>
           <li v-for="(feature, idx) in plan.features" :key="idx">
@@ -160,6 +163,8 @@ export default {
         top: -50px;
         right: -40px;
         transform: rotate(-15deg); // Leicht gedreht für visuellen Effekt
+
+        display: none;
       }
 
       /* Überschrift-Styling */
@@ -279,16 +284,34 @@ export default {
       &::before {
         content: "Beliebt";
         position: absolute;
-        top: -15px;
+        top: -20px;
         left: 50%;
         transform: translateX(-50%);
         background-color: $color-warning;
         color: $color-text-dark;
-        padding: 5px 15px;
+        padding: 10px 20px;
         border-radius: 20px;
-        font-size: 0.875rem;
+        // font-size: 0.875rem;
+        font-size: calc($font-size-p-lg - 5px);
         font-weight: 600;
       }
+    }
+
+    /* Styling für deaktivierten Button */
+    .disabled-button {
+      display: block;
+      width: 100%;
+      margin: 20px 0 50px 0;
+      padding: 12.5px 18px;
+      line-height: $line-height;
+      letter-spacing: $letter-spacing;
+      text-align: center;
+      text-transform: uppercase;
+      color: $color-text-white;
+      background-color: gray;
+      border-radius: 5px;
+      box-sizing: border-box;
+      cursor: not-allowed;
     }
   }
 }

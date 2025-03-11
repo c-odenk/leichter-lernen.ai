@@ -90,7 +90,8 @@ export default {
 
 .landing-faq {
   width: 100%;
-  margin: $spacing-xl $spacing-xs $spacing-xl $spacing-xs;
+  // margin: $spacing-xl $spacing-xs $spacing-xl $spacing-xs;
+  margin: calc($spacing-lg + 100px) 0;
 
   &__row {
     // @include content-container;
@@ -181,7 +182,7 @@ export default {
   &__title {
     margin: 0;
     padding: 0;
-    font-size: $font-size-h3-lg;
+    font-size: calc($font-size-h3-lg - 1px);
 
     @include respond(tablet) {
       font-size: $font-size-h3-md;

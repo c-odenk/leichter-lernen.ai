@@ -3,7 +3,7 @@
     <div class="landing-cta_row">
       <h2>⚡ {{ heading }}</h2>
       <p>{{ subheading }}</p>
-      <router-link to="/#"> Jetzt ausprobieren </router-link>
+      <router-link to="/login"> Jetzt ausprobieren </router-link>
     </div>
   </div>
 </template>
@@ -26,7 +26,7 @@ export default {
 
 .landing-cta {
   width: 100%;
-  margin: 100px 0;
+  margin: calc($spacing-lg + 0px) 0;
 
   &_row {
     @include content-container;

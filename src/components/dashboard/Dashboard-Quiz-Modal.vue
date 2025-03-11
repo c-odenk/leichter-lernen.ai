@@ -16,24 +16,27 @@
           {{ currentQuestion.question }}
         </h3>
         <form @submit.prevent="checkAnswer">
-          <div
-            v-for="(answer, index) in currentQuestion.answers"
-            :key="index"
-            class="answer-option"
-            :class="getAnswerClass(answer, index)"
-            @click="selectAnswer(index)"
-          >
-            <i :class="getIconClass(index)"></i>
-            <input
-              type="radio"
-              :id="'answer' + index"
-              :value="index"
-              v-model="selectedAnswer"
-              :disabled="answerChecked"
-              class="hidden-radio"
-            />
-            <label :for="'answer' + index">{{ answer.text }}</label>
-          </div>
+          <transition-group name="answer-fade" tag="div">
+            <div
+              v-for="(answer, index) in currentQuestion.answers"
+              :key="index"
+              class="answer-option"
+              :class="getAnswerClass(answer, index)"
+              @click="selectAnswer(index)"
+              :style="{ animationDelay: index * 0.1 + 's' }"
+            >
+              <i :class="getIconClass(index)"></i>
+              <input
+                type="radio"
+                :id="'answer' + index"
+                :value="index"
+                v-model="selectedAnswer"
+                :disabled="answerChecked"
+                class="hidden-radio"
+              />
+              <label :for="'answer' + index">{{ answer.text }}</label>
+            </div>
+          </transition-group>
         </form>
       </div>
       <div class="modal-footer">
@@ -159,93 +162,140 @@ export default {
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include flex-center;
+  z-index: 1000;
 }
 
 .dashboard-quiz-modal {
   width: 40vw;
-  height: auto;
-  background-color: white;
+  background-color: $color-text-white;
   margin: -100px 0 0 0;
-  //padding: 30px 30px 30px 30px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  border-radius: $border-radius-md;
+  box-shadow: $shadow-md;
   position: relative;
   box-sizing: border-box;
 
+  @include respond(laptop) {
+    width: 50vw;
+  }
+
+  @include respond(tablet) {
+    width: 70vw;
+  }
+
+  @include respond(phone) {
+    width: 90vw;
+  }
+
   .modal-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    @include flex-between;
     margin: 0;
-    padding: 30px 30px 0 30px;
+    padding: $spacing-md $spacing-md 0 $spacing-md;
 
     & p {
       margin: 0;
       padding: 0;
+      font-size: $font-size-p-lg;
+
+      @include respond(tablet) {
+        font-size: $font-size-p-md;
+      }
+
+      @include respond(phone) {
+        font-size: $font-size-p-sm;
+      }
 
       & .question-icon {
-        margin: 0 7.5px 0 0px;
+        margin: 0 $spacing-xs 0 0;
       }
 
       .score-display {
         display: none;
+
+        @include respond(tablet) {
+          display: inline-block;
+          margin-left: $spacing-sm;
+        }
       }
     }
 
     .close-icon {
       font-size: 1.1rem;
       cursor: pointer;
-      color: #333;
+      color: $color-text-dark;
+      transition: color $transition-speed-fast $transition-timing;
+
+      &:hover {
+        color: $color-danger;
+      }
     }
   }
 
   .quiz-content {
     margin: 0;
-    padding: 0 30px 0 30px;
+    padding: 0 $spacing-md;
     text-align: center;
 
     & h3 {
-      margin: 20px 0 30px 0;
+      margin: $spacing-md 0 $spacing-md 0;
       padding: 0;
       text-align: left;
+      font-size: $font-size-h3-lg;
+      color: $color-dark-blue;
+
+      @include respond(tablet) {
+        font-size: $font-size-h3-md;
+      }
+
+      @include respond(phone) {
+        font-size: $font-size-h3-sm;
+      }
     }
 
     .answer-option {
       display: flex;
       align-items: center;
-      margin: 10px 0;
-      padding: 15px;
-      border-radius: 10px;
+      margin: $spacing-xs 0;
+      padding: $spacing-sm;
+      border-radius: $border-radius-sm;
       cursor: pointer;
-      transition: all 0.2s ease;
-      border: 2px solid transparent;
-      border: 1px solid #000;
+      transition: all $transition-speed-medium $transition-timing;
+      border: 1px solid $color-text-dark;
+      text-align: left;
+      animation: answerSlideIn 0.5s ease-out forwards;
+      opacity: 0;
+      transform: translateY(10px);
 
       & label {
         cursor: pointer;
+        font-size: $font-size-p-lg;
+
+        @include respond(tablet) {
+          font-size: $font-size-p-md;
+        }
+
+        @include respond(phone) {
+          font-size: $font-size-p-sm;
+        }
       }
 
       &:hover {
-        background-color: #f5f5f5;
+        background-color: $color-body-background;
       }
 
       &.correct-answer {
-        border-color: green;
-        background-color: rgba(0, 128, 0, 0.1);
+        border-color: $color-success;
+        background-color: rgba($color-success, 0.1);
       }
 
       &.wrong-answer {
-        border-color: red;
-        background-color: rgba(255, 0, 0, 0.1);
+        border-color: $color-danger;
+        background-color: rgba($color-danger, 0.1);
       }
 
       i {
         font-size: 1.5rem;
-        margin: 0 12.5px 0 0;
+        margin: 0 $spacing-xs 0 0;
       }
 
       .hidden-radio {
@@ -257,27 +307,17 @@ export default {
   .modal-footer {
     display: flex;
     justify-content: flex-end;
-    margin: 50px 0 0 0;
-    padding: 20px 30px;
+    margin: $spacing-lg 0 0 0;
+    padding: $spacing-md $spacing-md;
     background-color: $color-dark-blue;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: $border-radius-md;
+    border-bottom-right-radius: $border-radius-md;
 
     .submit-btn,
     .next-btn {
-      padding: 15px 40px;
+      @include primary-button;
       min-width: 220px;
-      background-color: $color-light-blue;
-      color: white;
-      font-size: $font-size-p-lg;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-
-      &:hover {
-        background-color: #0056b3;
-      }
+      border: none; /* Border entfernt */
 
       &:disabled {
         background-color: #cccccc;
@@ -287,9 +327,26 @@ export default {
   }
 }
 
-@media (max-width: 768px) {
-  .dashboard-quiz-modal {
-    width: 90vw;
+/* Animation für die Antwortoptionen */
+@keyframes answerSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Transition für answer-fade */
+.answer-fade-enter-active,
+.answer-fade-leave-active {
+  transition: all 0.3s;
+}
+.answer-fade-enter-from,
+.answer-fade-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
 }
 </style>

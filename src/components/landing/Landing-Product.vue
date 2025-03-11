@@ -15,7 +15,8 @@ export default {
 
 .landing-product {
   width: 100%;
-  margin: 100px 0;
+  margin: $spacing-lg 0;
+  // padding: 0 $spacing-sm;
 
   &_row {
     width: $width-desktop;

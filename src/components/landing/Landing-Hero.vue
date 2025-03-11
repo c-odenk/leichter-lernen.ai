@@ -11,7 +11,7 @@
           intelligenter KI-Tutor für all deine Fragen.
           <b>Lerne schneller, effektiver und ohne Umwege!</b>
         </p>
-        <router-link to="/#"> Jetzt ausprobieren </router-link>
+        <router-link to="/login"> Jetzt ausprobieren </router-link>
       </div>
       <div class="landing-hero_image" aria-hidden="true">
         <!-- Hintergrundbild wird per CSS geladen -->
@@ -23,8 +23,6 @@
 <script>
 export default {
   name: "HeroSection",
-  // Da heading und subheading nicht verwendet werden, können wir sie entfernen
-  // Falls sie später gebraucht werden, können sie wieder hinzugefügt werden
 };
 </script>
 

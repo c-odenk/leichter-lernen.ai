@@ -1,6 +1,15 @@
 <template>
   <article class="blog-post-prev">
-    <img :src="getImageUrl(post.image)" alt="Blog Post Image" />
+    <div class="image-container">
+      <img
+        :src="getImageUrl(post.image)"
+        :alt="post.title"
+        loading="lazy"
+        @load="imageLoaded = true"
+        :class="{ 'image-loaded': imageLoaded }"
+      />
+      <div v-if="!imageLoaded" class="image-placeholder"></div>
+    </div>
     <h2>💬 {{ post.title }}</h2>
     <p>{{ post.introduction }}</p>
     <router-link :to="'blog/blogpost/#' + post.articleId" class="read-more">
@@ -18,6 +27,11 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      imageLoaded: false,
+    };
+  },
   methods: {
     getImageUrl(image) {
       return require(`@/assets/${image}`);
@@ -32,12 +46,43 @@ export default {
 .blog-post-prev {
   @include blog-post-container;
 
-  & img {
+  .image-container {
+    position: relative;
     width: 100%;
-    height: auto;
+    height: 0;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    overflow: hidden;
+    background-color: #f0f0f0; /* Leichte Hintergrundfarbe für den Placeholder */
+    border-top-left-radius: $border-radius-md;
+    border-top-right-radius: $border-radius-md;
+  }
+
+  .image-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #f0f0f0;
+  }
+
+  & img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     border-bottom: $blog-post-border-accent solid $color-dark-blue-lighter;
     border-top-left-radius: $border-radius-md;
     border-top-right-radius: $border-radius-md;
+    will-change: transform;
+    opacity: 0; /* Bild ist standardmäßig transparent */
+    transition: opacity 0.3s ease; /* Sanfter Übergang beim Laden */
+  }
+
+  & img.image-loaded {
+    opacity: 1; /* Bild wird sichtbar, wenn geladen */
   }
 
   & h2 {

@@ -84,6 +84,10 @@
           Mit Google anmelden
         </button>
 
+        <div class="back-link-container">
+          <a href="/" class="back-link"> Zurück zur Startseite </a>
+        </div>
+
         <div v-if="loginError" class="error-message" role="alert">
           {{ loginError }}
         </div>
@@ -202,11 +206,11 @@
           />
           <label for="agreeTerms">
             Ich stimme den
-            <a href="#" class="link" @click.prevent="showTerms"
+            <a href="/terms" class="link" @click.prevent="showTerms"
               >Nutzungsbedingungen</a
             >
             und
-            <a href="#" class="link" @click.prevent="showPrivacy"
+            <a href="/privacy" class="link" @click.prevent="showPrivacy"
               >Datenschutzrichtlinien</a
             >
             zu
@@ -234,6 +238,10 @@
           <span class="google-icon">G</span>
           Mit Google anmelden
         </button>
+
+        <div class="back-link-container">
+          <a href="/" class="back-link"> Zurück zur Startseite </a>
+        </div>
 
         <div v-if="registerError" class="error-message" role="alert">
           {{ registerError }}
@@ -516,26 +524,56 @@ export default {
 };
 </script>
 
-<style scoped>
-/* Basis-Styling */
+<style lang="scss">
+/* Import der globalen SCSS-Variablen */
+@import "@/variables/variables.scss";
+
+/* Basis-Styling mit globalen Variablen */
 .login-container {
   width: 100%;
   min-height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: $spacing-md;
   box-sizing: border-box;
-  background-color: #f9fafb;
+  background-color: $color-body-background;
 }
 
 .form-container {
   width: 100%;
   max-width: 500px;
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  background-color: $color-text-white;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-lg;
   overflow: hidden;
+  position: relative;
+}
+
+/* Zurück zur Startseite Link */
+.back-link-container {
+  // padding: $spacing-sm $spacing-md;
+  // text-align: center;
+  margin-top: calc($spacing-md - 5px);
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  color: $color-light-blue;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color $transition-speed-fast;
+
+  &:hover {
+    color: darken($color-light-blue, 15%);
+  }
+}
+
+.back-icon {
+  margin-right: $spacing-xs;
+  font-size: 16px;
 }
 
 /* Tabs */
@@ -547,18 +585,20 @@ export default {
 .tab {
   flex: 1;
   text-align: center;
-  padding: 16px;
+  padding: $spacing-sm;
   font-weight: 600;
   color: #777;
   background: none;
   border: none;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all $transition-speed-medium $transition-timing;
+
+  font-size: calc($font-size-p-lg - 5px);
 }
 
 .tab.active {
-  color: #3083e9;
-  border-bottom: 2px solid #3083e9;
+  color: $color-light-blue;
+  border-bottom: 2px solid $color-light-blue;
 }
 
 .tab:hover:not(.active) {
@@ -567,45 +607,48 @@ export default {
 
 /* Form */
 .form {
-  padding: 30px;
+  padding: $spacing-lg;
 }
 
 .form h2 {
-  margin: 0 0 24px;
-  font-size: 24px;
+  margin: 0 0 $spacing-md;
+  font-size: $font-size-h2-lg;
   font-weight: 700;
-  color: #333;
+  color: $color-dark-blue;
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: $spacing-md;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: $spacing-xs / 2;
   font-weight: 500;
-  color: #333;
+  color: $color-text-dark;
 }
 
 .form-group input[type="text"],
 .form-group input[type="email"],
 .form-group input[type="password"] {
   width: 100%;
-  padding: 12px 16px;
+  // padding: $spacing-xs $spacing-sm;
+  padding: 10px;
   border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: border-color 0.3s;
+  border-radius: $border-radius-sm;
+  font-size: $font-size-p-lg;
+  transition: border-color $transition-speed-medium;
   box-sizing: border-box;
+
+  font-size: calc($font-size-p-lg - 5px);
 }
 
 .form-group input[type="text"]:focus,
 .form-group input[type="email"]:focus,
 .form-group input[type="password"]:focus {
-  border-color: #3083e9;
+  border-color: $color-light-blue;
   outline: none;
-  box-shadow: 0 0 0 2px rgba(48, 131, 233, 0.1);
+  box-shadow: 0 0 0 2px rgba($color-light-blue, 0.1);
 }
 
 /* Password Input */
@@ -627,8 +670,8 @@ export default {
   color: #777;
   cursor: pointer;
   padding: 8px;
-  border-radius: 50%;
-  transition: background-color 0.3s;
+  border-radius: $border-radius-round;
+  transition: background-color $transition-speed-medium;
 }
 
 .toggle-password:hover {
@@ -642,7 +685,7 @@ export default {
 
 /* Password Strength */
 .password-strength {
-  margin-top: 8px;
+  margin-top: $spacing-xs;
 }
 
 .strength-bar {
@@ -656,19 +699,19 @@ export default {
 .strength-indicator {
   height: 100%;
   border-radius: 2px;
-  transition: width 0.3s ease;
+  transition: width $transition-speed-medium ease;
 }
 
 .strength-indicator.weak {
-  background-color: #ff4d4f;
+  background-color: $color-danger;
 }
 
 .strength-indicator.medium {
-  background-color: #faad14;
+  background-color: $color-warning;
 }
 
 .strength-indicator.strong {
-  background-color: #52c41a;
+  background-color: $color-success;
 }
 
 .strength-text {
@@ -676,29 +719,29 @@ export default {
 }
 
 .strength-text.weak {
-  color: #ff4d4f;
+  color: $color-danger;
 }
 
 .strength-text.medium {
-  color: #faad14;
+  color: $color-warning;
 }
 
 .strength-text.strong {
-  color: #52c41a;
+  color: $color-success;
 }
 
 /* Password Match */
 .password-match {
-  margin-top: 8px;
+  margin-top: $spacing-xs;
   font-size: 12px;
 }
 
 .password-match .match {
-  color: #52c41a;
+  color: $color-success;
 }
 
 .password-match .mismatch {
-  color: #ff4d4f;
+  color: $color-danger;
 }
 
 /* Form actions */
@@ -706,7 +749,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: $spacing-md;
 }
 
 /* Checkbox */
@@ -716,7 +759,7 @@ export default {
 }
 
 .checkbox-wrapper input[type="checkbox"] {
-  margin-right: 8px;
+  margin-right: $spacing-xs;
   cursor: pointer;
 }
 
@@ -726,72 +769,66 @@ export default {
 }
 
 .terms {
-  margin: 20px 0;
+  margin: $spacing-md 0;
 }
 
 /* Links */
 .link {
-  color: #3083e9;
+  color: $color-light-blue;
   text-decoration: none;
-  transition: color 0.3s;
-}
-
-.link:hover {
-  color: #1b6ecf;
-  text-decoration: underline;
+  transition: color $transition-speed-fast;
+  @include link-hover-effect; /* Verwendet das definierte Link-Hover-Mixin */
 }
 
 /* Buttons */
 .btn {
   width: 100%;
-  padding: 12px;
+  padding: $spacing-xs;
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
+  border-radius: $border-radius-sm;
+  font-size: $font-size-p-lg;
+  // font-size: calc($font-size-p-lg - 5px);
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all $transition-speed-medium;
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-}
 
-.btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
 }
 
 .btn-primary {
-  background-color: #3083e9;
-  color: white;
-}
-
-.btn-primary:hover:not(:disabled) {
-  background-color: #1b6ecf;
+  @include primary-button; /* Verwendet das definierte Button-Mixin */
+  font-size: calc($font-size-p-lg - 5px);
 }
 
 .btn-google {
   background-color: white;
-  color: #333;
+  color: $color-text-dark;
+  font-size: calc($font-size-p-lg - 5px);
   border: 1px solid #ddd;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
 }
 
 .google-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   background-color: #ea4335;
   color: white;
-  border-radius: 50%;
-  margin-right: 10px;
+  border-radius: $border-radius-round;
+  margin-right: $spacing-xs;
   font-weight: bold;
-}
-
-.btn-google:hover {
-  background-color: #f5f5f5;
 }
 
 /* Loading spinner */
@@ -800,10 +837,10 @@ export default {
   width: 16px;
   height: 16px;
   border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
+  border-radius: $border-radius-round;
   border-top-color: #fff;
   animation: spin 1s infinite linear;
-  margin-right: 8px;
+  margin-right: $spacing-xs;
 }
 
 @keyframes spin {
@@ -818,43 +855,43 @@ export default {
 /* Divider */
 .divider {
   position: relative;
-  margin: 24px 0;
+  margin: $spacing-md 0;
   text-align: center;
-}
 
-.divider:before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background-color: #ddd;
-}
+  &:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #ddd;
+  }
 
-.divider span {
-  position: relative;
-  background-color: white;
-  padding: 0 10px;
-  color: #777;
-  font-size: 14px;
+  span {
+    position: relative;
+    background-color: white;
+    padding: 0 $spacing-xs;
+    color: #777;
+    font-size: 14px;
+  }
 }
 
 /* Error message */
 .error-message {
-  margin-top: 16px;
-  padding: 10px;
-  background-color: rgba(255, 77, 79, 0.1);
-  border-radius: 8px;
-  color: #ff4d4f;
+  margin-top: $spacing-sm;
+  padding: $spacing-xs;
+  background-color: rgba($color-danger, 0.1);
+  border-radius: $border-radius-sm;
+  color: $color-danger;
   font-size: 14px;
   text-align: center;
 }
 
-/* Responsive Design */
-@media (max-width: 480px) {
+/* Responsive Design mit den definierten Breakpoints */
+@include respond(phone) {
   .form {
-    padding: 20px;
+    padding: $spacing-md;
   }
 
   .form-actions {
@@ -863,7 +900,11 @@ export default {
   }
 
   .form-actions a {
-    margin-top: 10px;
+    margin-top: $spacing-xs;
+  }
+
+  .form h2 {
+    font-size: $font-size-h2-sm;
   }
 }
 </style>

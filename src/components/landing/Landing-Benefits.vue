@@ -59,7 +59,8 @@ export default {
 
 .benefits {
   width: 100%;
-  margin: $spacing-xl 0;
+  // margin: $spacing-xl 0;
+  margin: calc($spacing-lg + 50px) 0;
 
   &__header {
     @include content-container;

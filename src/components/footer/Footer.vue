@@ -3,7 +3,7 @@
     <div class="footer_row">
       <p>Copyright &copy; 2025 leichter-lernen.ai. Alle Rechte vorbehalten.</p>
       <ul>
-        <li><router-link to="/"> AGB </router-link></li>
+        <li><router-link to="/terms"> AGB </router-link></li>
         <li><router-link to="/impressum"> Impressum </router-link></li>
       </ul>
     </div>
@@ -49,8 +49,7 @@ export default {
   padding: 40px 35px 30px 35px;
   background-color: rgb(33, 33, 33);
   border-radius: $border-radius-lg $border-radius-lg 0 0;
-  // padding: $spacing-md $spacing-md $spacing-sm $spacing-md;
-  // background-color: $color-dark-blue-darker;
+  box-sizing: border-box;
 
   @include respond(tablet) {
     padding: $spacing-sm;
@@ -64,7 +63,6 @@ export default {
     width: 100%;
     @include flex-between;
     box-sizing: border-box;
-    margin-bottom: $spacing-sm;
 
     @include respond(tablet) {
       flex-direction: column;
