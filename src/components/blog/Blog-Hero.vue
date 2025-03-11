@@ -28,23 +28,38 @@ export default {
   width: 100%;
 
   &_row {
-    width: $width-desktop;
-    margin: 150px auto 150px auto;
+    @include content-container;
+    margin: $spacing-xl auto;
     text-align: center;
 
     @include respond(laptop) {
+      margin: $spacing-lg auto;
     }
 
     @include respond(tablet) {
+      margin: $spacing-md auto;
     }
 
     @include respond(phone) {
+      margin: $spacing-sm auto;
     }
 
     & h2 {
       width: 80%;
-      margin: 0 auto 10px auto;
-      font-size: 40px;
+      margin: 0 auto $spacing-xs auto;
+      font-size: $font-size-h1-lg;
+      color: $color-dark-blue;
+      line-height: $line-height;
+
+      @include respond(tablet) {
+        width: 90%;
+        font-size: $font-size-h1-md;
+      }
+
+      @include respond(phone) {
+        width: 100%;
+        font-size: $font-size-h1-sm;
+      }
     }
 
     & p {
@@ -54,6 +69,17 @@ export default {
       font-size: $font-size-p-lg;
       line-height: $line-height;
       letter-spacing: $letter-spacing;
+      color: $color-text-dark;
+
+      @include respond(tablet) {
+        width: 80%;
+        font-size: $font-size-p-md;
+      }
+
+      @include respond(phone) {
+        width: 95%;
+        font-size: $font-size-p-sm;
+      }
     }
   }
 }

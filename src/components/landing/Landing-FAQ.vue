@@ -1,31 +1,31 @@
 <template>
   <div class="landing-faq">
-    <div class="landing-faq_row">
-      <div class="landing-faq_row_col-1">
-        <h2>🔍 {{ heading }}</h2>
-        <p>{{ subheading }}</p>
+    <div class="landing-faq__row">
+      <div class="landing-faq__column-left">
+        <h2 class="landing-faq__heading">🔍 {{ heading }}</h2>
+        <p class="landing-faq__subheading">{{ subheading }}</p>
       </div>
-      <div class="landing-faq_row_col-2">
+      <div class="landing-faq__column-right">
         <div
           class="faq-item"
-          :class="{ active: activeIndex === index }"
+          :class="{ 'faq-item--active': activeIndex === index }"
           v-for="(faq, index) in faqs"
           :key="index"
         >
-          <div class="faq-question" @click="toggleFAQ(index)">
-            <h3>
+          <div class="faq-item__question" @click="toggleFAQ(index)">
+            <h3 class="faq-item__title">
               {{ faq.question }}
             </h3>
             <i
               :class="[
                 'fa-solid',
                 activeIndex === index ? 'fa-minus' : 'fa-plus',
-                'icon-transition',
+                'faq-item__icon',
               ]"
             ></i>
           </div>
-          <div class="faq-answer" v-if="activeIndex === index">
-            <p>{{ faq.answer }}</p>
+          <div class="faq-item__answer" v-if="activeIndex === index">
+            <p class="faq-item__text">{{ faq.answer }}</p>
           </div>
         </div>
       </div>
@@ -90,82 +90,126 @@ export default {
 
 .landing-faq {
   width: 100%;
-  margin: 200px 0 150px 0;
+  margin: $spacing-xl $spacing-xs $spacing-xl $spacing-xs;
 
-  &_row {
+  &__row {
+    // @include content-container;
     width: $width-desktop - 100px;
+    margin: 0 auto;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     flex-wrap: wrap;
-    margin: 0 auto;
+  }
 
-    &_col-1 {
-      width: 50%;
+  &__column-left {
+    width: 50%;
 
-      & h2 {
-        margin: 0 0 10px 0;
-        padding: 0;
-        line-height: $line-height;
-        letter-spacing: $letter-spacing;
-      }
-
-      & p {
-        margin: 0;
-        padding: 0;
-        font-size: $font-size-p-lg;
-        line-height: $line-height;
-        letter-spacing: $letter-spacing;
-      }
+    @include respond(tablet) {
+      width: 100%;
+      margin-bottom: $spacing-lg;
     }
 
-    &_col-2 {
-      width: 40%;
-      display: flex;
-      flex-direction: column;
+    @include respond(phone) {
+      width: 100%;
+    }
+  }
+
+  &__column-right {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+
+    @include respond(tablet) {
+      width: 100%;
+    }
+
+    @include respond(phone) {
+      width: 100%;
+    }
+  }
+
+  &__heading {
+    margin: 0 0 $spacing-xs 0;
+    padding: 0;
+    line-height: $line-height;
+    letter-spacing: $letter-spacing;
+    font-size: $font-size-h2-lg;
+
+    @include respond(tablet) {
+      font-size: $font-size-h2-md;
+    }
+
+    @include respond(phone) {
+      font-size: $font-size-h2-sm;
+    }
+  }
+
+  &__subheading {
+    margin: 0;
+    padding: 0;
+    font-size: $font-size-p-lg;
+    line-height: $line-height;
+    letter-spacing: $letter-spacing;
+
+    @include respond(tablet) {
+      @include text-content-responsive;
     }
   }
 }
 
 .faq-item {
-  padding: 15px;
-  border-bottom: 1px solid #ccc;
+  padding: $spacing-sm;
+  border-bottom: 1px solid $color-dark-blue-lighter;
   box-sizing: border-box;
-  transition: transform 0.3s ease;
+  transition: background-color $transition-speed-medium $transition-timing,
+    color $transition-speed-medium $transition-timing;
   cursor: pointer;
+  // margin-bottom: $spacing-xs;
 
-  &.active {
+  &--active {
     background-color: $color-dark-blue;
-    color: #fff;
+    color: $color-text-white;
+    box-shadow: $shadow-sm;
+    // border-radius: $border-radius-sm $border-radius-sm 0 0;
   }
-}
 
-.faq-question {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  &__question {
+    @include flex-between;
+  }
 
-  & h3 {
+  &__title {
     margin: 0;
     padding: 0;
+    font-size: $font-size-h3-lg;
+
+    @include respond(tablet) {
+      font-size: $font-size-h3-md;
+    }
+
+    @include respond(phone) {
+      font-size: $font-size-h3-sm;
+    }
   }
 
-  .icon-transition {
-    transition: transform 0.3s ease;
+  &__icon {
+    transition: transform $transition-speed-medium $transition-timing;
   }
-}
 
-.faq-answer {
-  & p {
-    margin: 15px 0 25px 0;
+  &__answer {
+    margin-top: $spacing-sm;
+  }
+
+  &__text {
+    margin: $spacing-sm 0 $spacing-md 0;
     padding: 0;
     font-size: $font-size-p-lg;
     line-height: $line-height;
     letter-spacing: $letter-spacing;
-  }
-}
 
-span.rotated {
-  transform: rotate(180deg);
+    @include respond(tablet) {
+      @include text-content-responsive;
+    }
+  }
 }
 </style>

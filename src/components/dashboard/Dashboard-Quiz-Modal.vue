@@ -269,7 +269,7 @@ export default {
       min-width: 220px;
       background-color: $color-light-blue;
       color: white;
-      font-size: $font-size-p-lg - 2px;
+      font-size: $font-size-p-lg;
       border: none;
       border-radius: 10px;
       cursor: pointer;

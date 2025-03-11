@@ -41,34 +41,39 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/variables/Variables.scss";
+@import "@/variables/variables.scss";
 
 .footer {
-  width: $width-desktop;
-  margin: 0 auto;
+  @include content-container;
+  margin-bottom: 0;
   padding: 40px 35px 30px 35px;
-  border-radius: 15px 15px 0 0;
   background-color: rgb(33, 33, 33);
+  border-radius: $border-radius-lg $border-radius-lg 0 0;
+  // padding: $spacing-md $spacing-md $spacing-sm $spacing-md;
+  // background-color: $color-dark-blue-darker;
+
+  @include respond(tablet) {
+    padding: $spacing-sm;
+  }
 
   @include respond(phone) {
+    padding: $spacing-sm $spacing-xs;
   }
 
   &_row {
     width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-
+    @include flex-between;
     box-sizing: border-box;
-
-    @include respond(laptop) {
-    }
+    margin-bottom: $spacing-sm;
 
     @include respond(tablet) {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
     }
 
-    @include respond(phone) {
+    &:last-child {
+      margin-bottom: 0;
     }
 
     & p {
@@ -77,7 +82,16 @@ export default {
       font-size: $font-size-p-lg;
       line-height: $line-height;
       letter-spacing: $letter-spacing;
-      color: #fff;
+      color: $color-text-white;
+
+      @include respond(tablet) {
+        margin-bottom: $spacing-xs;
+        font-size: $font-size-p-md;
+      }
+
+      @include respond(phone) {
+        font-size: $font-size-p-sm;
+      }
     }
 
     & ul {
@@ -86,37 +100,60 @@ export default {
       list-style: none;
       margin: 0;
       padding: 0;
+      gap: $spacing-md;
+
+      @include respond(tablet) {
+        margin-top: $spacing-xs;
+      }
 
       @include respond(phone) {
+        gap: $spacing-sm;
       }
     }
 
+    & li {
+      display: inline-block;
+    }
+
     & a {
-      margin: 0 0 0 30px;
       padding: 0;
       text-decoration: none;
       font-size: $font-size-p-lg;
       line-height: $line-height;
       letter-spacing: $letter-spacing;
-      color: #fff;
+      color: $color-text-white;
+      transition: color $transition-speed-medium $transition-timing;
+
+      @include respond(tablet) {
+        font-size: $font-size-p-md;
+      }
+
+      @include respond(phone) {
+        font-size: $font-size-p-sm;
+      }
     }
 
     .social-icons {
       display: flex;
-      gap: 20px;
-      margin: 15px 0 0 0;
+      gap: $spacing-sm;
+      margin: $spacing-xs 0 0 0;
+
       display: none;
+
+      @include respond(tablet) {
+        margin-top: $spacing-sm;
+      }
     }
 
     .social-icons a {
       margin: 0;
-      color: #999;
+      color: $color-dark-blue-lighter;
       font-size: 24px;
-      transition: color 0.3s ease-in-out;
-    }
+      transition: color $transition-speed-medium $transition-timing;
 
-    .social-icons a:hover {
-      color: #0077b5;
+      @include respond(phone) {
+        font-size: 20px;
+      }
     }
   }
 }

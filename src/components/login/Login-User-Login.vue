@@ -98,13 +98,24 @@
         <h2>Registrieren</h2>
 
         <div class="form-group">
-          <label for="registerName">Name</label>
+          <label for="registerFirstName">Vorname</label>
           <input
             type="text"
-            id="registerName"
-            v-model="registerForm.name"
+            id="registerFirstName"
+            v-model="registerForm.firstName"
             required
-            placeholder="Ihr vollständiger Name"
+            placeholder="Ihr Vorname"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="registerLastName">Nachname</label>
+          <input
+            type="text"
+            id="registerLastName"
+            v-model="registerForm.lastName"
+            required
+            placeholder="Ihr Nachname"
           />
         </div>
 
@@ -253,7 +264,8 @@ export default {
                 token: "dummy-jwt-token",
                 user: {
                   id: 1,
-                  name: "Testnutzer",
+                  firstName: "Test",
+                  lastName: "Nutzer",
                   email: credentials.email,
                 },
               });
@@ -271,7 +283,12 @@ export default {
             console.log("Register with:", userData);
 
             // Simulierter Erfolgsfall
-            if (userData.email && userData.password && userData.name) {
+            if (
+              userData.email &&
+              userData.password &&
+              userData.firstName &&
+              userData.lastName
+            ) {
               resolve({
                 success: true,
                 message: "Registrierung erfolgreich",
@@ -319,7 +336,8 @@ export default {
 
     // Register form
     const registerForm = reactive({
-      name: "",
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -403,7 +421,8 @@ export default {
         isLoading.value = true;
 
         const response = await authService.register({
-          name: registerForm.name,
+          firstName: registerForm.firstName,
+          lastName: registerForm.lastName,
           email: registerForm.email,
           password: registerForm.password,
         });
@@ -497,54 +516,14 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-// Variablen
-$primary-color: #4a86e8;
-$secondary-color: darken($primary-color, 10%);
-$error-color: #ff4d4f;
-$success-color: #52c41a;
-$warning-color: #faad14;
-$text-color: #333;
-$text-light: #777;
-$background-color: #fff;
-$border-color: #ddd;
-$box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-$border-radius: 12px;
-$input-border-radius: 8px;
-$transition-speed: 0.3s;
-$google-blue: #4285f4;
-$google-red: #ea4335;
-$google-yellow: #fbbc05;
-$google-green: #34a853;
-
-// Mixins
-@mixin flex-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-@mixin input-style {
-  width: 100%;
-  padding: 12px 16px;
-  border: 1px solid $border-color;
-  border-radius: $input-border-radius;
-  font-size: 16px;
-  transition: border-color $transition-speed;
-  box-sizing: border-box;
-
-  &:focus {
-    border-color: $primary-color;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba($primary-color, 0.1);
-  }
-}
-
-// Basis-Styling
+<style scoped>
+/* Basis-Styling */
 .login-container {
   width: 100%;
   min-height: 100%;
-  @include flex-center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 20px;
   box-sizing: border-box;
   background-color: #f9fafb;
@@ -553,162 +532,176 @@ $google-green: #34a853;
 .form-container {
   width: 100%;
   max-width: 500px;
-  background-color: $background-color;
-  border-radius: $border-radius;
-  box-shadow: $box-shadow;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
   overflow: hidden;
 }
 
-// Tabs
+/* Tabs */
 .tabs {
   display: flex;
-  border-bottom: 1px solid $border-color;
-
-  .tab {
-    flex: 1;
-    text-align: center;
-    padding: 16px;
-    font-weight: 600;
-    color: $text-light;
-    background: none;
-    border: none;
-    cursor: pointer;
-    transition: all $transition-speed;
-
-    &.active {
-      color: $primary-color;
-      border-bottom: 2px solid $primary-color;
-    }
-
-    &:hover:not(.active) {
-      background-color: #f9f9f9;
-    }
-  }
+  border-bottom: 1px solid #ddd;
 }
 
-// Form
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 16px;
+  font-weight: 600;
+  color: #777;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.tab.active {
+  color: #3083e9;
+  border-bottom: 2px solid #3083e9;
+}
+
+.tab:hover:not(.active) {
+  background-color: #f9f9f9;
+}
+
+/* Form */
 .form {
   padding: 30px;
+}
 
-  h2 {
-    margin: 0 0 24px;
-    font-size: 24px;
-    font-weight: 700;
-    color: $text-color;
-  }
+.form h2 {
+  margin: 0 0 24px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
 }
 
 .form-group {
   margin-bottom: 20px;
-
-  label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 500;
-    color: $text-color;
-  }
-
-  input[type="text"],
-  input[type="email"],
-  input[type="password"] {
-    @include input-style;
-  }
 }
 
-// Password Input
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #333;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"] {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus {
+  border-color: #3083e9;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(48, 131, 233, 0.1);
+}
+
+/* Password Input */
 .password-input {
   position: relative;
-
-  input {
-    padding-right: 50px;
-  }
-
-  .toggle-password {
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: $text-light;
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 50%;
-    transition: background-color $transition-speed;
-
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.05);
-    }
-
-    .icon {
-      font-size: 20px;
-      line-height: 1;
-    }
-  }
 }
 
-// Password Strength
+.password-input input {
+  padding-right: 50px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #777;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.3s;
+}
+
+.toggle-password:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.toggle-password .icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+/* Password Strength */
 .password-strength {
   margin-top: 8px;
-
-  .strength-bar {
-    height: 4px;
-    background-color: #eee;
-    border-radius: 2px;
-    margin-bottom: 5px;
-    overflow: hidden;
-
-    .strength-indicator {
-      height: 100%;
-      border-radius: 2px;
-      transition: width 0.3s ease;
-
-      &.weak {
-        background-color: $error-color;
-      }
-
-      &.medium {
-        background-color: $warning-color;
-      }
-
-      &.strong {
-        background-color: $success-color;
-      }
-    }
-  }
-
-  .strength-text {
-    font-size: 12px;
-
-    &.weak {
-      color: $error-color;
-    }
-
-    &.medium {
-      color: $warning-color;
-    }
-
-    &.strong {
-      color: $success-color;
-    }
-  }
 }
 
-// Password Match
+.strength-bar {
+  height: 4px;
+  background-color: #eee;
+  border-radius: 2px;
+  margin-bottom: 5px;
+  overflow: hidden;
+}
+
+.strength-indicator {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.strength-indicator.weak {
+  background-color: #ff4d4f;
+}
+
+.strength-indicator.medium {
+  background-color: #faad14;
+}
+
+.strength-indicator.strong {
+  background-color: #52c41a;
+}
+
+.strength-text {
+  font-size: 12px;
+}
+
+.strength-text.weak {
+  color: #ff4d4f;
+}
+
+.strength-text.medium {
+  color: #faad14;
+}
+
+.strength-text.strong {
+  color: #52c41a;
+}
+
+/* Password Match */
 .password-match {
   margin-top: 8px;
   font-size: 12px;
-
-  .match {
-    color: $success-color;
-  }
-
-  .mismatch {
-    color: $error-color;
-  }
 }
 
-// Form actions
+.password-match .match {
+  color: #52c41a;
+}
+
+.password-match .mismatch {
+  color: #ff4d4f;
+}
+
+/* Form actions */
 .form-actions {
   display: flex;
   justify-content: space-between;
@@ -716,91 +709,92 @@ $google-green: #34a853;
   margin-bottom: 20px;
 }
 
-// Checkbox
+/* Checkbox */
 .checkbox-wrapper {
   display: flex;
   align-items: center;
+}
 
-  input[type="checkbox"] {
-    margin-right: 8px;
-    cursor: pointer;
-  }
+.checkbox-wrapper input[type="checkbox"] {
+  margin-right: 8px;
+  cursor: pointer;
+}
 
-  label {
-    cursor: pointer;
-    user-select: none;
-  }
+.checkbox-wrapper label {
+  cursor: pointer;
+  user-select: none;
 }
 
 .terms {
   margin: 20px 0;
 }
 
-// Links
+/* Links */
 .link {
-  color: $primary-color;
+  color: #3083e9;
   text-decoration: none;
-  transition: color $transition-speed;
-
-  &:hover {
-    color: $secondary-color;
-    text-decoration: underline;
-  }
+  transition: color 0.3s;
 }
 
-// Buttons
+.link:hover {
+  color: #1b6ecf;
+  text-decoration: underline;
+}
+
+/* Buttons */
 .btn {
   width: 100%;
   padding: 12px;
   border: none;
-  border-radius: $input-border-radius;
+  border-radius: 8px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: all $transition-speed;
+  transition: all 0.3s;
   position: relative;
-  @include flex-center;
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-
-  &.btn-primary {
-    background-color: $primary-color;
-    color: white;
-
-    &:hover:not(:disabled) {
-      background-color: $secondary-color;
-    }
-  }
-
-  &.btn-google {
-    background-color: white;
-    color: $text-color;
-    border: 1px solid $border-color;
-
-    .google-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 24px;
-      height: 24px;
-      // background-color: $google-blue;
-      background-color: $google-red;
-      color: white;
-      border-radius: 50%;
-      margin-right: 10px;
-      font-weight: bold;
-    }
-
-    &:hover {
-      background-color: #f5f5f5;
-    }
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-// Loading spinner
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background-color: #3083e9;
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #1b6ecf;
+}
+
+.btn-google {
+  background-color: white;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.google-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background-color: #ea4335;
+  color: white;
+  border-radius: 50%;
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.btn-google:hover {
+  background-color: #f5f5f5;
+}
+
+/* Loading spinner */
 .loading-spinner {
   display: inline-block;
   width: 16px;
@@ -821,43 +815,43 @@ $google-green: #34a853;
   }
 }
 
-// Divider
+/* Divider */
 .divider {
   position: relative;
   margin: 24px 0;
   text-align: center;
-
-  &:before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background-color: $border-color;
-  }
-
-  span {
-    position: relative;
-    background-color: white;
-    padding: 0 10px;
-    color: $text-light;
-    font-size: 14px;
-  }
 }
 
-// Error message
+.divider:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: #ddd;
+}
+
+.divider span {
+  position: relative;
+  background-color: white;
+  padding: 0 10px;
+  color: #777;
+  font-size: 14px;
+}
+
+/* Error message */
 .error-message {
   margin-top: 16px;
   padding: 10px;
-  background-color: rgba($error-color, 0.1);
-  border-radius: $input-border-radius;
-  color: $error-color;
+  background-color: rgba(255, 77, 79, 0.1);
+  border-radius: 8px;
+  color: #ff4d4f;
   font-size: 14px;
   text-align: center;
 }
 
-// Responsive Design
+/* Responsive Design */
 @media (max-width: 480px) {
   .form {
     padding: 20px;
@@ -866,10 +860,10 @@ $google-green: #34a853;
   .form-actions {
     flex-direction: column;
     align-items: flex-start;
+  }
 
-    a {
-      margin-top: 10px;
-    }
+  .form-actions a {
+    margin-top: 10px;
   }
 }
 </style>

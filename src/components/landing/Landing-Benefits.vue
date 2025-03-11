@@ -1,26 +1,24 @@
 <template>
-  <div class="landing-benefits">
-    <div class="landing-benefits_row-1">
-      <div class="landing-benefits_row-1_col-1">
-        <h2>⚡ {{ heading }}</h2>
-        <p>{{ subheading }}</p>
-      </div>
+  <section class="benefits">
+    <div class="benefits__header">
+      <h2 class="benefits__title">⚡ {{ heading }}</h2>
+      <p class="benefits__subtitle">{{ subheading }}</p>
     </div>
 
-    <div class="landing-benefits_row-2">
+    <div class="benefits__grid">
       <div
         v-for="(benefit, index) in benefits"
         :key="index"
-        class="landing-benefits_row-2_col"
+        class="benefits__card"
         :style="{ backgroundImage: `url(${benefit.image})` }"
       >
-        <div class="content-container">
-          <h3>{{ benefit.title }}</h3>
-          <p>{{ benefit.description }}</p>
+        <div class="benefits__content">
+          <h3 class="benefits__card-title">{{ benefit.title }}</h3>
+          <p class="benefits__card-text">{{ benefit.description }}</p>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -51,26 +49,6 @@ export default {
           image: require("@/assets/tutoring.jpg"),
         },
       ],
-      /*
-      benefitsAlt: [
-        {
-          title:
-            "🚀 Schnelle Zusammenfassungen statt stundenlanges Mitschreiben",
-          description:
-            "Lade deine Vorlesungsskripte hoch, und unsere KI erstellt für dich prägnante, leicht verständliche Zusammenfassungen. So erfasst du die wichtigsten Inhalte bis zu 40 % schneller und hast mehr Zeit für das Wesentliche.",
-        },
-        {
-          title: "🎯 Effizient wiederholen mit intelligenten Lernkarten",
-          description:
-            "Kein lästiges Karteikarten-Schreiben mehr! Unsere KI generiert automatisch interaktive Lernkarten aus deinen Unterlagen und nutzt die Spaced Repetition Methode, damit du dir den Stoff langfristig merkst.",
-        },
-        {
-          title: "💡 Teste dein Wissen – Erklären wie ein Profi",
-          description:
-            "Erkläre der KI dein Thema oder stelle gezielte Fragen – unser RAG-gestützter Chat gibt dir sofort Feedback und zeigt dir, wo du noch Lücken hast. So festigst du dein Wissen spielend leicht!",
-        },
-      ],
-      */
     };
   },
 };
@@ -79,75 +57,112 @@ export default {
 <style lang="scss" scoped>
 @import "@/variables/variables.scss";
 
-.landing-benefits {
+.benefits {
   width: 100%;
-  margin: 100px 0 100px 0;
+  margin: $spacing-xl 0;
 
-  &_row-1 {
-    width: $width-desktop;
-    margin: 0 auto 50px auto;
+  &__header {
+    @include content-container;
+    margin-bottom: $spacing-lg;
+  }
 
-    &_col-1 {
-      width: 45%;
+  &__title {
+    margin: 0 0 $spacing-xs;
+    padding: 0;
+    font-size: $font-size-h2-lg;
 
-      & h2 {
-        margin: 0 0 10px 0;
-        padding: 0;
-      }
+    @include respond(tablet) {
+      font-size: $font-size-h2-md;
+    }
 
-      & p {
-        margin: 0;
-        padding: 0;
-        font-size: $font-size-p-lg;
-        line-height: $line-height;
-        letter-spacing: $letter-spacing;
-      }
+    @include respond(phone) {
+      font-size: $font-size-h2-sm;
     }
   }
 
-  &_row-2 {
-    width: $width-desktop;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    margin: 0 auto;
+  &__subtitle {
+    width: 45%;
+    margin: 0;
+    padding: 0;
+    font-size: $font-size-p-lg;
+    line-height: $line-height;
+    letter-spacing: $letter-spacing;
 
-    &_col {
-      width: 32%;
-      height: 500px;
-      padding: 20px;
-      border-radius: 15px;
-      box-sizing: border-box;
-      position: relative;
-      color: white;
-      display: flex;
-      align-items: flex-end;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
+    @include respond(tablet) {
+      width: 70%;
+      @include text-content-responsive;
     }
 
-    .content-container {
-      background: rgba(0, 0, 0, 0.7);
-      padding: 30px 20px;
-      border-radius: 10px;
+    @include respond(phone) {
       width: 100%;
-      text-align: left;
-
-      & h3 {
-        margin: 0;
-        padding: 0;
-      }
-
-      & p {
-        margin: 15px 0 10px 0;
-        padding: 0;
-        // font-size: $font-size-p-lg;
-        line-height: $line-height;
-        letter-spacing: $letter-spacing;
-      }
     }
+  }
+
+  &__grid {
+    @include content-container;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  &__card {
+    width: 32%;
+    height: 500px;
+    padding: $spacing-md;
+    border-radius: $border-radius-lg;
+    box-sizing: border-box;
+    position: relative;
+    color: $color-text-white;
+    display: flex;
+    align-items: flex-end;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    box-shadow: $shadow-md;
+    transition: box-shadow $transition-speed-medium $transition-timing;
+
+    @include respond(tablet) {
+      width: 48%;
+      margin-bottom: $spacing-md;
+      height: 450px;
+    }
+
+    @include respond(phone) {
+      width: 100%;
+      height: 400px;
+    }
+  }
+
+  &__content {
+    background: rgba(0, 0, 0, 0.7);
+    padding: $spacing-md $spacing-sm;
+    border-radius: $border-radius-md;
+    width: 100%;
+    text-align: left;
+  }
+
+  &__card-title {
+    margin: 0;
+    padding: 0;
+    font-size: $font-size-h3-lg;
+
+    @include respond(tablet) {
+      font-size: $font-size-h3-md;
+    }
+
+    @include respond(phone) {
+      font-size: $font-size-h3-sm;
+    }
+  }
+
+  &__card-text {
+    margin: $spacing-sm 0 $spacing-xs;
+    padding: 0;
+    line-height: $line-height;
+    letter-spacing: $letter-spacing;
+    font-size: calc($font-size-p-lg - 2px);
+
+    @include text-content-responsive;
   }
 }
 </style>

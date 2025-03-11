@@ -25,6 +25,8 @@ export default {
 
 .view-login {
   width: 100vw;
+  overflow: hidden;
+
   &_row {
     display: flex;
     flex-direction: row;
@@ -37,6 +39,8 @@ export default {
     &_col-2 {
       width: 50vw;
       height: 100vh;
+      box-sizing: border-box;
+      overflow: hidden;
     }
   }
 }

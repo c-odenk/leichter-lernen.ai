@@ -1,9 +1,9 @@
 <template>
-  <div class="landing-hero">
-    <div class="landing-hero_row">
-      <div class="landing-hero_row_col-1">
+  <section class="landing-hero">
+    <div class="landing-hero_container">
+      <div class="landing-hero_content">
         <h1>
-          Effizienter <span class="orange">lernen mit KI</span> – schneller
+          Effizienter <span class="highlight">lernen mit KI</span> – schneller
           verstehen, besser merken!
         </h1>
         <p>
@@ -11,107 +11,114 @@
           intelligenter KI-Tutor für all deine Fragen.
           <b>Lerne schneller, effektiver und ohne Umwege!</b>
         </p>
-        <router-link to="/#"> Get started </router-link>
+        <router-link to="/#"> Jetzt ausprobieren </router-link>
       </div>
-      <div class="landing-hero_row_col-2"></div>
+      <div class="landing-hero_image" aria-hidden="true">
+        <!-- Hintergrundbild wird per CSS geladen -->
+      </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
 export default {
   name: "HeroSection",
+  // Da heading und subheading nicht verwendet werden, können wir sie entfernen
+  // Falls sie später gebraucht werden, können sie wieder hinzugefügt werden
 };
 </script>
 
 <style lang="scss" scoped>
-@import "@/variables/variables.scss";
+@import "@/variables/Variables.scss";
 
 .landing-hero {
   width: 100%;
-  margin: 50px 0;
+  margin: $spacing-lg 0;
+  padding: 0 $spacing-sm;
+  box-sizing: border-box;
 
-  @include respond(laptop) {
+  // Content-Container mixin anwenden für responsive Breite
+  &_container {
+    @include content-container;
+    @include flex-between;
+    gap: $spacing-lg;
+
+    @include respond(tablet) {
+      flex-direction: column;
+      gap: $spacing-md;
+    }
   }
 
-  @include respond(tablet) {
-  }
+  &_content {
+    width: 50%;
 
-  @include respond(phone) {
-  }
+    @include respond(tablet) {
+      width: 100%;
+      text-align: center;
+    }
 
-  &_row {
-    width: $width-desktop;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin: 0 auto;
+    h1 {
+      margin: 0;
+      font-size: 40px; // Feste Größe wie gewünscht
+      line-height: 1.2;
+      letter-spacing: $letter-spacing;
+      color: $color-dark-blue;
 
-    &_col-1 {
-      width: 40%;
-
-      & h1 {
-        margin: 0 0 0 0;
-        padding: 0;
-        font-size: 40px;
-        line-height: 1;
-        letter-spacing: $letter-spacing;
-
-        & .orange {
-          // color: $color-orange;
-        }
+      .highlight {
+        color: $color-light-blue;
       }
 
-      & p {
-        margin: 20px 0 40px 0;
-        padding: 0;
-        font-size: $font-size-p-lg;
-        line-height: $line-height;
-        letter-spacing: $letter-spacing;
+      @include respond(laptop) {
+        font-size: 36px;
       }
 
-      & a {
-        display: inline-block;
-        margin: 0;
-        padding: 15px 60px;
-        text-decoration: none;
-        // font-weight: bold;
-        // color: $color-orange;
-        // background-color: $color-orange;
-        // background-color: $color-img-platzhalter;
-        // background-color: $color-teal;
-        background-color: $color-dark-blue;
-        border-radius: 8px;
-        transition: background-color 0.3s ease;
-        font-size: $font-size-p-lg;
-        line-height: $line-height;
-        letter-spacing: $letter-spacing;
-        color: #fff;
-
-        &:hover {
-          // background-color: lighten($color-orange, 10%);
-        }
-
-        @include respond(laptop) {
-        }
-
-        @include respond(tablet) {
-        }
-
-        @include respond(phone) {
-        }
+      @include respond(phone) {
+        font-size: 32px;
       }
     }
 
-    &_col-2 {
-      width: 47.5%;
-      height: 700px;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-image: url("~@/assets/background-image-hero.avif");
-      border-radius: 15px;
+    p {
+      margin: $spacing-md 0 $spacing-lg 0;
+      font-size: $font-size-p-lg;
+      line-height: $line-height;
+      letter-spacing: $letter-spacing;
+      color: $color-text-dark;
+
+      @include respond(tablet) {
+        font-size: $font-size-p-md;
+      }
+
+      @include respond(phone) {
+        font-size: $font-size-p-sm;
+      }
+    }
+
+    & a {
+      @include primary-button;
+    }
+  }
+
+  &_image {
+    width: 45%;
+    height: 600px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url("~@/assets/background-image-hero.avif");
+    border-radius: $border-radius-lg;
+    box-shadow: $shadow-md;
+
+    @include respond(laptop) {
+      height: 450px;
+    }
+
+    @include respond(tablet) {
+      width: 100%;
+      height: 400px;
+    }
+
+    @include respond(phone) {
+      height: 300px;
     }
   }
 }

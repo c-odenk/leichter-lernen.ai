@@ -27,22 +27,40 @@ export default {
   width: 100%;
 
   &_row {
-    width: $width-desktop;
-    margin: 150px auto 150px auto;
+    @include content-container;
+    margin: $spacing-xl auto;
+    // margin: 150px auto;
     text-align: center;
 
     @include respond(laptop) {
+      margin: $spacing-lg auto;
     }
 
     @include respond(tablet) {
+      margin: $spacing-md auto;
     }
 
     @include respond(phone) {
+      margin: $spacing-sm auto;
     }
 
     & h2 {
-      font-size: 40px;
-      margin: 0 0 10px 0;
+      font-size: $font-size-h1-lg;
+      margin: 0 0 $spacing-xs 0;
+      color: $color-dark-blue;
+      line-height: $line-height;
+
+      @include respond(tablet) {
+        font-size: $font-size-h1-md;
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      @include respond(phone) {
+        font-size: $font-size-h1-sm;
+        width: 100%;
+      }
     }
 
     & p {
@@ -52,6 +70,17 @@ export default {
       font-size: $font-size-p-lg;
       line-height: $line-height;
       letter-spacing: $letter-spacing;
+      color: $color-text-dark;
+
+      @include respond(tablet) {
+        width: 80%;
+        font-size: $font-size-p-md;
+      }
+
+      @include respond(phone) {
+        width: 95%;
+        font-size: $font-size-p-sm;
+      }
     }
   }
 }

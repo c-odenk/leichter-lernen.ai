@@ -1,10 +1,17 @@
 <template>
-  <header>
+  <header v-cloak>
     <div class="header">
       <div class="header_row">
         <div class="header_row_logo">
           <router-link to="/">
-            <img src="@/assets/leichter-lernen-logo.png" />
+            <div v-if="!imageLoaded" class="logo-placeholder"></div>
+            <img
+              v-show="imageLoaded"
+              :src="logoSrc"
+              width="100"
+              height="100"
+              alt="leichter-lernen Logo"
+            />
             <h2>leichter-lernen.ai</h2>
           </router-link>
         </div>
@@ -15,7 +22,7 @@
             </li>
             <li>
               <router-link
-                to="/"
+                to=""
                 @click="handleDisabledClick"
                 class="disabled-link"
               >
@@ -38,7 +45,29 @@
 export default {
   name: "HeaderSection",
   data() {
-    return {};
+    return {
+      imageLoaded: false,
+      logoSrc: null,
+    };
+  },
+  created() {
+    // Logo URL vorbereiten
+    this.logoSrc = require("@/assets/leichter-lernen-logo.png");
+  },
+  mounted() {
+    // Bild im Hintergrund vorladen
+    const img = new Image();
+    img.onload = () => {
+      this.imageLoaded = true;
+    };
+    img.src = this.logoSrc;
+
+    // Cache Header in sessionStorage für schnellere Wiederbesuche
+    if (sessionStorage.getItem("headerLoaded") === "true") {
+      this.imageLoaded = true;
+    } else {
+      sessionStorage.setItem("headerLoaded", "true");
+    }
   },
   methods: {
     handleDisabledClick(event) {
@@ -50,123 +79,102 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/variables/Variables.scss";
+@import "@/variables/variables.scss";
+
+// Visibility handling for loading
+[v-cloak] {
+  display: none;
+}
+
+.logo-placeholder {
+  width: 100px;
+  height: 100px;
+  background-color: $color-body-background;
+  display: inline-block;
+  border-radius: $border-radius-sm;
+}
 
 .header {
   width: 100%;
-  padding: 30px 0px;
-
-  @include respond(laptop) {
-  }
-
-  @include respond(phone) {
-  }
+  padding: $spacing-md 0;
 
   &_row {
-    width: $width-desktop;
+    @include content-container;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
     align-items: center;
-    margin: 0 auto;
+    position: relative;
 
+    // Logo section
     &_logo {
-      & a {
-        display: flex;
-        flex-direction: row;
-        text-decoration: none;
-        align-items: center;
-        color: #000;
+      width: 33.33%;
 
-        & img {
+      a {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: $color-text-dark;
+        transition: color $transition-speed-medium $transition-timing;
+
+        img {
           height: 100px;
           width: auto;
+          display: block;
         }
 
-        & h2 {
+        h2 {
+          margin-left: $spacing-sm;
+          font-size: $font-size-h1-logo-lg;
+          line-height: $line-height;
+          letter-spacing: $letter-spacing;
+          color: $color-dark-blue;
         }
       }
     }
 
+    // Navigation section
     &_navigation {
-      @include respond(phone) {
-        width: 100%;
-      }
+      width: 33.33%;
+      display: flex;
+      justify-content: center;
 
-      & ul {
+      ul {
         display: flex;
-        flex-direction: row;
         list-style: none;
         margin: 0;
         padding: 0;
+        justify-content: center;
 
-        @include respond(phone) {
-          flex-direction: column;
-          padding: 50px 0 25px 0;
-        }
+        li {
+          margin: 0 $spacing-xs;
 
-        & li {
-          @include respond(phone) {
-            padding: 5px 5px;
-          }
-
-          & a {
-            padding: 0px 25px;
+          a {
+            padding: 0 $spacing-sm;
             font-size: $font-size-p-lg;
             font-weight: 500;
             line-height: $line-height;
             letter-spacing: $letter-spacing;
             text-decoration: none;
             text-transform: uppercase;
-            color: #000;
-
-            @include respond(tablet) {
-              padding: 0px 10px;
-            }
-
-            @include respond(phone) {
-              padding: 100px 10px;
-            }
+            color: $color-text-dark;
+            transition: color $transition-speed-medium $transition-timing;
 
             &.disabled-link {
-              // pointer-events: none;
               cursor: not-allowed;
-            }
-
-            &:hover {
+              opacity: 0.7;
             }
           }
         }
       }
     }
 
+    // CTA button
     &_cta {
+      width: 33.33%;
+      display: flex;
+      justify-content: flex-end;
+
       & a {
-        padding: 12px 30px;
-        font-size: calc(#{$font-size-p-lg} - 3px);
-        font-weight: 500;
-        line-height: $line-height;
-        letter-spacing: $letter-spacing;
-        text-decoration: none;
-        text-transform: uppercase;
-        border-radius: 7.5px;
-        color: #000;
-        border: 1px solid rgba(0, 0, 0, 0.5);
-        box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);
-
-        @include respond(tablet) {
-        }
-
-        @include respond(phone) {
-        }
-
-        &:hover {
-        }
-      }
-      & .img-platzhalter {
-        width: 200px;
-        height: 40px;
-        background-color: red;
+        @include primary-button;
       }
     }
   }

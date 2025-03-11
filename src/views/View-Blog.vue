@@ -56,11 +56,11 @@ export default {
     margin: 0 auto;
 
     &_post-prev {
-      width: 70%;
+      width: 68%;
     }
 
     &_widget {
-      width: 27.5%;
+      width: 29.5%;
     }
   }
 }

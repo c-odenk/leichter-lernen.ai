@@ -151,7 +151,7 @@ export default {
         width: 97.5%;
         margin: 0 auto 0 0;
         padding: 0;
-        font-size: $font-size-p-lg - 1px;
+        font-size: $font-size-p-lg;
         line-height: $line-height;
         word-wrap: break-word;
       }
@@ -169,7 +169,7 @@ export default {
         & li {
           margin: 0;
           padding: 7.5px 20px;
-          font-size: $font-size-p-lg - 1px;
+          font-size: $font-size-p-lg;
           background-color: #f0f0f0;
           border: 1px solid #000;
           border-radius: 15px;
@@ -198,7 +198,7 @@ export default {
       & button.dropdown {
         min-width: 200px;
         padding: 10px 30px;
-        font-size: $font-size-p-lg - 2px;
+        font-size: $font-size-p-lg;
         border: none;
         border-radius: 10px;
         cursor: pointer;

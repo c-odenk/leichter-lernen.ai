@@ -1,37 +1,105 @@
 <template>
   <div class="view-landing">
     <Header />
-    <LandingHero />
-    <LandingProduct />
-    <LandingBenefits />
-    <LandingTestimonials />
-    <LandingCTA />
-    <LandingQA />
+    <div
+      class="section-wrapper"
+      v-for="(section, index) in sections"
+      :key="section.key"
+      :ref="(el) => setSectionRef(el, section.key)"
+    >
+      <component
+        :is="section.component"
+        class="fade-item"
+        :class="index < 2 ? animationClass(section.key) : 'static-visible'"
+      />
+    </div>
     <Footer />
   </div>
 </template>
 
 <script>
+import { ref, onMounted, nextTick } from "vue";
 import Header from "@/components/header/Header.vue";
+import Footer from "@/components/footer/Footer.vue";
 import LandingHero from "@/components/landing/Landing-Hero.vue";
 import LandingProduct from "@/components/landing/Landing-Product.vue";
 import LandingBenefits from "@/components/landing/Landing-Benefits.vue";
 import LandingTestimonials from "@/components/landing/Landing-Testimonials.vue";
 import LandingQA from "@/components/landing/Landing-FAQ.vue";
 import LandingCTA from "@/components/landing/Landing-CTA.vue";
-import Footer from "@/components/footer/Footer.vue";
 
 export default {
   name: "ViewLanding",
   components: {
     Header,
+    Footer,
     LandingHero,
     LandingProduct,
     LandingBenefits,
     LandingTestimonials,
     LandingQA,
     LandingCTA,
-    Footer,
+  },
+  setup() {
+    const sections = ref([
+      { key: "hero", component: LandingHero },
+      { key: "product", component: LandingProduct },
+      { key: "benefits", component: LandingBenefits },
+      { key: "testimonials", component: LandingTestimonials },
+      { key: "cta", component: LandingCTA },
+      { key: "qa", component: LandingQA },
+    ]);
+
+    const visibleSections = ref({});
+    const sectionRefs = ref({});
+
+    const setSectionRef = (el, key) => {
+      if (el) {
+        sectionRefs.value[key] = el;
+      }
+    };
+
+    const animationClass = (key) => {
+      return {
+        "fade-in": visibleSections.value[key],
+        "slide-in-left": key === "hero" && visibleSections.value[key],
+        "slide-in-right delay": key === "product" && visibleSections.value[key],
+      };
+    };
+
+    onMounted(() => {
+      nextTick(() => {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry, index) => {
+              setTimeout(() => {
+                if (!entry.isIntersecting) return;
+                if (index >= 2) {
+                  entry.target.classList.add("static-visible");
+                } else {
+                  visibleSections.value[
+                    entry.target.getAttribute("data-key")
+                  ] = true;
+                }
+              }, index * 300 || 0);
+            });
+          },
+          { threshold: 0.3 }
+        );
+
+        Object.entries(sectionRefs.value).forEach(([key, el], index) => {
+          if (el) {
+            el.setAttribute("data-key", key);
+            observer.observe(el);
+            if (index >= 2) {
+              el.classList.add("static-visible");
+            }
+          }
+        });
+      });
+    });
+
+    return { sections, visibleSections, setSectionRef, animationClass };
   },
 };
 </script>
@@ -40,5 +108,43 @@ export default {
 @import "@/variables/Variables.scss";
 
 .view-landing {
+  .section-wrapper {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .fade-item {
+    opacity: 0;
+    transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+  }
+
+  .fade-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .slide-in-left {
+    transform: translateX(-30px);
+  }
+
+  .slide-in-right {
+    transform: translateX(30px);
+  }
+
+  .delay {
+    transition-delay: 0.3s;
+  }
+
+  .fade-in,
+  .slide-in-left,
+  .slide-in-right {
+    transform: translateX(0) translateY(0);
+    opacity: 1;
+  }
+
+  .static-visible {
+    opacity: 1;
+    transform: none;
+  }
 }
 </style>

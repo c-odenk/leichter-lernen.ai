@@ -31,20 +31,34 @@ export default {
 
 .blog-widget {
   width: 100%;
-  padding: 30px 40px;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);
+  padding: $spacing-md $spacing-lg;
+  box-shadow: $shadow-md;
   box-sizing: border-box;
+  border-radius: $border-radius-md;
+  background-color: $color-text-white;
 
   @include respond(tablet) {
+    padding: $spacing-md;
   }
 
   @include respond(phone) {
+    padding: $spacing-sm;
   }
 
   & h2 {
-    margin: 0 0 20px 0;
-    padding: 0 0 10px 0;
+    margin: 0 0 $spacing-sm 0;
+    padding: 0 0 $spacing-xs 0;
     border-bottom: solid 1px #ddd;
+    font-size: $font-size-h2-lg;
+    color: $color-dark-blue;
+
+    @include respond(tablet) {
+      font-size: $font-size-h2-md;
+    }
+
+    @include respond(phone) {
+      font-size: $font-size-h2-sm;
+    }
   }
 
   & p {
@@ -53,22 +67,34 @@ export default {
     font-size: $font-size-p-lg;
     line-height: $line-height;
     letter-spacing: $letter-spacing;
+    color: $color-text-dark;
+
+    @include respond(tablet) {
+      font-size: $font-size-p-md;
+    }
+
+    @include respond(phone) {
+      font-size: $font-size-p-sm;
+    }
   }
 
   & ul {
     list-style: none;
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 
     & li {
-      padding-bottom: 5px;
+      padding-bottom: $spacing-xs;
 
       & a {
         text-decoration: none;
-        color: #000;
+        color: $color-light-blue;
         font-weight: 400;
 
+        @include link-hover-effect;
+
         &:hover {
+          color: $color-light-blue-darker;
         }
       }
     }

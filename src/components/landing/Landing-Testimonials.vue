@@ -4,8 +4,8 @@
       <h2>💬 {{ heading }}</h2>
       <p>{{ paragraph }}</p>
 
-      <div class="landing-testimonials_row_testimonials">
-        <div
+      <ul class="landing-testimonials_row_testimonials">
+        <li
           class="testimonial"
           v-for="(testimonial, index) in testimonials"
           :key="index"
@@ -22,8 +22,8 @@
             <h3>{{ testimonial.headline }}</h3>
             <p>{{ testimonial.testimonial }}</p>
           </div>
-        </div>
-      </div>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -79,22 +79,6 @@ export default {
             "Ich lade meine Skripte hoch und erhalte sofort eine klare Struktur und Zusammenfassung. Das spart mir viel Zeit und lässt mich effizienter lernen. Top!",
           image: "anonymous-user.png",
         },
-        /*
-        {
-          name: "Sophie Keller",
-          headline: "Effizient lernen, weniger Stress",
-          testimonial:
-            "Die Zusammenfassungen und Quizfragen helfen mir enorm. Ich spare Zeit und kann mich viel gezielter auf meine Prüfungen vorbereiten – ohne stundenlang meine Unterlagen durchzugehen.",
-          image: "anonymous-user.png",
-        },
-        {
-          name: "Daniel Hoffmann",
-          headline: "Perfekt für last-minute Lernen",
-          testimonial:
-            "Wenn eine Prüfung bevorsteht und die Zeit knapp ist, verlasse ich mich auf die KI. Sie filtert die wichtigsten Inhalte heraus, sodass ich mich schnell und effizient vorbereiten kann. Kein unnötiges Blättern mehr!",
-          image: "anonymous-user.png",
-        },
-        */
       ],
     };
   },
@@ -106,25 +90,24 @@ export default {
 
 .landing-testimonials {
   width: 100%;
-  margin: 200px 0 200px 0;
+  margin: $spacing-xl 0;
 
   &_row {
-    width: $width-desktop;
-    margin: 0 auto;
-
-    @include respond(laptop) {
-    }
-
-    @include respond(tablet) {
-    }
-
-    @include respond(phone) {
-    }
+    @include content-container;
 
     & h2 {
-      margin: 0 0 10px 0;
+      margin: 0 0 $spacing-xs 0;
       padding: 0;
       text-align: center;
+      font-size: $font-size-h2-lg;
+
+      @include respond(tablet) {
+        font-size: $font-size-h2-md;
+      }
+
+      @include respond(phone) {
+        font-size: $font-size-h2-sm;
+      }
     }
 
     & p {
@@ -135,6 +118,16 @@ export default {
       line-height: $line-height;
       letter-spacing: $letter-spacing;
       text-align: center;
+
+      @include respond(tablet) {
+        width: 80%;
+        font-size: $font-size-p-md;
+      }
+
+      @include respond(phone) {
+        width: 95%;
+        font-size: $font-size-p-sm;
+      }
     }
 
     &_testimonials {
@@ -143,49 +136,83 @@ export default {
       flex-direction: row;
       align-items: flex-start;
       flex-wrap: wrap;
-      gap: 10px;
-      grid-auto-rows: auto;
-      margin: 50px auto 0 auto;
+      gap: $spacing-xs;
+      margin: $spacing-lg auto 0 auto;
+      padding: 0;
+      list-style: none;
 
       & .testimonial {
-        width: calc(100% / 3 - 10px);
+        width: calc(100% / 3 - #{$spacing-xs});
         height: auto;
         margin: 0;
-        padding: 35px 25px 40px 25px;
+        padding: $spacing-md $spacing-sm $spacing-lg $spacing-sm;
         box-sizing: border-box;
         border: 1px solid rgba(0, 0, 0, 0.07);
-        border-radius: 15px;
-        box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);
+        border-radius: $border-radius-lg;
+        box-shadow: $shadow-md;
         background-image: url("https://cdn.prod.website-files.com/642c9095b374127dfdae1169/67b4805b2e4275aa6ac3fa36_points-stats.svg");
+        transition: transform $transition-speed-medium $transition-timing;
+
+        @include respond(tablet) {
+          width: calc(50% - #{$spacing-xs});
+        }
+
+        @include respond(phone) {
+          width: 100%;
+        }
 
         &_header {
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-          align-items: center;
-          margin: 0 0 30px 0;
+          @include flex-between;
+          margin: 0 0 $spacing-md 0;
 
           & img {
             width: 65px;
             height: 65px;
-            border-radius: 50%;
+            border-radius: $border-radius-round;
           }
 
           & h3 {
             display: inline-block;
-            margin: 0 15px 0 0;
+            margin: 0 $spacing-xs 0 0;
             padding: 0;
+            font-size: $font-size-h3-lg;
+
+            @include respond(tablet) {
+              font-size: $font-size-h3-md;
+            }
+
+            @include respond(phone) {
+              font-size: $font-size-h3-sm;
+            }
           }
         }
 
         &_body {
           & h3 {
-            // color: orange;
+            color: $color-dark-blue;
+            font-size: $font-size-h3-lg;
+
+            @include respond(tablet) {
+              font-size: $font-size-h3-md;
+            }
+
+            @include respond(phone) {
+              font-size: $font-size-h3-sm;
+            }
           }
 
           & p {
             width: 100%;
             text-align: left;
+            font-size: $font-size-p-lg;
+
+            @include respond(tablet) {
+              font-size: $font-size-p-md;
+            }
+
+            @include respond(phone) {
+              font-size: $font-size-p-sm;
+            }
           }
         }
       }
