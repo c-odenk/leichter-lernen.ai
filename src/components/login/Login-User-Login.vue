@@ -1,6 +1,24 @@
 <template>
   <div class="login-container">
-    <div class="form-container">
+    <!-- Mobile-Hinweis, wird nur auf kleinen Bildschirmen angezeigt -->
+    <div v-if="isMobileDevice" class="mobile-notice">
+      <div class="notice-content">
+        <div class="notice-icon">📱❌</div>
+        <h2>Nur auf größeren Geräten verfügbar</h2>
+        <p>
+          Unsere Lernplattform benötigt für eine optimale Nutzererfahrung einen
+          größeren Bildschirm.
+        </p>
+        <p>
+          Bitte nutze ein Tablet, einen Laptop oder einen Desktop-PC, um auf die
+          Plattform zuzugreifen.
+        </p>
+        <a href="/" class="back-link"> Zurück zur Startseite </a>
+      </div>
+    </div>
+
+    <!-- Login/Register-Formular, wird nur auf größeren Bildschirmen angezeigt -->
+    <div v-else class="form-container">
       <div class="tabs">
         <button
           class="tab"
@@ -206,12 +224,20 @@
           />
           <label for="agreeTerms">
             Ich stimme den
-            <a href="/terms" class="link" @click.prevent="showTerms"
-              >Nutzungsbedingungen</a
+            <router-link
+              to="/terms"
+              class="link"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Nutzungsbedingungen</router-link
             >
             und
-            <a href="/privacy" class="link" @click.prevent="showPrivacy"
-              >Datenschutzrichtlinien</a
+            <router-link
+              to="/privacy"
+              class="link"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Datenschutzrichtlinien</router-link
             >
             zu
           </label>
@@ -252,11 +278,32 @@
 </template>
 
 <script>
-import { ref, computed, reactive } from "vue";
+import { ref, computed, reactive, onMounted } from "vue";
 
 export default {
   name: "LoginSection",
   setup() {
+    // Mobile-Erkennung
+    const isMobileDevice = ref(false);
+
+    // Überprüft beim Laden und bei Größenänderungen, ob ein mobiles Gerät verwendet wird
+    const checkMobileDevice = () => {
+      isMobileDevice.value = window.innerWidth < 768; // 768px ist ein typischer Breakpoint für Tablets
+    };
+
+    onMounted(() => {
+      // Initial prüfen
+      checkMobileDevice();
+
+      // Event-Listener für Größenänderungen hinzufügen
+      window.addEventListener("resize", checkMobileDevice);
+
+      // Cleanup beim Komponenten-Unmount
+      return () => {
+        window.removeEventListener("resize", checkMobileDevice);
+      };
+    });
+
     // Lokaler Auth-Service (als Ersatz für den fehlenden externen Service)
     const authService = {
       // Diese Funktionen werden später mit der tatsächlichen API-Integration ersetzt
@@ -519,6 +566,7 @@ export default {
       forgotPassword,
       showTerms,
       showPrivacy,
+      isMobileDevice, // Mobile-Status für das Template verfügbar machen
     };
   },
 };
@@ -538,6 +586,44 @@ export default {
   padding: $spacing-md;
   box-sizing: border-box;
   background-color: $color-body-background;
+}
+
+/* Mobile-Hinweis Styling */
+.mobile-notice {
+  width: 100%;
+  max-width: 500px;
+  background-color: $color-text-white;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-lg;
+  overflow: hidden;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.notice-content {
+  padding: $spacing-lg;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.notice-icon {
+  font-size: 48px;
+  margin-bottom: $spacing-md;
+}
+
+.notice-content h2 {
+  margin: 0 0 $spacing-md;
+  font-size: $font-size-h2-lg;
+  font-weight: 700;
+  color: $color-dark-blue;
+}
+
+.notice-content p {
+  margin-bottom: $spacing-md;
+  color: $color-text-dark;
+  line-height: 1.5;
 }
 
 .form-container {

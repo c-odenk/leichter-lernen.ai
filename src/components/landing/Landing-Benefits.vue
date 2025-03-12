@@ -33,7 +33,7 @@ export default {
         {
           title: "🚀 Schnelle Zusammenfassungen in wenigen Sekunden",
           description:
-            "Lade deine Vorlesungsskripte hoch und erhalte prägnante Zusammenfassungen. Erfasse die wichtigsten Inhalte schneller und spare wertvolle Lernzeit.",
+            "Lade deine Vorlesungsskripte hoch und erhalte prägnante Zusammenfassungen. So erfasst du die wichtigsten Inhalte schneller sparst wertvolle Lernzeit.",
           image: require("@/assets/studying.jpg"),
         },
         {

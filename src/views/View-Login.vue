@@ -34,6 +34,10 @@ export default {
     &_col-1 {
       width: 50vw;
       height: 100vh;
+
+      @include respond(phone) {
+        display: none;
+      }
     }
 
     &_col-2 {
@@ -41,6 +45,10 @@ export default {
       height: 100vh;
       box-sizing: border-box;
       overflow: hidden;
+
+      @include respond(phone) {
+        width: 100%;
+      }
     }
   }
 }

@@ -2,7 +2,7 @@
   <div class="dashboard-analyzed-topic">
     <div class="dashboard-analyzed-topic_row">
       <div class="dashboard-analyzed-topic_row_col-1">
-        <h3>Thema</h3>
+        <h3>📚 Thema</h3>
         <p>Dein analysiertes Thema</p>
       </div>
       <div class="dashboard-analyzed-topic_row_col-2">
@@ -12,7 +12,7 @@
 
     <div class="dashboard-analyzed-topic_row">
       <div class="dashboard-analyzed-topic_row_col-1">
-        <h3>Themenübersicht</h3>
+        <h3>📖 Themenübersicht</h3>
         <p>Alle Unterthemen auf einen Blick</p>
       </div>
       <div class="dashboard-analyzed-topic_row_col-2">
@@ -26,7 +26,7 @@
 
     <div class="dashboard-analyzed-topic_row">
       <div class="dashboard-analyzed-topic_row_col-1">
-        <h3>Zusammenfassung</h3>
+        <h3>✍️ Zusammenfassung</h3>
         <p>Verstehe & vertiefe dein Wissen</p>
       </div>
 
@@ -61,7 +61,7 @@
 
     <div class="dashboard-analyzed-topic_row">
       <div class="dashboard-analyzed-topic_row_col-1">
-        <h3>Multiple-Choice-Quiz</h3>
+        <h3>🏆 Multiple-Choice-Quiz</h3>
         <p>Teste dein Wissen umfassend</p>
       </div>
       <div class="dashboard-analyzed-topic_row_col-2">
@@ -134,7 +134,7 @@ export default {
     }
 
     &_col-1 {
-      width: 20vw;
+      width: 18vw;
       max-width: 500px;
       margin-right: $spacing-md;
 
@@ -163,7 +163,7 @@ export default {
       & p {
         margin: 0;
         padding: 0;
-        font-size: calc($font-size-p-lg - 4px);
+        font-size: calc($font-size-p-lg - 5px);
         font-weight: 500;
         // color: $color-dark-blue-lighter;
         color: #707070;

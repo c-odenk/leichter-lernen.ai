@@ -33,9 +33,14 @@ const routes = [
     component: () => import("../views/View-Login.vue"),
   },
   {
+    path: "/newtopic",
+    name: "NewTopic",
+    component: () => import("../views/View-Dashboard-New-Topic.vue"),
+  },
+  {
     path: "/dashboard",
     name: "Dashboard",
-    component: () => import("../views/View-Dashboard.vue"),
+    component: () => import("../views/View-Dashboard-Analyzed-Topic.vue"),
   },
   {
     path: "/impressum",

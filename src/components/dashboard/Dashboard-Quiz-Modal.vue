@@ -167,7 +167,7 @@ export default {
 }
 
 .dashboard-quiz-modal {
-  width: 40vw;
+  width: $width-modal-lg;
   background-color: $color-text-white;
   margin: -100px 0 0 0;
   border-radius: $border-radius-md;
@@ -195,7 +195,7 @@ export default {
     & p {
       margin: 0;
       padding: 0;
-      font-size: $font-size-p-lg;
+      font-size: calc($font-size-p-lg - 3px);
 
       @include respond(tablet) {
         font-size: $font-size-p-md;
@@ -268,7 +268,7 @@ export default {
 
       & label {
         cursor: pointer;
-        font-size: $font-size-p-lg;
+        font-size: calc($font-size-p-lg - 3px);
 
         @include respond(tablet) {
           font-size: $font-size-p-md;
@@ -294,8 +294,8 @@ export default {
       }
 
       i {
-        font-size: 1.5rem;
-        margin: 0 $spacing-xs 0 0;
+        font-size: 1.1rem;
+        margin: 0 10px 0 0;
       }
 
       .hidden-radio {
@@ -307,8 +307,8 @@ export default {
   .modal-footer {
     display: flex;
     justify-content: flex-end;
-    margin: $spacing-lg 0 0 0;
-    padding: $spacing-md $spacing-md;
+    margin: calc($spacing-lg + 10px) 0 0 0;
+    padding: calc($spacing-md - 5px) $spacing-md;
     background-color: $color-dark-blue;
     border-bottom-left-radius: $border-radius-md;
     border-bottom-right-radius: $border-radius-md;
@@ -317,7 +317,8 @@ export default {
     .next-btn {
       @include primary-button;
       min-width: 220px;
-      border: none; /* Border entfernt */
+      border: none;
+      font-size: calc($font-size-p-lg - 4px);
 
       &:disabled {
         background-color: #cccccc;
