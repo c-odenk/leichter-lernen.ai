@@ -1,6 +1,6 @@
 <template>
-  <div class="impressum">
-    <div class="impressum_row">
+  <div class="imprint">
+    <div class="imprint_row">
       <h2>
         Impressum <br />
         Angaben gemäß § 5 TMG:
@@ -97,7 +97,7 @@
 
 <script>
 export default {
-  name: "ImpressumSection",
+  name: "ImprintSection",
   data() {
     return {
       unternehmen: "Musterfirma GmbH",
@@ -125,7 +125,7 @@ export default {
 <style lang="scss" scoped>
 @import "@/variables/variables.scss";
 
-.impressum {
+.imprint {
   width: 100%;
 
   &_row {

@@ -7,7 +7,7 @@
     <div class="dashboard-sidebar__menu">
       <div class="dashboard-sidebar__menu__section top">
         <button
-          @click="$router.push('/')"
+          @click="$router.push('/newtopic')"
           class="primary-button sidebar-button"
         >
           <i class="fa-solid fa-plus"></i>
@@ -27,7 +27,7 @@
                 class="menu-item"
                 :class="{ active: isActive(item.link) }"
               >
-                <span class="indicator"></span>
+                <i class="fa-solid fa-file-lines"></i>
                 <span class="text">{{ item.name }}</span>
               </router-link>
             </li>
@@ -36,7 +36,6 @@
       </div>
 
       <div class="dashboard-sidebar__menu__section bottom">
-        <!-- <h3 class="section-title">Optionen</h3> -->
         <ul class="utility-list">
           <li>
             <router-link to="/settings" class="menu-item">
@@ -80,25 +79,27 @@ export default {
 <style lang="scss" scoped>
 @import "@/variables/Variables.scss";
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 .dashboard-sidebar {
   position: sticky;
   top: 0;
   display: flex;
   flex-direction: column;
-  width: 13vw;
-  min-width: 300px;
+  width: 280px;
   height: 100vh;
-  padding: $spacing-md;
   background-color: $color-dark-blue;
   box-shadow: $shadow-md;
-  box-sizing: border-box;
   transition: width $transition-speed-medium $transition-timing;
   overflow-y: auto;
   overflow-x: hidden;
 
   @include respond(tablet) {
     width: 250px;
-    padding: $spacing-sm;
   }
 
   @include respond(phone) {
@@ -108,7 +109,8 @@ export default {
   }
 
   &__logo {
-    margin-bottom: $spacing-lg;
+    padding: $spacing-md;
+    /* Trennlinie entfernt */
 
     .img-platzhalter {
       width: 100%;
@@ -128,7 +130,7 @@ export default {
     flex-direction: column;
     justify-content: space-between;
     flex-grow: 1;
-    gap: $spacing-lg;
+    padding: $spacing-md;
 
     &__section {
       &.top {
@@ -137,12 +139,11 @@ export default {
     }
 
     .section-title {
-      margin: $spacing-md 0 $spacing-xs 5px;
-      color: transparentize($color-text-white, 0.3);
-      font-size: calc($font-size-p-lg - 2px);
-      font-weight: 500;
-      // text-transform: uppercase;
-      letter-spacing: 1px;
+      margin: $spacing-sm 0 $spacing-xs 0;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
     }
 
     .sidebar-button {
@@ -152,15 +153,16 @@ export default {
       gap: $spacing-xs;
       font-weight: 500;
       border: none;
+      padding: 12px 15px;
+      border-radius: $border-radius-sm;
 
       i {
-        font-size: calc($font-size-p-lg - 2px);
-        margin: 0 10px 0 0;
+        font-size: 14px;
       }
     }
 
     .theme-section {
-      margin-bottom: $spacing-md;
+      margin-bottom: $spacing-lg;
     }
 
     .theme-list,
@@ -171,62 +173,59 @@ export default {
 
       li {
         margin: 2px 0;
-        border-radius: $border-radius-md;
       }
-    }
-
-    .theme-item {
-      // padding-left: $spacing-xs;
     }
 
     .menu-item {
       display: flex;
       align-items: center;
-      padding: $spacing-xs $spacing-sm;
+      padding: 10px 12px;
       color: $color-text-white;
-      font-size: calc($font-size-p-lg - 3px);
+      font-size: 14px;
       text-decoration: none;
-      border-radius: $border-radius-md;
-      transition: background-color $transition-speed-fast $transition-timing;
-
-      &:hover,
-      &.active {
-        background-color: transparentize($color-light-blue, 0.7);
-      }
-
-      &.active {
-        font-weight: 500;
-
-        .indicator {
-          opacity: 1;
-        }
-      }
-
-      .indicator {
-        width: 4px;
-        height: 4px;
-        margin-right: $spacing-xs;
-        background-color: $color-light-blue-lighter;
-        border-radius: $border-radius-round;
-        opacity: 0;
-        transition: opacity $transition-speed-fast $transition-timing;
-
-        display: none;
-      }
+      border-radius: $border-radius-sm;
+      transition: all $transition-speed-fast $transition-timing;
 
       i {
         margin-right: $spacing-xs;
-        width: 20px;
+        width: 18px;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.7);
         text-align: center;
       }
 
-      @include respond(tablet) {
-        font-size: $font-size-p-md;
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
       }
 
-      @include respond(phone) {
-        font-size: $font-size-p-sm;
+      &.active {
+        background-color: $color-light-blue;
+        font-weight: 500;
+
+        i {
+          color: $color-text-white;
+        }
       }
+
+      .text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+}
+
+// Utility List (Bottom) special styling
+.utility-list {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: $spacing-sm;
+
+  .menu-item {
+    color: rgba(255, 255, 255, 0.8);
+
+    &:hover {
+      color: $color-text-white;
     }
   }
 }

@@ -1,10 +1,11 @@
 <template>
   <div class="file-upload-container">
-    <div class="upload-header">
+    <div class="component-header">
       <h3>Datei hochladen</h3>
+      <div class="step-indicator">Schritt 1 von 3</div>
     </div>
 
-    <div class="upload-content">
+    <div class="component-content">
       <div
         class="upload-dropzone"
         :class="{
@@ -97,23 +98,18 @@
         </div>
       </div>
 
-      <div class="url-upload-section">
-        <p class="url-title">Oder von URL hochladen</p>
-        <div class="url-input-container">
-          <input
-            type="text"
-            class="url-input"
-            placeholder="https://meinewebsite.de/datei"
-            v-model="fileUrl"
-          />
-          <button
-            class="url-upload-button"
-            :disabled="!fileUrl"
-            @click="uploadFromUrl"
-          >
-            Hochladen
-          </button>
-        </div>
+      <!-- Navigation Buttons -->
+      <div class="navigation-buttons">
+        <button class="secondary-button" @click="handleCancel">
+          Abbrechen
+        </button>
+        <button
+          class="primary-button"
+          :disabled="!uploadComplete"
+          @click="handleContinue"
+        >
+          Weiter
+        </button>
       </div>
     </div>
   </div>
@@ -131,11 +127,11 @@ export default {
   data() {
     return {
       selectedFile: null,
-      fileUrl: "",
       isUploading: false,
       isDragging: false,
       uploadProgress: 0,
       allowedFileTypes: [".csv", ".doc", ".docx", ".pdf", ".txt", ".rtf"],
+      uploadComplete: false,
     };
   },
   computed: {
@@ -179,6 +175,7 @@ export default {
       const fileExtension = this.getFileExtension(file.name);
       if (this.isAllowedFileType(fileExtension)) {
         this.selectedFile = file;
+        this.uploadComplete = false; // Reset upload state
         // Simulate processing
         this.simulateUpload();
       } else {
@@ -213,6 +210,7 @@ export default {
     removeFile() {
       this.selectedFile = null;
       this.uploadProgress = 0;
+      this.uploadComplete = false;
       // Reset input
       const input = document.getElementById("file-input");
       if (input) {
@@ -222,21 +220,7 @@ export default {
     cancelUpload() {
       this.isUploading = false;
       this.uploadProgress = 0;
-    },
-    uploadFromUrl() {
-      if (this.fileUrl) {
-        // Validate URL file type
-        const fileExtension = this.getFileExtension(this.fileUrl);
-        if (this.isAllowedFileType(fileExtension)) {
-          this.isUploading = true;
-          // Simulate URL upload
-          this.simulateUpload();
-        } else {
-          alert(
-            "Die URL muss auf eine unterstützte Datei verweisen (CSV, Word, PDF, TXT, RTF)"
-          );
-        }
-      }
+      this.uploadComplete = false;
     },
     simulateUpload() {
       this.isUploading = true;
@@ -247,9 +231,10 @@ export default {
         if (this.uploadProgress >= 100) {
           clearInterval(interval);
           this.isUploading = false;
+          this.uploadComplete = true;
 
           // Emit completion event
-          this.$emit("upload-complete", this.selectedFile || this.fileUrl);
+          this.$emit("upload-complete", this.selectedFile);
         }
       }, 100);
     },
@@ -262,12 +247,31 @@ export default {
 
       return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
     },
+    handleCancel() {
+      // Vollständig zurücksetzen
+      this.removeFile();
+
+      // Emit cancel event
+      this.$emit("cancel");
+    },
+    handleContinue() {
+      // Only allow continue if upload is complete
+      if (this.uploadComplete) {
+        this.$emit("continue", this.selectedFile);
+      }
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 @import "@/variables/variables.scss";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
 // Component Container Layout
 .file-upload-container {
@@ -284,15 +288,19 @@ export default {
 }
 
 // Header Styles
-.upload-header {
+.component-header {
   padding: $spacing-sm $spacing-md;
   border-bottom: 1px solid #eee;
   background-color: $color-text-white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   h3 {
     margin: 0;
     color: $color-text-dark;
     font-size: $font-size-h3-lg;
+    font-weight: 600;
 
     @include respond(tablet) {
       font-size: $font-size-h3-md;
@@ -302,10 +310,19 @@ export default {
       font-size: $font-size-h3-sm;
     }
   }
+
+  .step-indicator {
+    font-size: 14px;
+    font-weight: 500;
+    color: $color-light-blue;
+    background-color: lighten($color-light-blue, 35%);
+    padding: 4px 10px;
+    border-radius: $border-radius-sm;
+  }
 }
 
 // Main Content Styles
-.upload-content {
+.component-content {
   padding: $spacing-md;
   background-color: $color-text-white;
 
@@ -376,6 +393,7 @@ export default {
   margin: 5px 0;
   font-size: 16px;
   color: $color-text-dark;
+  font-weight: 500;
 }
 
 .upload-subtext {
@@ -394,41 +412,6 @@ export default {
 
 .hidden-input {
   display: none;
-}
-
-// URL Upload Styles
-.url-upload-section {
-  .url-title {
-    margin: $spacing-sm 0 $spacing-xs;
-    font-size: 14px;
-    color: #666;
-  }
-
-  .url-input-container {
-    display: flex;
-
-    .url-input {
-      flex: 1;
-      padding: 10px 12px;
-      border: 1px solid #ddd;
-      border-right: none;
-      border-radius: $border-radius-sm 0 0 $border-radius-sm;
-      font-size: 14px;
-      transition: border-color $transition-speed-fast $transition-timing;
-
-      &:focus {
-        outline: none;
-        border-color: $color-light-blue;
-      }
-    }
-
-    .url-upload-button {
-      @include primary-button;
-      border-radius: 0 $border-radius-sm $border-radius-sm 0;
-      padding: 10px 15px;
-      border: none;
-    }
-  }
 }
 
 // Progress State Styles
@@ -561,5 +544,40 @@ export default {
   margin: 3px 0 0;
   font-size: 12px;
   color: #666;
+}
+
+// Navigation Buttons Styles
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: $spacing-md;
+  padding-top: $spacing-sm;
+  border-top: 1px solid #eee;
+}
+
+.secondary-button {
+  padding: 10px 20px;
+  background-color: transparent;
+  border: 1px solid #ddd;
+  border-radius: $border-radius-sm;
+  color: #666;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all $transition-speed-fast $transition-timing;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+}
+
+.primary-button {
+  @include primary-button;
+  padding: 10px 30px;
+  border: none;
+
+  &:disabled {
+    background-color: lighten($color-light-blue, 25%);
+    cursor: not-allowed;
+  }
 }
 </style>

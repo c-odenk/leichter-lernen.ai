@@ -1,6 +1,6 @@
 <template>
-  <div class="agb">
-    <div class="agb_row">
+  <div class="terms">
+    <div class="terms_row">
       <h2>Allgemeine Geschäftsbedingungen (AGB)</h2>
 
       <h3>1. Geltungsbereich</h3>
@@ -58,7 +58,7 @@
 
 <script>
 export default {
-  name: "AGBSection",
+  name: "TermsSection",
   data() {
     return {
       unternehmen: "Musterfirma GmbH",
@@ -73,7 +73,7 @@ export default {
 <style lang="scss" scoped>
 @import "@/variables/variables.scss";
 
-.agb {
+.terms {
   width: 100%;
 
   &_row {

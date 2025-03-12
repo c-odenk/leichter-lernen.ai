@@ -4,7 +4,7 @@
       <p>Copyright &copy; 2025 leichter-lernen.ai. Alle Rechte vorbehalten.</p>
       <ul>
         <li><router-link to="/terms"> AGB </router-link></li>
-        <li><router-link to="/impressum"> Impressum </router-link></li>
+        <li><router-link to="/imprint"> Impressum </router-link></li>
       </ul>
     </div>
     <div class="footer_row">

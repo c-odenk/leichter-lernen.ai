@@ -43,9 +43,9 @@ const routes = [
     component: () => import("../views/View-Dashboard-Analyzed-Topic.vue"),
   },
   {
-    path: "/impressum",
+    path: "/imprint",
     name: "Impressum",
-    component: () => import("../views/View-Impressum.vue"),
+    component: () => import("../views/View-Imprint.vue"),
   },
   {
     path: "/privacy",

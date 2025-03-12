@@ -1,6 +1,6 @@
 <template>
-  <div class="datenschutz">
-    <div class="datenschutz_row">
+  <div class="privacy">
+    <div class="privacy_row">
       <h2>Datenschutzerklärung</h2>
 
       <h3>1. Verantwortliche Stelle</h3>
@@ -80,7 +80,7 @@
 
 <script>
 export default {
-  name: "DatenschutzSection",
+  name: "PrivacySection",
   data() {
     return {
       unternehmen: "Musterfirma GmbH",
@@ -95,7 +95,7 @@ export default {
 <style lang="scss" scoped>
 @import "@/variables/variables.scss";
 
-.datenschutz {
+.privacy {
   width: 100%;
 
   &_row {
