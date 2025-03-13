@@ -268,7 +268,7 @@ export default {
 
       & label {
         cursor: pointer;
-        font-size: calc($font-size-p-lg - 3px);
+        font-size: calc($font-size-p-lg - 2px);
 
         @include respond(tablet) {
           font-size: $font-size-p-md;

@@ -77,7 +77,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/variables/Variables.scss";
+@import "@/variables/variables.scss";
 
 *,
 *::before,
@@ -110,7 +110,6 @@ export default {
 
   &__logo {
     padding: $spacing-md;
-    /* Trennlinie entfernt */
 
     .img-platzhalter {
       width: 100%;
@@ -181,7 +180,9 @@ export default {
       align-items: center;
       padding: 10px 12px;
       color: $color-text-white;
-      font-size: 14px;
+      font-size: calc(
+        14px + 1px
+      ); /* Erhöhte Schriftgröße für Navigationslinks */
       text-decoration: none;
       border-radius: $border-radius-sm;
       transition: all $transition-speed-fast $transition-timing;

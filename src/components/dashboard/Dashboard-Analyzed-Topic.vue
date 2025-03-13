@@ -65,7 +65,9 @@
         <p>Teste dein Wissen umfassend</p>
       </div>
       <div class="dashboard-analyzed-topic_row_col-2">
-        <button class="quiz primary-button">Quiz starten</button>
+        <button class="quiz primary-button" @click="startQuiz">
+          Quiz starten
+        </button>
       </div>
     </div>
   </div>
@@ -104,12 +106,21 @@ export default {
     toggleExpand() {
       this.isExpanded = !this.isExpanded;
     },
+    startQuiz() {
+      this.$emit("start-quiz", this.topic);
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 @import "@/variables/variables.scss";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
 .dashboard-analyzed-topic {
   margin: 0;
@@ -145,10 +156,10 @@ export default {
       }
 
       & h3 {
-        margin: 0 0 calc($spacing-xs - 8px) 0;
+        margin: 0 0 5px 0;
         padding: 0;
         font-size: $font-size-h3-lg;
-        color: #000;
+        color: $color-dark-blue;
         font-weight: 600;
 
         @include respond(tablet) {
@@ -163,17 +174,18 @@ export default {
       & p {
         margin: 0;
         padding: 0;
-        font-size: calc($font-size-p-lg - 5px);
+        font-size: calc(
+          $font-size-p-lg - 5px
+        ); /* Kleinere Schriftgröße für Subheading */
         font-weight: 500;
-        // color: $color-dark-blue-lighter;
         color: #707070;
 
         @include respond(tablet) {
-          font-size: $font-size-p-md;
+          font-size: calc($font-size-p-md - 2px);
         }
 
         @include respond(phone) {
-          font-size: $font-size-p-sm;
+          font-size: calc($font-size-p-sm - 1px);
         }
       }
     }
@@ -210,7 +222,7 @@ export default {
         width: 95%;
         margin: 0 auto 0 0;
         padding: 0;
-        font-size: calc($font-size-p-lg - 2px);
+        font-size: calc($font-size-p-lg - 3px);
         line-height: $line-height;
         word-wrap: break-word;
 
@@ -221,6 +233,12 @@ export default {
         @include respond(phone) {
           font-size: $font-size-p-sm;
         }
+      }
+
+      & b {
+        font-size: calc($font-size-p-lg - 3px);
+        font-weight: 500;
+        color: $color-dark-blue;
       }
 
       & ul {
@@ -248,8 +266,6 @@ export default {
           @include respond(phone) {
             font-size: $font-size-p-sm;
           }
-
-          /* Hover-Effekt entfernt */
         }
       }
 
@@ -270,7 +286,7 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 30px 0 0 0;
+        margin: $spacing-md 0 0 0;
         padding: 10px $spacing-md;
         font-size: calc($font-size-p-lg - 3px);
         background-color: transparent;
@@ -308,9 +324,8 @@ export default {
       & button.quiz {
         @include primary-button;
         align-self: flex-start;
-        // margin-top: $spacing-xs;
         border: none; /* Border entfernt */
-        font-size: calc($font-size-p-lg - 4px);
+        font-size: calc($font-size-p-lg - 3px);
       }
     }
   }

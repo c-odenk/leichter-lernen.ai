@@ -9,11 +9,13 @@
           v-for="(topic, index) in AnalyzedTopic"
           :key="index"
           :topic="topic"
+          @start-quiz="startQuiz(topic)"
         />
       </div>
       <DashboardQuizModal
-        v-if="AnalyzedTopic.length > 0"
-        :topic="AnalyzedTopic.map((topic) => topic.topicQuiz)"
+        v-if="showQuizModal && currentQuizTopic"
+        :topic="currentQuizTopic.topicQuiz"
+        @close="closeQuizModal"
       />
     </div>
   </div>
@@ -36,7 +38,18 @@ export default {
   data() {
     return {
       AnalyzedTopic,
+      showQuizModal: false,
+      currentQuizTopic: null,
     };
+  },
+  methods: {
+    startQuiz(topic) {
+      this.currentQuizTopic = topic;
+      this.showQuizModal = true;
+    },
+    closeQuizModal() {
+      this.showQuizModal = false;
+    },
   },
 };
 </script>

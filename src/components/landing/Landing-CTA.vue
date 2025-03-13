@@ -35,7 +35,26 @@ export default {
     text-align: center;
     border-radius: $border-radius-lg;
     background-color: $color-dark-blue;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 600'%3E%3Crect width='500' height='600' fill='%23172b4d' /%3E%3Cg opacity='0.25'%3E%3Cpath d='M0 50 Q125 100, 250 75 T 500 100' fill='none' stroke='%233083e9' stroke-width='0.9' /%3E%3Cpath d='M0 75 Q125 125, 250 100 T 500 125' fill='none' stroke='%233083e9' stroke-width='0.9' /%3E%3C/g%3E%3Cg opacity='0.18'%3E%3Cpath d='M0 150 Q200 100, 350 175 T 500 200' fill='none' stroke='%23ffffff' stroke-width='0.6' /%3E%3Cpath d='M0 175 Q200 125, 350 200 T 500 225' fill='none' stroke='%23ffffff' stroke-width='0.6' /%3E%3C/g%3E%3Cg opacity='0.25'%3E%3Cpath d='M500 400 Q375 450, 250 425 T 0 450' fill='none' stroke='%233083e9' stroke-width='0.9' /%3E%3Cpath d='M500 425 Q375 475, 250 450 T 0 475' fill='none' stroke='%233083e9' stroke-width='0.9' /%3E%3C/g%3E%3Cg opacity='0.18'%3E%3Cpath d='M500 500 Q300 525, 150 500 T 0 525' fill='none' stroke='%23ffffff' stroke-width='0.6' /%3E%3Cpath d='M500 525 Q300 550, 150 525 T 0 550' fill='none' stroke='%23ffffff' stroke-width='0.6' /%3E%3C/g%3E%3C/svg%3E");
+    background-size: cover;
     box-shadow: $shadow-lg;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(
+        circle at center,
+        rgba(48, 131, 233, 0.015) 0%,
+        rgba(23, 43, 77, 0.12) 100%
+      );
+      z-index: 1;
+    }
 
     @include respond(laptop) {
       padding: $spacing-xl 0;
@@ -56,6 +75,8 @@ export default {
       padding: 0;
       color: $color-text-white;
       font-size: $font-size-h2-lg;
+      position: relative;
+      z-index: 2;
 
       @include respond(tablet) {
         font-size: $font-size-h2-md;
@@ -78,6 +99,8 @@ export default {
       width: 60%;
       margin-left: auto;
       margin-right: auto;
+      position: relative;
+      z-index: 2;
 
       @include respond(tablet) {
         font-size: $font-size-p-md;
@@ -93,6 +116,8 @@ export default {
 
     & a {
       @include primary-button;
+      position: relative;
+      z-index: 2;
     }
   }
 }
