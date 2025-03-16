@@ -275,15 +275,15 @@ export default {
 
 // Component Container Layout
 .file-upload-container {
-  width: $width-modal-lg;
+  width: $width-modal-desktop;
   background-color: $color-text-white;
   border-radius: $border-radius-md;
   box-shadow: $shadow-md;
   overflow: hidden;
   font-family: $font-family;
 
-  @include respond(tablet) {
-    max-width: 100%;
+  @include respond(laptop) {
+    width: $width-modal-laptop;
   }
 }
 
@@ -305,10 +305,6 @@ export default {
     @include respond(tablet) {
       font-size: $font-size-h3-md;
     }
-
-    @include respond(phone) {
-      font-size: $font-size-h3-sm;
-    }
   }
 
   .step-indicator {
@@ -325,10 +321,6 @@ export default {
 .component-content {
   padding: $spacing-md;
   background-color: $color-text-white;
-
-  @include respond(phone) {
-    padding: $spacing-sm;
-  }
 }
 
 // Dropzone Styles
@@ -356,11 +348,6 @@ export default {
     background-color: $color-text-white;
     border-color: #e0e0e0;
     border-style: solid;
-  }
-
-  @include respond(phone) {
-    padding: $spacing-sm;
-    min-height: 150px;
   }
 }
 

@@ -77,7 +77,7 @@ export default {
 
     p {
       margin: $spacing-md 0 $spacing-lg 0;
-      font-size: $font-size-p-lg;
+      font-size: $font-size-p-xl;
       line-height: $line-height;
       letter-spacing: $letter-spacing;
       color: $color-text-dark;

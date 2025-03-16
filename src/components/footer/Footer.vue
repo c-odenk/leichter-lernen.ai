@@ -77,7 +77,7 @@ export default {
     & p {
       margin: 0;
       padding: 0;
-      font-size: $font-size-p-lg;
+      font-size: $font-size-p-xl;
       line-height: $line-height;
       letter-spacing: $letter-spacing;
       color: $color-text-white;
@@ -116,7 +116,7 @@ export default {
     & a {
       padding: 0;
       text-decoration: none;
-      font-size: $font-size-p-lg;
+      font-size: $font-size-p-xl;
       line-height: $line-height;
       letter-spacing: $letter-spacing;
       color: $color-text-white;

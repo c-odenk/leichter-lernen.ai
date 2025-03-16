@@ -1,24 +1,6 @@
 <template>
   <div class="login-container">
-    <!-- Mobile-Hinweis, wird nur auf kleinen Bildschirmen angezeigt -->
-    <div v-if="isMobileDevice" class="mobile-notice">
-      <div class="notice-content">
-        <div class="notice-icon">📱❌</div>
-        <h2>Nur auf größeren Geräten verfügbar</h2>
-        <p>
-          Unsere Lernplattform benötigt für eine optimale Nutzererfahrung einen
-          größeren Bildschirm.
-        </p>
-        <p>
-          Bitte nutze ein Tablet, einen Laptop oder einen Desktop-PC, um auf die
-          Plattform zuzugreifen.
-        </p>
-        <a href="/" class="back-link"> Zurück zur Startseite </a>
-      </div>
-    </div>
-
-    <!-- Login/Register-Formular, wird nur auf größeren Bildschirmen angezeigt -->
-    <div v-else class="form-container">
+    <div class="form-container">
       <div class="tabs">
         <button
           class="tab"
@@ -103,7 +85,7 @@
         </button>
 
         <div class="back-link-container">
-          <a href="/" class="back-link"> Zurück zur Startseite </a>
+          <a href="/" class="back-link">Zurück zur Startseite</a>
         </div>
 
         <div v-if="loginError" class="error-message" role="alert">
@@ -119,26 +101,28 @@
       >
         <h2>Registrieren</h2>
 
-        <div class="form-group">
-          <label for="registerFirstName">Vorname</label>
-          <input
-            type="text"
-            id="registerFirstName"
-            v-model="registerForm.firstName"
-            required
-            placeholder="Ihr Vorname"
-          />
-        </div>
+        <div class="form-row">
+          <div class="form-group form-group-half">
+            <label for="registerFirstName">Vorname</label>
+            <input
+              type="text"
+              id="registerFirstName"
+              v-model="registerForm.firstName"
+              required
+              placeholder="Ihr Vorname"
+            />
+          </div>
 
-        <div class="form-group">
-          <label for="registerLastName">Nachname</label>
-          <input
-            type="text"
-            id="registerLastName"
-            v-model="registerForm.lastName"
-            required
-            placeholder="Ihr Nachname"
-          />
+          <div class="form-group form-group-half">
+            <label for="registerLastName">Nachname</label>
+            <input
+              type="text"
+              id="registerLastName"
+              v-model="registerForm.lastName"
+              required
+              placeholder="Ihr Nachname"
+            />
+          </div>
         </div>
 
         <div class="form-group">
@@ -252,21 +236,8 @@
           <span>{{ isLoading ? "Wird registriert..." : "Registrieren" }}</span>
         </button>
 
-        <div class="divider">
-          <span>oder</span>
-        </div>
-
-        <button
-          type="button"
-          class="btn btn-google"
-          @click="registerWithGoogle"
-        >
-          <span class="google-icon">G</span>
-          Mit Google anmelden
-        </button>
-
         <div class="back-link-container">
-          <a href="/" class="back-link"> Zurück zur Startseite </a>
+          <a href="/" class="back-link">Zurück zur Startseite</a>
         </div>
 
         <div v-if="registerError" class="error-message" role="alert">
@@ -278,32 +249,11 @@
 </template>
 
 <script>
-import { ref, computed, reactive, onMounted } from "vue";
+import { ref, computed, reactive } from "vue";
 
 export default {
-  name: "LoginSection",
+  name: "LoginUserSection",
   setup() {
-    // Mobile-Erkennung
-    const isMobileDevice = ref(false);
-
-    // Überprüft beim Laden und bei Größenänderungen, ob ein mobiles Gerät verwendet wird
-    const checkMobileDevice = () => {
-      isMobileDevice.value = window.innerWidth < 768; // 768px ist ein typischer Breakpoint für Tablets
-    };
-
-    onMounted(() => {
-      // Initial prüfen
-      checkMobileDevice();
-
-      // Event-Listener für Größenänderungen hinzufügen
-      window.addEventListener("resize", checkMobileDevice);
-
-      // Cleanup beim Komponenten-Unmount
-      return () => {
-        window.removeEventListener("resize", checkMobileDevice);
-      };
-    });
-
     // Lokaler Auth-Service (als Ersatz für den fehlenden externen Service)
     const authService = {
       // Diese Funktionen werden später mit der tatsächlichen API-Integration ersetzt
@@ -366,10 +316,6 @@ export default {
             resolve(true);
           }, 500);
         });
-      },
-
-      async registerWithGoogle() {
-        return this.loginWithGoogle();
       },
     };
 
@@ -512,23 +458,6 @@ export default {
       }
     };
 
-    const registerWithGoogle = async () => {
-      try {
-        registerError.value = "";
-        isLoading.value = true;
-
-        await authService.registerWithGoogle();
-        // Nach erfolgreicher Registrierung zur Login-Seite wechseln oder direkt einloggen
-      } catch (error) {
-        registerError.value =
-          error.message ||
-          "Bei der Registrierung mit Google ist ein Fehler aufgetreten";
-        console.error("Google registration error", error);
-      } finally {
-        isLoading.value = false;
-      }
-    };
-
     const forgotPassword = () => {
       console.log("Forgot password");
       // Hier würde normalerweise die Passwort-Zurücksetzen-Funktion implementiert werden
@@ -562,11 +491,10 @@ export default {
       login,
       register,
       loginWithGoogle,
-      registerWithGoogle,
+
       forgotPassword,
       showTerms,
       showPrivacy,
-      isMobileDevice, // Mobile-Status für das Template verfügbar machen
     };
   },
 };
@@ -579,51 +507,13 @@ export default {
 /* Basis-Styling mit globalen Variablen */
 .login-container {
   width: 100%;
-  min-height: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: $spacing-md;
   box-sizing: border-box;
   background-color: $color-body-background;
-}
-
-/* Mobile-Hinweis Styling */
-.mobile-notice {
-  width: 100%;
-  max-width: 500px;
-  background-color: $color-text-white;
-  border-radius: $border-radius-lg;
-  box-shadow: $shadow-lg;
-  overflow: hidden;
-  text-align: center;
-  box-sizing: border-box;
-}
-
-.notice-content {
-  padding: $spacing-lg;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-sizing: border-box;
-}
-
-.notice-icon {
-  font-size: 48px;
-  margin-bottom: $spacing-md;
-}
-
-.notice-content h2 {
-  margin: 0 0 $spacing-md;
-  font-size: $font-size-h2-lg;
-  font-weight: 700;
-  color: $color-dark-blue;
-}
-
-.notice-content p {
-  margin-bottom: $spacing-md;
-  color: $color-text-dark;
-  line-height: 1.5;
 }
 
 .form-container {
@@ -638,8 +528,6 @@ export default {
 
 /* Zurück zur Startseite Link */
 .back-link-container {
-  // padding: $spacing-sm $spacing-md;
-  // text-align: center;
   margin-top: calc($spacing-md - 5px);
 }
 
@@ -678,8 +566,7 @@ export default {
   border: none;
   cursor: pointer;
   transition: all $transition-speed-medium $transition-timing;
-
-  font-size: calc($font-size-p-lg - 5px);
+  font-size: calc($font-size-p-lg - 3px);
 }
 
 .tab.active {
@@ -693,7 +580,7 @@ export default {
 
 /* Form */
 .form {
-  padding: $spacing-lg;
+  padding: $spacing-lg calc($spacing-lg - 10px);
 }
 
 .form h2 {
@@ -703,8 +590,21 @@ export default {
   color: $color-dark-blue;
 }
 
+.form-row {
+  display: flex;
+  margin: 0 -8px;
+  margin-bottom: $spacing-md;
+}
+
 .form-group {
   margin-bottom: $spacing-md;
+}
+
+.form-group-half {
+  flex: 0 0 50%;
+  padding: 0 8px;
+  margin-bottom: 0;
+  box-sizing: border-box;
 }
 
 .form-group label {
@@ -718,15 +618,12 @@ export default {
 .form-group input[type="email"],
 .form-group input[type="password"] {
   width: 100%;
-  // padding: $spacing-xs $spacing-sm;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: $border-radius-sm;
-  font-size: $font-size-p-lg;
+  font-size: calc($font-size-p-lg - 3px);
   transition: border-color $transition-speed-medium;
   box-sizing: border-box;
-
-  font-size: calc($font-size-p-lg - 5px);
 }
 
 .form-group input[type="text"]:focus,
@@ -872,8 +769,7 @@ export default {
   padding: $spacing-xs;
   border: none;
   border-radius: $border-radius-sm;
-  font-size: $font-size-p-lg;
-  // font-size: calc($font-size-p-lg - 5px);
+  // font-size: calc($font-size-p-lg - 3px);
   font-weight: 600;
   cursor: pointer;
   transition: all $transition-speed-medium;
@@ -890,13 +786,13 @@ export default {
 
 .btn-primary {
   @include primary-button; /* Verwendet das definierte Button-Mixin */
-  font-size: calc($font-size-p-lg - 5px);
+  font-size: calc($font-size-p-lg - 2px);
 }
 
 .btn-google {
   background-color: white;
   color: $color-text-dark;
-  font-size: calc($font-size-p-lg - 5px);
+  font-size: calc($font-size-p-lg - 3px);
   border: 1px solid #ddd;
 
   &:hover {

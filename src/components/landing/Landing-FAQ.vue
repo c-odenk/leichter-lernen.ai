@@ -149,7 +149,7 @@ export default {
   &__subheading {
     margin: 0;
     padding: 0;
-    font-size: $font-size-p-lg;
+    font-size: $font-size-p-xl;
     line-height: $line-height;
     letter-spacing: $letter-spacing;
 

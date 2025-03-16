@@ -85,7 +85,7 @@ export default {
     width: 45%;
     margin: 0;
     padding: 0;
-    font-size: $font-size-p-lg;
+    font-size: $font-size-p-xl;
     line-height: $line-height;
     letter-spacing: $letter-spacing;
 
@@ -161,7 +161,7 @@ export default {
     padding: 0;
     line-height: $line-height;
     letter-spacing: $letter-spacing;
-    font-size: calc($font-size-p-lg - 2px);
+    font-size: $font-size-p-lg;
 
     @include text-content-responsive;
   }

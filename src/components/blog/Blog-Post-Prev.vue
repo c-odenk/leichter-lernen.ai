@@ -107,7 +107,7 @@ export default {
     margin: $spacing-lg 0;
     padding: 0 $spacing-lg;
     text-align: justify;
-    font-size: $font-size-p-lg;
+    font-size: $font-size-p-xl;
     line-height: $line-height;
     letter-spacing: $letter-spacing;
     @include themed(color, text);
@@ -119,8 +119,8 @@ export default {
     margin: 0;
     padding: 0 $spacing-lg $spacing-md $spacing-lg;
     text-decoration: none;
-    text-transform: uppercase;
-    font-size: $font-size-p-lg;
+    // text-transform: uppercase;
+    font-size: $font-size-p-xl;
     line-height: $line-height;
     letter-spacing: $letter-spacing;
     font-weight: 500;
@@ -139,7 +139,7 @@ export default {
     }
 
     & i {
-      margin: 0 $spacing-xs 0 0;
+      margin: 0 15px 0 0;
     }
   }
 }

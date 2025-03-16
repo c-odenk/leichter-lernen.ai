@@ -167,7 +167,7 @@ export default {
 }
 
 .dashboard-quiz-modal {
-  width: $width-modal-lg;
+  width: $width-modal-desktop;
   background-color: $color-text-white;
   margin: -100px 0 0 0;
   border-radius: $border-radius-md;
@@ -176,7 +176,8 @@ export default {
   box-sizing: border-box;
 
   @include respond(laptop) {
-    width: 50vw;
+    width: $width-modal-laptop;
+    margin: -50px 0 0 120px;
   }
 
   @include respond(tablet) {

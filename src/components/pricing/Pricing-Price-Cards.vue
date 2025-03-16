@@ -1,5 +1,4 @@
 <template>
-  <!-- Hauptcontainer für die Preiskarten-Sektion -->
   <div class="pricing-price-cards">
     <div class="pricing-price-cards_row">
       <!-- Iteration über alle Preispläne mit v-for -->
@@ -15,12 +14,8 @@
           :src="require(`@/assets/coming-soon.png`)"
           alt="User Image"
         />
-
-        <!-- Überschrift des Preisplans -->
         <h3>{{ plan.title }}</h3>
-        <!-- Beschreibung des Preisplans -->
         <p>{{ plan.description }}</p>
-        <!-- Preisdarstellung mit hervorgehobenem Preisbetrag -->
         <p>
           <span class="preis">{{ plan.price }}</span> {{ plan.priceModel }}
         </p>
@@ -132,7 +127,7 @@ export default {
       & p {
         margin: 0;
         padding: 0;
-        font-size: calc($font-size-p-lg - 1px);
+        font-size: $font-size-p-lg;
         line-height: $line-height;
         letter-spacing: $letter-spacing;
 
@@ -167,7 +162,7 @@ export default {
         & li {
           margin: 0;
           padding: 0 0 20px 25px;
-          font-size: calc($font-size-p-lg - 1px);
+          font-size: $font-size-p-lg;
           line-height: $line-height;
           letter-spacing: $letter-spacing;
           position: relative;
@@ -267,7 +262,8 @@ export default {
         color: $color-text-dark;
         padding: 10px 20px;
         border-radius: 20px;
-        font-size: calc($font-size-p-lg - 5px);
+        font-size: calc($font-size-p-lg - 3px);
+        letter-spacing: 0.5px;
         font-weight: 600;
       }
     }

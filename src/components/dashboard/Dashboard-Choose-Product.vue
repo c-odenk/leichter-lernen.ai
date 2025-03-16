@@ -28,9 +28,7 @@
             <div v-if="!product.available" class="product-availability">
               <i class="fa-solid fa-clock"></i> Bald verfügbar
             </div>
-            <div v-if="product.mostWanted" class="product-badge">
-              <i class="fa-solid fa-star"></i> Bestseller
-            </div>
+            <!-- Bestseller-Badge wurde entfernt -->
           </div>
           <div class="product-price-section">
             <p class="product-price">{{ product.price }}</p>
@@ -111,15 +109,15 @@ export default {
 
 // Component Container Layout
 .product-selection-container {
-  width: $width-modal-lg;
+  width: $width-modal-desktop;
   background-color: $color-text-white;
   border-radius: $border-radius-md;
   box-shadow: $shadow-md;
   overflow: hidden;
   font-family: $font-family;
 
-  @include respond(tablet) {
-    max-width: 100%;
+  @include respond(laptop) {
+    width: $width-modal-laptop;
   }
 }
 
@@ -141,10 +139,6 @@ export default {
     @include respond(tablet) {
       font-size: $font-size-h3-md;
     }
-
-    @include respond(phone) {
-      font-size: $font-size-h3-sm;
-    }
   }
 
   .step-indicator {
@@ -161,10 +155,6 @@ export default {
 .component-content {
   padding: $spacing-md;
   background-color: $color-text-white;
-
-  @include respond(phone) {
-    padding: $spacing-sm;
-  }
 }
 
 // Product Item Styles
@@ -193,17 +183,11 @@ export default {
     opacity: 0.7;
     cursor: not-allowed;
 
-    .product-price {
-      text-decoration: line-through;
-    }
+    // Der Durchstreicheffekt für den Preis wurde entfernt
   }
 
   &:last-child {
     margin-bottom: $spacing-md;
-  }
-
-  @include respond(phone) {
-    padding: $spacing-sm;
   }
 }
 
@@ -262,20 +246,7 @@ export default {
     }
   }
 
-  .product-badge {
-    position: absolute;
-    top: -8px;
-    right: 0;
-    background-color: $color-success;
-    color: white;
-    font-size: 12px;
-    padding: 2px 8px;
-    border-radius: 12px;
-
-    i {
-      margin-right: 3px;
-    }
-  }
+  // Der product-badge Block wurde entfernt
 }
 
 // Product Price Section

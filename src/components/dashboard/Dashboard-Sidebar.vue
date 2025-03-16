@@ -90,8 +90,9 @@ export default {
   top: 0;
   display: flex;
   flex-direction: column;
-  width: 280px;
   height: 100vh;
+  width: 12vw;
+  max-width: 300px;
   background-color: $color-dark-blue;
   box-shadow: $shadow-md;
   transition: width $transition-speed-medium $transition-timing;
@@ -102,14 +103,8 @@ export default {
     width: 250px;
   }
 
-  @include respond(phone) {
-    width: 100%;
-    height: auto;
-    position: static;
-  }
-
   &__logo {
-    padding: $spacing-md;
+    padding: $spacing-md calc($spacing-md - 5px);
 
     .img-platzhalter {
       width: 100%;
@@ -129,7 +124,7 @@ export default {
     flex-direction: column;
     justify-content: space-between;
     flex-grow: 1;
-    padding: $spacing-md;
+    padding: $spacing-md calc($spacing-md - 5px);
 
     &__section {
       &.top {
@@ -140,7 +135,7 @@ export default {
     .section-title {
       margin: $spacing-sm 0 $spacing-xs 0;
       color: rgba(255, 255, 255, 0.7);
-      font-size: 14px;
+      font-size: $font-size-p-lg;
       font-weight: 600;
       letter-spacing: 0.5px;
     }
@@ -149,14 +144,17 @@ export default {
       width: 100%;
       margin-bottom: $spacing-md;
       justify-content: center;
+      align-items: center;
       gap: $spacing-xs;
       font-weight: 500;
       border: none;
       padding: 12px 15px;
       border-radius: $border-radius-sm;
+      font-size: calc($font-size-p-lg - 2px);
 
       i {
-        font-size: 14px;
+        font-size: calc($font-size-p-lg - 4px);
+        margin: 0 10px 0 0;
       }
     }
 
@@ -180,9 +178,7 @@ export default {
       align-items: center;
       padding: 10px 12px;
       color: $color-text-white;
-      font-size: calc(
-        14px + 1px
-      ); /* Erhöhte Schriftgröße für Navigationslinks */
+      font-size: calc($font-size-p-lg - 2px);
       text-decoration: none;
       border-radius: $border-radius-sm;
       transition: all $transition-speed-fast $transition-timing;
@@ -221,6 +217,7 @@ export default {
 .utility-list {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding-top: $spacing-sm;
+  font-size: calc($font-size-p-lg - 2px);
 
   .menu-item {
     color: rgba(255, 255, 255, 0.8);

@@ -190,7 +190,7 @@ export default {
       width: 60%;
       margin: 0 auto;
       padding: 0;
-      font-size: $font-size-p-lg;
+      font-size: $font-size-p-xl;
       line-height: $line-height;
       letter-spacing: $letter-spacing;
       text-align: center;
@@ -212,12 +212,13 @@ export default {
   width: 100%;
   margin: $spacing-lg auto 0 auto;
   position: relative;
+  /*
   background-color: rgba(
     248,
     241,
     241,
     0.3
-  ); /* Zarter Rosa-Hintergrund wie im Screenshot */
+  ); */ /* Zarter Rosa-Hintergrund wie im Screenshot */
   padding: $spacing-md;
   border-radius: $border-radius-lg;
 }
@@ -330,7 +331,7 @@ export default {
       width: 100%;
       margin: 0;
       text-align: left;
-      font-size: calc(#{$font-size-p-lg} - 2px);
+      font-size: $font-size-p-lg;
 
       @include respond(tablet) {
         font-size: calc(#{$font-size-p-md} - 2px);

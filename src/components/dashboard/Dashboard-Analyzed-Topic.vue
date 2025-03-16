@@ -126,12 +126,13 @@ export default {
   margin: 0;
   padding: $spacing-lg $spacing-xl $spacing-lg $spacing-lg;
 
-  @include respond(tablet) {
-    padding: $spacing-md $spacing-lg $spacing-md $spacing-md;
+  @include respond(laptop) {
+    padding: calc($spacing-md + 5px) calc($spacing-md + 10px) $spacing-md
+      $spacing-md;
   }
 
-  @include respond(phone) {
-    padding: $spacing-sm;
+  @include respond(tablet) {
+    // padding: $spacing-md $spacing-lg $spacing-md $spacing-md;
   }
 
   &_row {
@@ -139,20 +140,13 @@ export default {
     align-items: flex-start;
     margin: 0 0 calc($spacing-lg - 20px) 0;
 
-    @include respond(phone) {
-      flex-direction: column;
-      margin-bottom: $spacing-md;
-    }
-
     &_col-1 {
       width: 18vw;
       max-width: 500px;
       margin-right: $spacing-md;
 
-      @include respond(phone) {
-        width: 100%;
-        max-width: 100%;
-        margin-bottom: $spacing-sm;
+      @include respond(laptop) {
+        width: 15vw;
       }
 
       & h3 {
@@ -162,12 +156,9 @@ export default {
         color: $color-dark-blue;
         font-weight: 600;
 
-        @include respond(tablet) {
+        @include respond(laptop) {
           font-size: $font-size-h3-md;
-        }
-
-        @include respond(phone) {
-          font-size: $font-size-h3-sm;
+          margin: 0 0 0 0;
         }
       }
 
@@ -182,10 +173,6 @@ export default {
 
         @include respond(tablet) {
           font-size: calc($font-size-p-md - 2px);
-        }
-
-        @include respond(phone) {
-          font-size: calc($font-size-p-sm - 1px);
         }
       }
     }
@@ -213,6 +200,10 @@ export default {
         color: $color-dark-blue;
         font-weight: 500;
 
+        @include respond(laptop) {
+          // font-size: $font-size-h3-md;
+        }
+
         @include respond(tablet) {
           font-size: $font-size-p-md;
         }
@@ -226,12 +217,10 @@ export default {
         line-height: $line-height;
         word-wrap: break-word;
 
-        @include respond(tablet) {
-          font-size: $font-size-p-md;
-        }
-
-        @include respond(phone) {
-          font-size: $font-size-p-sm;
+        @include respond(laptop) {
+          // font-size: $font-size-p-md;
+          width: 100%;
+          margin: 0;
         }
       }
 
@@ -259,12 +248,8 @@ export default {
           border-radius: $border-radius-md;
           color: $color-dark-blue;
 
-          @include respond(tablet) {
+          @include respond(laptop) {
             font-size: $font-size-p-md;
-          }
-
-          @include respond(phone) {
-            font-size: $font-size-p-sm;
           }
         }
       }
@@ -299,15 +284,6 @@ export default {
 
         @include respond(tablet) {
           font-size: $font-size-p-md;
-        }
-
-        @include respond(phone) {
-          font-size: $font-size-p-sm;
-        }
-
-        &:hover {
-          background-color: rgba($color-light-blue, 0.05);
-          border-color: $color-light-blue;
         }
 
         & i {

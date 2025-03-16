@@ -2,7 +2,7 @@
   SCREEN WIDTH VARIABLES
 ========================================================================== */
 
-$width-desktop: 1900px; // Reduziert von 1900px für bessere Lesbarkeit
+$width-desktop: 1900px;
 $width-laptop: 90vw;
 $width-tablet: 94vw;
 $width-phone: 95vw;
@@ -11,7 +11,8 @@ $width-phone: 95vw;
   MODAL WIDTH VARIABLES
 ========================================================================== */
 
-$width-modal-lg: 38vw;
+$width-modal-desktop: 38vw;
+$width-modal-laptop: 62vw;
 
 /* ==========================================================================
   BREAKPOINTS VARIABLES
@@ -103,7 +104,7 @@ $font-size-h3-lg: 1.2rem; // Abschnittsüberschriften auf Desktop
 $font-size-h1-logo-sm: 2rem; // Für das Logo auf kleineren Bildschirmen
 $font-size-h1-md: 1.5rem; // Hauptüberschriften auf Tablet
 $font-size-h2-md: 2rem; // Unterüberschriften auf Tablet
-$font-size-h3-md: 1.3rem; // Abschnittsüberschriften auf Tablet
+$font-size-h3-md: 1.1rem; // Abschnittsüberschriften auf Tablet
 
 // Mobile/Small Screens
 $font-size-h1-sm: 1.5rem; // Hauptüberschriften auf Smartphone
@@ -112,7 +113,8 @@ $font-size-h3-sm: 2rem; // Abschnittsüberschriften auf Smartphone
 
 // Standard Text - einheitlich in rem
 // $font-size-p-lg: 1.125rem; // 18px umgerechnet
-$font-size-p-lg: 20px;
+$font-size-p-xl: 20px; // 20
+$font-size-p-lg: 18px;
 $font-size-p-md: 1.2rem;
 $font-size-p-sm: 1rem;
 
@@ -229,13 +231,13 @@ $blog-post-padding-bottom: $spacing-lg;
 @mixin primary-button {
   @include button-base;
   background-color: $color-light-blue;
-  font-size: calc($font-size-p-lg - 2.5px);
+  font-size: $font-size-p-lg;
   font-weight: 500;
   line-height: $line-height;
   // letter-spacing: $letter-spacing;
   letter-spacing: 1px;
   color: $color-text-white;
-  padding: 15px 40px;
+  padding: 14px 40px;
   border-radius: 10px;
 
   &:hover {

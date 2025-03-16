@@ -407,7 +407,7 @@ export default {
 
 // Container Layout
 .payment-container {
-  width: $width-modal-lg;
+  width: $width-modal-desktop;
   background-color: $color-text-white;
   border-radius: $border-radius-md;
   box-shadow: $shadow-md;
@@ -415,8 +415,8 @@ export default {
   font-family: $font-family;
   box-sizing: border-box;
 
-  @include respond(tablet) {
-    max-width: 100%;
+  @include respond(laptop) {
+    width: $width-modal-laptop;
   }
 }
 

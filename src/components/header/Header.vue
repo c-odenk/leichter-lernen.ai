@@ -149,7 +149,7 @@ export default {
 
           a {
             padding: 0 $spacing-sm;
-            font-size: $font-size-p-lg;
+            font-size: $font-size-p-xl;
             font-weight: 500;
             line-height: $line-height;
             letter-spacing: $letter-spacing;
