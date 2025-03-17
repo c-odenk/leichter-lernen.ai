@@ -58,8 +58,14 @@
 <script>
 export default {
   name: "DashboardSidebar",
+
+  // Reaktive Daten der Komponente
   data() {
     return {
+      /**
+       * Array der Menüeinträge für die Themennavigation
+       * Jeder Eintrag hat einen Namen und einen Link zur entsprechenden Route
+       */
       menuItems: [
         { name: "Personalbeschaffung & -planung", link: "/dashboard" },
         { name: "Thema 2", link: "/thema2" },
@@ -68,7 +74,16 @@ export default {
       ],
     };
   },
+
+  // Methoden zur Interaktion mit der Komponente
   methods: {
+    /**
+     * Prüft, ob eine Route der aktuellen aktiven Route entspricht
+     * Wird verwendet, um den aktiven Menüpunkt visuell hervorzuheben
+     *
+     * @param {string} route - Der zu prüfende Routenpfad
+     * @returns {boolean} True, wenn die übergebene Route der aktuellen Route entspricht
+     */
     isActive(route) {
       return this.$route.path === route;
     },
@@ -213,7 +228,6 @@ export default {
   }
 }
 
-// Utility List (Bottom) special styling
 .utility-list {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding-top: $spacing-sm;
@@ -228,7 +242,6 @@ export default {
   }
 }
 
-// Verwenden des vordefinierten primary-button mixins
 .primary-button {
   @include primary-button;
 }

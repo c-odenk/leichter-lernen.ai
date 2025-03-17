@@ -6,7 +6,6 @@
     </div>
 
     <div class="component-content">
-      <!-- Produktübersicht -->
       <div class="product-summary">
         <div class="product-info">
           <div class="product-icon">
@@ -21,7 +20,6 @@
         </div>
       </div>
 
-      <!-- Zahlungsmethoden -->
       <div class="payment-methods">
         <p class="section-title">Zahlungsmethode auswählen</p>
         <div class="payment-options">
@@ -40,9 +38,7 @@
         </div>
       </div>
 
-      <!-- Zahlungsmethoden Details Container mit fester Höhe -->
       <div class="payment-details-container">
-        <!-- Kreditkarteninformationen (wird nur angezeigt, wenn Kreditkarte ausgewählt ist) -->
         <div v-if="selectedMethod === 'credit-card'" class="payment-details">
           <div class="form-group">
             <label for="card-holder">Karteninhaber</label>
@@ -93,7 +89,6 @@
           </div>
         </div>
 
-        <!-- PayPal Informationen -->
         <div v-if="selectedMethod === 'paypal'" class="payment-details">
           <div class="paypal-info">
             <p>
@@ -104,7 +99,6 @@
         </div>
       </div>
 
-      <!-- Rechnungsadresse -->
       <div class="billing-address">
         <p class="section-title">Rechnungsadresse</p>
         <div class="form-group">
@@ -167,7 +161,6 @@
         </div>
       </div>
 
-      <!-- Gesamtsumme -->
       <div class="order-summary">
         <div class="summary-row">
           <span class="summary-label">Produkt:</span>
@@ -187,7 +180,6 @@
         </div>
       </div>
 
-      <!-- Bedingungen akzeptieren -->
       <div class="terms-acceptance">
         <label class="checkbox-container">
           <input type="checkbox" v-model="termsAccepted" />
@@ -199,7 +191,6 @@
         </label>
       </div>
 
-      <!-- Navigation Buttons -->
       <div class="navigation-buttons">
         <button class="secondary-button" @click="handleCancel">Zurück</button>
         <button
@@ -217,24 +208,40 @@
 <script>
 export default {
   name: "PaymentForm",
+
+  // Props: Daten, die von der übergeordneten Komponente übergeben werden
   props: {
-    // Produktdetails als Props übergeben
+    /**
+     * Name des ausgewählten Produkts, das bezahlt werden soll
+     */
     productName: {
       type: String,
       default: "Produkt",
     },
+
+    /**
+     * Preis des ausgewählten Produkts in Euro (ohne Versand und Steuern)
+     */
     productPrice: {
       type: Number,
       default: 0,
     },
+
+    /**
+     * Versandkosten für das Produkt in Euro
+     */
     shippingCost: {
       type: Number,
       default: 0,
     },
   },
+
+  // Reaktive Daten der Komponente
   data() {
     return {
-      // Zahlungsmethoden
+      /**
+       * Verfügbare Zahlungsmethoden mit ID, Name und Icon
+       */
       paymentMethods: [
         {
           id: "credit-card",
@@ -243,45 +250,74 @@ export default {
         },
         { id: "paypal", name: "PayPal", icon: "fa-brands fa-paypal" },
       ],
+
+      /**
+       * Aktuell ausgewählte Zahlungsmethode (ID)
+       */
       selectedMethod: "credit-card",
 
-      // Kreditkartendaten
+      /**
+       * Kreditkartendaten des Nutzers
+       */
       cardHolder: "",
       cardNumber: "",
       expiryDate: "",
       cvv: "",
 
-      // Rechnungsadresse
+      /**
+       * Rechnungsadresse des Nutzers
+       */
       billingAddress: {
         name: "",
         street: "",
         postalCode: "",
         city: "",
-        country: "DE",
+        country: "DE", // Deutschland als Standard
       },
 
-      // Bestellnummer (hier einfach als Dummy)
+      /**
+       * Eindeutige Bestellnummer (hier als zufällige Dummy-Nummer generiert)
+       */
       orderId: "ORD-" + Math.floor(Math.random() * 10000),
 
-      // Checkbox für AGBs
+      /**
+       * Flag, ob der Nutzer die AGBs und Datenschutzbestimmungen akzeptiert hat
+       */
       termsAccepted: false,
 
-      // Steuer
+      /**
+       * Mehrwertsteuersatz (19%)
+       */
       taxRate: 0.19,
     };
   },
+
+  // Berechnete Eigenschaften
   computed: {
-    // Berechnung der Mehrwertsteuer
+    /**
+     * Berechnet die Mehrwertsteuer basierend auf dem Produktpreis und dem Steuersatz
+     *
+     * @returns {number} Berechnete Mehrwertsteuer in Euro
+     */
     tax() {
       return this.productPrice * this.taxRate;
     },
 
-    // Berechnung des Gesamtbetrags
+    /**
+     * Berechnet den Gesamtbetrag inklusive Produkt, Versand und Steuern
+     *
+     * @returns {number} Gesamtbetrag in Euro
+     */
     totalAmount() {
       return this.productPrice + this.shippingCost + this.tax;
     },
 
-    // Überprüfung, ob die Zahlungsinformationen gültig sind
+    /**
+     * Prüft, ob alle erforderlichen Zahlungsinformationen eingegeben wurden
+     * Validierung erfolgt basierend auf der ausgewählten Zahlungsmethode
+     *
+     * @returns {boolean} True wenn alle Pflichtfelder ausgefüllt und gültig sind
+     */
     isPaymentValid() {
       if (!this.termsAccepted) return false;
 
@@ -310,13 +346,24 @@ export default {
       return false;
     },
   },
+
+  // Methoden zur Interaktion mit der Komponente
   methods: {
-    // Auswahl der Zahlungsmethode
+    /**
+     * Setzt die ausgewählte Zahlungsmethode auf die übergebene Methoden-ID
+     *
+     * @param {string} methodId - ID der auszuwählenden Zahlungsmethode
+     */
     selectPaymentMethod(methodId) {
       this.selectedMethod = methodId;
     },
 
-    // Formatierung der Kreditkartennummer (4er Gruppen)
+    /**
+     * Formatiert die Kreditkartennummer in 4er-Blöcke (z.B. "1234 5678 9012 3456")
+     * - Entfernt alle Nicht-Zahlen
+     * - Begrenzt auf 16 Zeichen
+     * - Fügt nach jeweils 4 Ziffern ein Leerzeichen ein
+     */
     formatCardNumber() {
       // Nur Zahlen behalten
       let value = this.cardNumber.replace(/\D/g, "");
@@ -336,7 +383,12 @@ export default {
       this.cardNumber = formattedValue;
     },
 
-    // Formatierung des Ablaufdatums (MM/JJ)
+    /**
+     * Formatiert das Ablaufdatum der Kreditkarte in das Format MM/JJ
+     * - Entfernt alle Nicht-Zahlen
+     * - Begrenzt auf 4 Zeichen
+     * - Fügt nach den ersten 2 Ziffern einen Schrägstrich ein
+     */
     formatExpiryDate() {
       // Nur Zahlen behalten
       let value = this.expiryDate.replace(/\D/g, "");
@@ -352,7 +404,12 @@ export default {
       }
     },
 
-    // Formatierung des Betrags als Währung
+    /**
+     * Formatiert einen Betrag als Währung im deutschen Format
+     *
+     * @param {number} amount - Der zu formatierende Betrag
+     * @returns {string} Formatierter Betrag (z.B. "42,99 €")
+     */
     formatCurrency(amount) {
       return new Intl.NumberFormat("de-DE", {
         style: "currency",
@@ -360,12 +417,19 @@ export default {
       }).format(amount);
     },
 
-    // Abbrechen der Zahlung
+    /**
+     * Behandelt den Klick auf den "Abbrechen"-Button
+     * Emittiert ein "cancel"-Event an die übergeordnete Komponente
+     */
     handleCancel() {
       this.$emit("cancel");
     },
 
-    // Verarbeitung der Zahlung
+    /**
+     * Verarbeitet die Zahlung, wenn alle Daten gültig sind
+     * Sammelt alle relevanten Zahlungsdaten und emittiert ein "payment-complete"-Event
+     * mit den Zahlungsdaten als Payload
+     */
     processPayment() {
       if (this.isPaymentValid) {
         // Hier würde die tatsächliche Zahlungsverarbeitung stattfinden
@@ -405,7 +469,6 @@ export default {
   box-sizing: border-box;
 }
 
-// Container Layout
 .payment-container {
   width: $width-modal-desktop;
   background-color: $color-text-white;
@@ -420,7 +483,6 @@ export default {
   }
 }
 
-// Header Styles
 .component-header {
   padding: $spacing-sm $spacing-md;
   border-bottom: 1px solid #eee;
@@ -455,7 +517,6 @@ export default {
   }
 }
 
-// Main Content Styles
 .component-content {
   padding: $spacing-md;
   background-color: $color-text-white;
@@ -466,7 +527,6 @@ export default {
   }
 }
 
-// Produktübersicht
 .product-summary {
   margin-bottom: $spacing-md;
   padding: $spacing-sm;
@@ -519,7 +579,6 @@ export default {
   }
 }
 
-// Zahlungsmethoden
 .payment-methods {
   margin-bottom: $spacing-md;
   box-sizing: border-box;
@@ -580,14 +639,12 @@ export default {
   }
 }
 
-// Container für Zahlungsdetails mit fester Höhe
 .payment-details-container {
-  min-height: 200px; // Feste Mindesthöhe für beide Zahlungsmethoden
+  min-height: 200px;
   margin-bottom: $spacing-md;
   box-sizing: border-box;
 }
 
-// Zahlungsdetails Formular
 .payment-details {
   padding: $spacing-sm;
   border-radius: $border-radius-sm;
@@ -635,13 +692,12 @@ export default {
   }
 }
 
-// Paypal Infos
 .paypal-info {
   padding: $spacing-sm;
   border-radius: $border-radius-sm;
   box-sizing: border-box;
-  min-height: 120px; // Zusätzliche Mindesthöhe für PayPal-Info
-  @include flex-center; // Zentriert den Inhalt vertikal und horizontal
+  min-height: 120px;
+  @include flex-center;
 
   p {
     margin: 0;
@@ -650,7 +706,6 @@ export default {
   }
 }
 
-// Bestellübersicht
 .order-summary {
   margin: $spacing-md 0;
   padding: $spacing-sm;
@@ -677,7 +732,6 @@ export default {
   }
 }
 
-// AGB Checkbox
 .terms-acceptance {
   margin-bottom: $spacing-md;
   box-sizing: border-box;
@@ -758,7 +812,6 @@ export default {
   }
 }
 
-// Navigation Buttons
 .navigation-buttons {
   display: flex;
   justify-content: space-between;

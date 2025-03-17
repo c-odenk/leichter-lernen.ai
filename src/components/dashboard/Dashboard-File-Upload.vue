@@ -18,7 +18,6 @@
         @dragleave.prevent="setDragInactive"
         @drop.prevent="handleFileDrop"
       >
-        <!-- Initial Upload State -->
         <div v-if="!isUploading && !selectedFile" class="upload-initial-state">
           <div class="upload-icon">
             <div class="icon-circle">
@@ -39,7 +38,6 @@
           />
         </div>
 
-        <!-- Uploading State -->
         <div v-if="isUploading" class="upload-progress-state">
           <div class="progress-circle">
             <svg width="80" height="80" viewBox="0 0 80 80">
@@ -69,7 +67,6 @@
           <button class="cancel-button" @click="cancelUpload">Abbrechen</button>
         </div>
 
-        <!-- Selected File State -->
         <div v-if="selectedFile && !isUploading" class="file-selected-state">
           <div class="file-info">
             <div class="file-icon">
@@ -98,7 +95,6 @@
         </div>
       </div>
 
-      <!-- Navigation Buttons -->
       <div class="navigation-buttons">
         <button class="secondary-button" @click="handleCancel">
           Abbrechen
@@ -118,35 +114,90 @@
 <script>
 export default {
   name: "FileUpload",
+
+  // Props: Konfigurationseigenschaften, die von der übergeordneten Komponente übergeben werden
   props: {
+    /**
+     * Maximale Dateigröße in Bytes, die hochgeladen werden kann
+     * Default: 10MB (10 * 1024 * 1024 Bytes)
+     */
     maxFileSize: {
       type: Number,
       default: 10 * 1024 * 1024, // 10MB default max size
     },
   },
+
+  // Reaktive Daten der Komponente
   data() {
     return {
+      /**
+       * Speichert die aktuell ausgewählte Datei
+       * null bedeutet, dass keine Datei ausgewählt ist
+       */
       selectedFile: null,
+
+      /**
+       * Flag, das anzeigt, ob gerade ein Upload im Gange ist
+       */
       isUploading: false,
+
+      /**
+       * Flag, das anzeigt, ob der Benutzer gerade eine Datei über die Drop-Zone zieht
+       */
       isDragging: false,
+
+      /**
+       * Aktueller Fortschritt des Uploads in Prozent (0-100)
+       */
       uploadProgress: 0,
+
+      /**
+       * Liste der erlaubten Dateierweiterungen
+       */
       allowedFileTypes: [".csv", ".doc", ".docx", ".pdf", ".txt", ".rtf"],
+
+      /**
+       * Flag, das anzeigt, ob der Upload vollständig abgeschlossen ist
+       */
       uploadComplete: false,
     };
   },
+
+  // Berechnete Eigenschaften
   computed: {
+    /**
+     * Berechnet den Versatz für den Fortschrittskreis bei kreisförmiger Anzeige
+     * Wird verwendet, um den SVG-Kreis proportional zum Upload-Fortschritt zu füllen
+     *
+     * @returns {number} Der Versatz für das stroke-dashoffset Attribut des SVG-Kreises
+     */
     dashOffset() {
       const circumference = 2 * Math.PI * 36;
       return circumference - (this.uploadProgress / 100) * circumference;
     },
   },
+
+  // Methoden zur Interaktion mit der Komponente
   methods: {
+    /**
+     * Setzt den Status auf "aktives Ziehen", wenn eine Datei über die Drop-Zone gezogen wird
+     */
     setDragActive() {
       this.isDragging = true;
     },
+
+    /**
+     * Setzt den Status auf "inaktives Ziehen", wenn eine Datei die Drop-Zone verlässt
+     */
     setDragInactive() {
       this.isDragging = false;
     },
+
+    /**
+     * Verarbeitet eine Datei, die per Drag & Drop in die Drop-Zone gezogen wurde
+     *
+     * @param {DragEvent} event - Das Drop-Event
+     */
     handleFileDrop(event) {
       this.isDragging = false;
       const files = event.dataTransfer.files;
@@ -154,12 +205,25 @@ export default {
         this.processFile(files[0]);
       }
     },
+
+    /**
+     * Verarbeitet eine Datei, die über den Datei-Dialog ausgewählt wurde
+     *
+     * @param {Event} event - Das Change-Event des Datei-Inputs
+     */
     handleFileSelect(event) {
       const files = event.target.files;
       if (files.length > 0) {
         this.processFile(files[0]);
       }
     },
+
+    /**
+     * Verarbeitet und validiert eine Datei vor dem Upload
+     * Prüft Dateigröße und Dateityp und beginnt den Upload-Prozess
+     *
+     * @param {File} file - Die zu verarbeitende Datei
+     */
     processFile(file) {
       // Validate file size
       if (file.size > this.maxFileSize) {
@@ -184,12 +248,33 @@ export default {
         );
       }
     },
+
+    /**
+     * Extrahiert die Dateierweiterung aus einem Dateinamen
+     *
+     * @param {string} filename - Der Dateiname inklusive Erweiterung
+     * @returns {string} Die Dateierweiterung mit führendem Punkt (z.B. ".pdf")
+     */
     getFileExtension(filename) {
       return "." + filename.split(".").pop().toLowerCase();
     },
+
+    /**
+     * Prüft, ob eine Dateierweiterung zu den erlaubten Typen gehört
+     *
+     * @param {string} extension - Die zu prüfende Dateierweiterung
+     * @returns {boolean} True, wenn der Dateityp erlaubt ist
+     */
     isAllowedFileType(extension) {
       return this.allowedFileTypes.includes(extension.toLowerCase());
     },
+
+    /**
+     * Bestimmt das passende Icon für einen Dateityp basierend auf der Erweiterung
+     *
+     * @param {string} filename - Der Dateiname inklusive Erweiterung
+     * @returns {string} Die CSS-Klasse für das passende FontAwesome-Icon
+     */
     getFileIcon(filename) {
       const extension = this.getFileExtension(filename);
       switch (extension) {
@@ -207,6 +292,10 @@ export default {
           return "fa-solid fa-file";
       }
     },
+
+    /**
+     * Entfernt die ausgewählte Datei und setzt den Zustand zurück
+     */
     removeFile() {
       this.selectedFile = null;
       this.uploadProgress = 0;
@@ -217,11 +306,20 @@ export default {
         input.value = "";
       }
     },
+
+    /**
+     * Bricht den laufenden Upload ab und setzt den Zustand zurück
+     */
     cancelUpload() {
       this.isUploading = false;
       this.uploadProgress = 0;
       this.uploadComplete = false;
     },
+
+    /**
+     * Simuliert einen Upload-Prozess mit schrittweise ansteigendem Fortschritt
+     * In einer echten Anwendung würde hier der tatsächliche API-Aufruf zum Upload erfolgen
+     */
     simulateUpload() {
       this.isUploading = true;
       this.uploadProgress = 0;
@@ -238,6 +336,13 @@ export default {
         }
       }, 100);
     },
+
+    /**
+     * Formatiert eine Dateigröße in Bytes in eine besser lesbare Form (KB, MB, GB)
+     *
+     * @param {number} bytes - Die Dateigröße in Bytes
+     * @returns {string} Die formatierte Dateigröße mit Einheit (z.B. "2.5 MB")
+     */
     formatFileSize(bytes) {
       if (bytes === 0) return "0 Bytes";
 
@@ -247,6 +352,11 @@ export default {
 
       return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
     },
+
+    /**
+     * Behandelt den Klick auf den "Abbrechen"-Button
+     * Setzt den Zustand zurück und emittiert ein "cancel"-Event
+     */
     handleCancel() {
       // Vollständig zurücksetzen
       this.removeFile();
@@ -254,6 +364,12 @@ export default {
       // Emit cancel event
       this.$emit("cancel");
     },
+
+    /**
+     * Behandelt den Klick auf den "Weiter"-Button
+     * Emittiert ein "continue"-Event mit der hochgeladenen Datei als Payload,
+     * wenn der Upload abgeschlossen ist
+     */
     handleContinue() {
       // Only allow continue if upload is complete
       if (this.uploadComplete) {
@@ -273,7 +389,6 @@ export default {
   box-sizing: border-box;
 }
 
-// Component Container Layout
 .file-upload-container {
   width: $width-modal-desktop;
   background-color: $color-text-white;
@@ -287,7 +402,6 @@ export default {
   }
 }
 
-// Header Styles
 .component-header {
   padding: $spacing-sm $spacing-md;
   border-bottom: 1px solid #eee;
@@ -317,13 +431,11 @@ export default {
   }
 }
 
-// Main Content Styles
 .component-content {
   padding: $spacing-md;
   background-color: $color-text-white;
 }
 
-// Dropzone Styles
 .upload-dropzone {
   padding: $spacing-md;
   border: 2px dashed #ccd;
@@ -351,7 +463,6 @@ export default {
   }
 }
 
-// Initial State Styles
 .upload-initial-state {
   @include flex-center;
   flex-direction: column;
@@ -401,7 +512,6 @@ export default {
   display: none;
 }
 
-// Progress State Styles
 .upload-progress-state {
   @include flex-center;
   flex-direction: column;
@@ -444,7 +554,6 @@ export default {
   }
 }
 
-// File Selected State Styles
 .file-selected-state {
   width: 100%;
 }
@@ -465,19 +574,19 @@ export default {
     }
 
     .fa-file-excel {
-      color: #217346; // Excel green color
+      color: #217346;
     }
 
     .fa-file-word {
-      color: #2b579a; // Word blue color
+      color: #2b579a;
     }
 
     .fa-file-pdf {
-      color: #f40f02; // PDF red color
+      color: #f40f02;
     }
 
     .fa-file-lines {
-      color: #5a5a5a; // Text dark gray color
+      color: #5a5a5a;
     }
   }
 
@@ -533,7 +642,6 @@ export default {
   color: #666;
 }
 
-// Navigation Buttons Styles
 .navigation-buttons {
   display: flex;
   justify-content: space-between;

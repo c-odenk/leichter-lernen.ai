@@ -26,7 +26,7 @@
 
     <div class="dashboard-analyzed-topic_row">
       <div class="dashboard-analyzed-topic_row_col-1">
-        <h3>✍️ Zusammenfassung</h3>
+        <h3>📝 Zusammenfassung</h3>
         <p>Verstehe & vertiefe dein Wissen</p>
       </div>
 
@@ -62,12 +62,46 @@
     <div class="dashboard-analyzed-topic_row">
       <div class="dashboard-analyzed-topic_row_col-1">
         <h3>🏆 Multiple-Choice-Quiz</h3>
-        <p>Teste dein Wissen umfassend</p>
+        <p>Sichere dein Verständnis durch Übungsfragen</p>
       </div>
       <div class="dashboard-analyzed-topic_row_col-2">
         <button class="quiz primary-button" @click="startQuiz">
           Quiz starten
         </button>
+      </div>
+    </div>
+
+    <div class="dashboard-analyzed-topic_row">
+      <div class="dashboard-analyzed-topic_row_col-1">
+        <h3>✍️ Probeklausur</h3>
+        <p>Teste dein Wissen umfassend</p>
+      </div>
+      <div class="dashboard-analyzed-topic_row_col-2">
+        <div class="button-container">
+          <button class="quiz primary-button disabled" disabled>
+            Probeklausur starten
+          </button>
+          <button class="quiz upgrade-button" @click="upgradePaket">
+            Paket upgraden
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-analyzed-topic_row">
+      <div class="dashboard-analyzed-topic_row_col-1">
+        <h3>🎓 KI Tutor</h3>
+        <p>Erhalte präzise Antworten auf deine Fragen</p>
+      </div>
+      <div class="dashboard-analyzed-topic_row_col-2">
+        <div class="button-container">
+          <button class="quiz primary-button disabled" disabled>
+            KI Tutor starten
+          </button>
+          <button class="quiz upgrade-button" @click="upgradePaket">
+            Paket upgraden
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -76,38 +110,80 @@
 <script>
 export default {
   name: "DashboardAnalyzedTopicSection",
+
+  // Props: Eigenschaften, die von der übergeordneten Komponente übergeben werden
   props: {
+    // Das topic Objekt enthält alle Informationen zum ausgewählten Thema
+    // inklusive Titel, Übersicht, Zusammenfassung usw.
     topic: {
       type: Object,
       required: true,
     },
   },
+
+  // Reaktive Daten der Komponente
   data() {
     return {
+      // Steuert, ob die Zusammenfassung vollständig angezeigt wird oder nicht
       isExpanded: false,
     };
   },
+
+  // Berechnete Eigenschaften für die dynamische Darstellung der Zusammenfassung
   computed: {
+    /**
+     * Generiert den vollständigen Text der Zusammenfassung, indem alle
+     * Inhalte der einzelnen Abschnitte zu einem String zusammengefügt werden
+     * @returns {string} Der vollständige Text der Zusammenfassung
+     */
     fullText() {
       return this.topic.topicSummary
         .map((summary) => summary.content)
         .join(" ");
     },
+
+    /**
+     * Erstellt einen gekürzten Vorschautext für die zusammengeklappte Ansicht
+     * @returns {string} Gekürzte Version des Textes (max. 350 Zeichen)
+     */
     previewText() {
       return this.fullText.length > 350
         ? this.fullText.slice(0, 350)
         : this.fullText;
     },
+
+    /**
+     * Prüft, ob der Text lang genug ist, um die "Mehr anzeigen" Funktion anzuzeigen
+     * @returns {boolean} True wenn Text länger als 350 Zeichen ist
+     */
     hasLongText() {
       return this.fullText.length > 350;
     },
   },
+
+  // Methoden für Benutzerinteraktionen
   methods: {
+    /**
+     * Schaltet zwischen erweiterter und kompakter Ansicht der Zusammenfassung um
+     */
     toggleExpand() {
       this.isExpanded = !this.isExpanded;
     },
+
+    /**
+     * Startet das Quiz für das ausgewählte Thema
+     * Sendet ein Event an die Elternkomponente mit dem aktuellen Thema als Payload
+     */
     startQuiz() {
       this.$emit("start-quiz", this.topic);
+    },
+
+    /**
+     * Leitet den Benutzer zum Paket-Upgrade weiter
+     * Sendet ein Event an die Elternkomponente, die dann den Upgrade-Prozess handhabt
+     */
+    upgradePaket() {
+      this.$emit("upgrade-paket");
     },
   },
 };
@@ -131,10 +207,6 @@ export default {
       $spacing-md;
   }
 
-  @include respond(tablet) {
-    // padding: $spacing-md $spacing-lg $spacing-md $spacing-md;
-  }
-
   &_row {
     display: flex;
     align-items: flex-start;
@@ -149,7 +221,7 @@ export default {
         width: 15vw;
       }
 
-      & h3 {
+      h3 {
         margin: 0 0 5px 0;
         padding: 0;
         font-size: $font-size-h3-lg;
@@ -158,16 +230,14 @@ export default {
 
         @include respond(laptop) {
           font-size: $font-size-h3-md;
-          margin: 0 0 0 0;
+          margin: 0;
         }
       }
 
-      & p {
+      p {
         margin: 0;
         padding: 0;
-        font-size: calc(
-          $font-size-p-lg - 5px
-        ); /* Kleinere Schriftgröße für Subheading */
+        font-size: calc($font-size-p-lg - 5px);
         font-weight: 500;
         color: #707070;
 
@@ -193,44 +263,39 @@ export default {
         box-shadow: $shadow-md;
       }
 
-      & h2 {
+      // Textstile
+      h2 {
         margin: 0 0 $spacing-xs 0;
         padding: 0;
         font-size: $font-size-h3-lg;
         color: $color-dark-blue;
         font-weight: 500;
 
-        @include respond(laptop) {
-          // font-size: $font-size-h3-md;
-        }
-
         @include respond(tablet) {
           font-size: $font-size-p-md;
         }
       }
 
-      & p {
+      p {
         width: 95%;
         margin: 0 auto 0 0;
         padding: 0;
-        font-size: calc($font-size-p-lg - 3px);
+        font-size: calc($font-size-p-lg - 2px);
         line-height: $line-height;
         word-wrap: break-word;
 
         @include respond(laptop) {
-          // font-size: $font-size-p-md;
           width: 100%;
           margin: 0;
         }
       }
 
-      & b {
-        font-size: calc($font-size-p-lg - 3px);
+      b {
+        font-size: calc($font-size-p-lg - 2px);
         font-weight: 500;
-        color: $color-dark-blue;
       }
 
-      & ul {
+      ul {
         width: 100%;
         display: flex;
         flex-direction: row;
@@ -240,10 +305,10 @@ export default {
         padding: 0;
         list-style: none;
 
-        & li {
+        li {
           margin: 0;
           padding: $spacing-xs $spacing-sm;
-          font-size: calc($font-size-p-lg - 3px);
+          font-size: calc($font-size-p-lg - 2px);
           background-color: rgba($color-light-blue, 0.1);
           border-radius: $border-radius-md;
           color: $color-dark-blue;
@@ -258,7 +323,7 @@ export default {
         width: 100%;
       }
 
-      & .paragraph {
+      .paragraph {
         width: 100%;
         margin-bottom: $spacing-md;
 
@@ -267,41 +332,76 @@ export default {
         }
       }
 
-      & button.dropdown {
+      .button-container {
+        width: 100%;
         display: flex;
+        justify-content: space-between;
         align-items: center;
-        justify-content: center;
-        margin: $spacing-md 0 0 0;
-        padding: 10px $spacing-md;
-        font-size: calc($font-size-p-lg - 3px);
-        background-color: transparent;
-        color: $color-light-blue;
-        border: 1px solid rgba($color-light-blue, 0.2);
-        border-radius: $border-radius-sm;
-        cursor: pointer;
-        transition: all $transition-speed-medium $transition-timing;
-        font-weight: 500;
-
-        @include respond(tablet) {
-          font-size: $font-size-p-md;
-        }
-
-        & i {
-          margin: 0 0 0 15px;
-          transition: transform $transition-speed-medium $transition-timing;
-          font-size: calc($font-size-p-lg - 5px);
-        }
-
-        & i.rotated {
-          transform: rotate(180deg);
-        }
       }
 
-      & button.quiz {
-        @include primary-button;
-        align-self: flex-start;
-        border: none; /* Border entfernt */
-        font-size: calc($font-size-p-lg - 3px);
+      button {
+        &.dropdown {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: $spacing-md 0 0 0;
+          padding: 10px $spacing-md;
+          font-size: calc($font-size-p-lg - 3px);
+          background-color: transparent;
+          color: $color-light-blue;
+          border: 1px solid rgba($color-light-blue, 0.2);
+          border-radius: $border-radius-sm;
+          cursor: pointer;
+          transition: all $transition-speed-medium $transition-timing;
+          font-weight: 500;
+
+          @include respond(tablet) {
+            font-size: $font-size-p-md;
+          }
+
+          i {
+            margin: 0 0 0 15px;
+            transition: transform $transition-speed-medium $transition-timing;
+            font-size: calc($font-size-p-lg - 5px);
+
+            &.rotated {
+              transform: rotate(180deg);
+            }
+          }
+        }
+
+        &.quiz {
+          @include primary-button;
+          align-self: flex-start;
+          border: none;
+          font-size: calc($font-size-p-lg - 3px);
+
+          &.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background-color: #a0a0a0;
+            box-shadow: none;
+
+            &:hover {
+              background-color: #a0a0a0;
+              transform: none;
+              box-shadow: none;
+            }
+          }
+
+          &.upgrade-button {
+            background-color: $color-light-blue;
+            color: white;
+            font-weight: 500;
+            transition: all $transition-speed-medium $transition-timing;
+
+            &:hover {
+              background-color: darken($color-light-blue, 10%);
+              transform: translateY(-2px);
+              box-shadow: $shadow-md;
+            }
+          }
+        }
       }
     }
   }

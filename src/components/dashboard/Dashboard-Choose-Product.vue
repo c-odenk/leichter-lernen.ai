@@ -56,18 +56,43 @@
 <script>
 export default {
   name: "ProductSelection",
+
+  // Props: Daten, die von der übergeordneten Komponente übergeben werden
   props: {
+    /**
+     * Array mit Produktdaten, die dem Benutzer zur Auswahl angezeigt werden
+     * Jedes Produkt sollte folgende Eigenschaften haben:
+     * - title: Name des Produkts
+     * - description: Beschreibung des Produkts
+     * - price: Preis des Produkts als formatierter String
+     * - priceModel: Beschreibung des Preismodells (z.B. "pro Monat")
+     * - available: Boolean, ob das Produkt verfügbar ist
+     */
     products: {
       type: Array,
       required: true,
     },
   },
+
+  // Reaktive Daten der Komponente
   data() {
     return {
+      /**
+       * Speichert den Index des ausgewählten Produkts aus dem products-Array
+       * null bedeutet, dass kein Produkt ausgewählt ist
+       */
       selectedProductId: null,
     };
   },
+
+  // Berechnete Eigenschaften
   computed: {
+    /**
+     * Prüft, ob ein verfügbares Produkt ausgewählt wurde
+     * Wird verwendet, um den "Weiter"-Button zu aktivieren/deaktivieren
+     *
+     * @returns {boolean} True, wenn ein verfügbares Produkt ausgewählt ist
+     */
     isProductSelected() {
       return (
         this.selectedProductId !== null &&
@@ -75,13 +100,29 @@ export default {
       );
     },
   },
+
+  // Methoden zur Interaktion mit der Komponente
   methods: {
+    /**
+     * Wählt ein Produkt anhand seiner ID (Index im products-Array) aus
+     * Produkte, die nicht verfügbar sind, können nicht ausgewählt werden
+     *
+     * @param {number} productId - Index des Produkts im products-Array
+     */
     selectProduct(productId) {
       // Nur verfügbare Produkte können ausgewählt werden
       if (this.products[productId].available) {
         this.selectedProductId = productId;
       }
     },
+
+    /**
+     * Sendet das ausgewählte Produkt an die übergeordnete Komponente,
+     * wenn ein Produkt ausgewählt wurde und der Benutzer auf "Weiter" klickt
+     *
+     * Emittiert das 'product-selected'-Event mit einem Objekt, das die
+     * Produktdetails enthält (Name, Beschreibung, Preis, ID)
+     */
     continueWithProduct() {
       if (this.isProductSelected) {
         // Ausgewähltes Produkt an übergeordnete Komponente senden
@@ -107,7 +148,6 @@ export default {
   box-sizing: border-box;
 }
 
-// Component Container Layout
 .product-selection-container {
   width: $width-modal-desktop;
   background-color: $color-text-white;
@@ -121,7 +161,6 @@ export default {
   }
 }
 
-// Header Styles
 .component-header {
   padding: $spacing-sm $spacing-md;
   border-bottom: 1px solid #eee;
@@ -151,13 +190,11 @@ export default {
   }
 }
 
-// Main Content Styles
 .component-content {
   padding: $spacing-md;
   background-color: $color-text-white;
 }
 
-// Product Item Styles
 .product-item {
   padding: $spacing-md;
   border: 2px solid #eee;
@@ -182,8 +219,6 @@ export default {
   &.not-available {
     opacity: 0.7;
     cursor: not-allowed;
-
-    // Der Durchstreicheffekt für den Preis wurde entfernt
   }
 
   &:last-child {
@@ -191,14 +226,12 @@ export default {
   }
 }
 
-// Product Info Layout
 .product-info {
   display: flex;
   align-items: center;
   width: 100%;
 }
 
-// Product Icon Styles
 .product-icon {
   margin-right: $spacing-sm;
   flex-shrink: 0;
@@ -217,7 +250,6 @@ export default {
   }
 }
 
-// Product Details Styles
 .product-details {
   flex: 1;
   position: relative;
@@ -245,11 +277,8 @@ export default {
       margin-right: 4px;
     }
   }
-
-  // Der product-badge Block wurde entfernt
 }
 
-// Product Price Section
 .product-price-section {
   display: flex;
   flex-direction: column;
@@ -271,7 +300,6 @@ export default {
   }
 }
 
-// Navigation Buttons Styles
 .navigation-buttons {
   display: flex;
   justify-content: space-between;

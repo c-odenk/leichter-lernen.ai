@@ -60,40 +60,107 @@
 <script>
 export default {
   name: "DashboardQuizModal",
+
+  // Props: Daten, die von der übergeordneten Komponente übergeben werden
   props: {
+    /**
+     * Das Thema mit zugehörigen Quizfragen
+     * Erwartet ein Array von Fragen oder ein verschachteltes Array,
+     * das zu einem flachen Array von Fragen umgewandelt wird
+     */
     topic: {
       type: Array,
       required: true,
     },
   },
+
+  // Reaktive Daten der Komponente
   data() {
     return {
+      /**
+       * Steuert die Sichtbarkeit des Modals
+       */
       isVisible: true,
+
+      /**
+       * Speichert den Index der aktuell ausgewählten Antwort
+       * null bedeutet, dass keine Antwort ausgewählt ist
+       */
       selectedAnswer: null,
+
+      /**
+       * Flag, das anzeigt, ob die aktuelle Antwort bereits überprüft wurde
+       */
       answerChecked: false,
+
+      /**
+       * Index der aktuell angezeigten Frage im quizQuestions Array
+       */
       currentQuestionIndex: 0,
+
+      /**
+       * Zähler für korrekte Antworten
+       */
       correctAnswers: 0,
+
+      /**
+       * Gesamtzahl der beantworteten Fragen
+       */
       totalAnswered: 0,
+
+      /**
+       * Verlauf der gegebenen Antworten mit Details zu jeder Antwort
+       */
       answerHistory: [],
     };
   },
+
+  // Berechnete Eigenschaften
   computed: {
+    /**
+     * Konvertiert das möglicherweise verschachtelte topic-Array in ein flaches Array von Quizfragen
+     *
+     * @returns {Array} Flaches Array mit allen Quizfragen
+     */
     quizQuestions() {
       // Flacht das Array ab, falls es verschachtelt ist
       return this.topic.flat();
     },
+
+    /**
+     * Gibt die aktuell angezeigte Frage zurück
+     *
+     * @returns {Object} Die aktuelle Quizfrage mit ihren Antwortoptionen
+     */
     currentQuestion() {
       return this.quizQuestions[this.currentQuestionIndex];
     },
+
+    /**
+     * Prüft, ob die aktuelle Frage die letzte im Quiz ist
+     *
+     * @returns {boolean} True, wenn die aktuelle Frage die letzte ist
+     */
     isLastQuestion() {
       return this.currentQuestionIndex === this.quizQuestions.length - 1;
     },
   },
+
+  // Methoden zur Interaktion mit der Komponente
   methods: {
+    /**
+     * Schließt das Quiz-Modal und informiert die übergeordnete Komponente
+     * Wird aufgerufen, wenn der Benutzer auf das X oder außerhalb des Modals klickt
+     */
     closeModal() {
       this.isVisible = false;
       this.$emit("close");
     },
+
+    /**
+     * Überprüft die ausgewählte Antwort und aktualisiert den Punktestand
+     * Wird aufgerufen, wenn der Benutzer eine Antwort bestätigt
+     */
     checkAnswer() {
       if (this.selectedAnswer !== null) {
         this.answerChecked = true;
@@ -116,11 +183,23 @@ export default {
         }
       }
     },
+
+    /**
+     * Wählt eine Antwortoption aus
+     * Wird aufgerufen, wenn der Benutzer auf eine Antwortoption klickt
+     *
+     * @param {number} index - Index der ausgewählten Antwort
+     */
     selectAnswer(index) {
       if (!this.answerChecked) {
         this.selectedAnswer = index;
       }
     },
+
+    /**
+     * Wechselt zur nächsten Frage oder beendet das Quiz, wenn es die letzte Frage war
+     * Wird aufgerufen, wenn der Benutzer auf "Nächste Frage" oder "Quiz beenden" klickt
+     */
     nextQuestion() {
       if (this.currentQuestionIndex < this.quizQuestions.length - 1) {
         this.currentQuestionIndex++;
@@ -136,6 +215,15 @@ export default {
         this.closeModal();
       }
     },
+
+    /**
+     * Bestimmt die CSS-Klasse für eine Antwortoption basierend auf ihrer Korrektheit
+     * und ob sie ausgewählt wurde
+     *
+     * @param {Object} answer - Das Antwortobjekt
+     * @param {number} index - Index der Antwort
+     * @returns {string} CSS-Klassenname für die Antwort
+     */
     getAnswerClass(answer, index) {
       if (!this.answerChecked) return "";
       if (answer.isCorrect) return "correct-answer";
@@ -143,6 +231,13 @@ export default {
         return "wrong-answer";
       return "";
     },
+
+    /**
+     * Bestimmt die Icon-Klasse für eine Antwortoption basierend auf ihrer Auswahl
+     *
+     * @param {number} index - Index der Antwort
+     * @returns {string} CSS-Klassenname für das Icon
+     */
     getIconClass(index) {
       return this.selectedAnswer === index
         ? "fa-regular fa-square-check"
@@ -269,7 +364,7 @@ export default {
 
       & label {
         cursor: pointer;
-        font-size: calc($font-size-p-lg - 2px);
+        font-size: calc($font-size-p-lg - 0px);
 
         @include respond(tablet) {
           font-size: $font-size-p-md;
@@ -319,7 +414,7 @@ export default {
       @include primary-button;
       min-width: 220px;
       border: none;
-      font-size: calc($font-size-p-lg - 4px);
+      font-size: calc($font-size-p-lg - 2px);
 
       &:disabled {
         background-color: #cccccc;
@@ -329,7 +424,6 @@ export default {
   }
 }
 
-/* Animation für die Antwortoptionen */
 @keyframes answerSlideIn {
   from {
     opacity: 0;
@@ -341,7 +435,6 @@ export default {
   }
 }
 
-/* Transition für answer-fade */
 .answer-fade-enter-active,
 .answer-fade-leave-active {
   transition: all 0.3s;
