@@ -64,7 +64,11 @@
             <div class="progress-text">{{ uploadProgress }}%</div>
           </div>
           <p class="uploading-text">Datei wird hochgeladen...</p>
-          <button class="cancel-button" @click="cancelUpload">Abbrechen</button>
+          <ButtonBlue
+            variant="dropdown"
+            text="Abbrechen"
+            @click="cancelUpload"
+          />
         </div>
 
         <div v-if="selectedFile && !isUploading" class="file-selected-state">
@@ -96,16 +100,13 @@
       </div>
 
       <div class="navigation-buttons">
-        <button class="secondary-button" @click="handleCancel">
-          Abbrechen
-        </button>
-        <button
-          class="primary-button"
+        <ButtonBlue variant="dropdown" text="Abbrechen" @click="handleCancel" />
+        <ButtonBlue
+          variant="primary"
+          text="Weiter"
           :disabled="!uploadComplete"
           @click="handleContinue"
-        >
-          Weiter
-        </button>
+        />
       </div>
     </div>
   </div>
@@ -545,20 +546,6 @@ export default {
   color: #666;
 }
 
-.cancel-button {
-  background: none;
-  border: none;
-  color: $color-light-blue;
-  cursor: pointer;
-  padding: 5px 10px;
-  transition: all $transition-speed-fast $transition-timing;
-  font-size: calc($font-size-p-lg - 2px);
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
 .file-selected-state {
   width: 100%;
 }
@@ -653,40 +640,5 @@ export default {
   margin-top: $spacing-md;
   padding-top: $spacing-sm;
   border-top: 1px solid #eee;
-}
-
-.secondary-button {
-  padding: 10px 20px;
-  background-color: transparent;
-  border: 1px solid #ddd;
-  border-radius: $border-radius-sm;
-  color: #666;
-  font-size: calc($font-size-p-lg - 2px);
-  cursor: pointer;
-  transition: all $transition-speed-fast $transition-timing;
-
-  @include respond(laptop) {
-    ont-size: calc($font-size-p-md - 2px);
-  }
-
-  &:hover {
-    background-color: #f5f5f5;
-  }
-}
-
-.primary-button {
-  @include primary-button;
-  padding: 10px 30px;
-  border: none;
-  font-size: calc($font-size-p-lg - 2px);
-
-  @include respond(laptop) {
-    font-size: calc($font-size-p-md - 2px);
-  }
-
-  &:disabled {
-    background-color: lighten($color-light-blue, 25%);
-    cursor: not-allowed;
-  }
 }
 </style>

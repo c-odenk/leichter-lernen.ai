@@ -3,7 +3,7 @@
     <div class="landing-cta_row">
       <h2>⚡ {{ heading }}</h2>
       <p>{{ subheading }}</p>
-      <router-link to="/login"> Jetzt ausprobieren </router-link>
+      <LinkButtonBlue text="Jetzt ausprobieren" to="/login" />
     </div>
   </div>
 </template>
@@ -11,8 +11,6 @@
 <script>
 export default {
   name: "CTASection",
-
-  // Reaktive Daten der Komponente
   data() {
     return {
       heading: "Effizienter lernen, weniger Zeit verschwenden!",
@@ -20,12 +18,6 @@ export default {
         "Nutze künstliche Intelligenz, um deine Lernzeit zu optimieren und Wissen effizienter zu verinnerlichen.",
     };
   },
-
-  // Diese einfache Komponente benötigt keine weiteren Methoden oder Computed Properties,
-  // könnte aber in Zukunft erweitert werden, um beispielsweise:
-  // - A/B-Tests verschiedener Überschriften und Texte durchzuführen
-  // - Tracking der CTA-Button-Klicks zu implementieren
-  // - Dynamische Anpassung der Nachricht basierend auf Nutzerverhalten
 };
 </script>
 
@@ -133,16 +125,6 @@ export default {
         font-size: $font-size-p-sm;
         width: 90%;
         margin: $spacing-xs 0 $spacing-md 0;
-      }
-    }
-
-    & a {
-      @include primary-button;
-      position: relative;
-      z-index: 2;
-
-      @include respond(laptop) {
-        font-size: $font-size-p-md;
       }
     }
   }

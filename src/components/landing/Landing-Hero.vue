@@ -11,7 +11,7 @@
           intelligenter KI-Tutor für all deine Fragen.
           <b>Lerne schneller, effektiver und ohne Umwege!</b>
         </p>
-        <router-link to="/login"> Jetzt ausprobieren </router-link>
+        <LinkButtonBlue text="Jetzt ausprobieren" to="/login" />
       </div>
       <div class="landing-hero_image" aria-hidden="true"></div>
     </div>
@@ -103,10 +103,6 @@ export default {
       @include respond(phone) {
         font-size: $font-size-p-sm;
       }
-    }
-
-    & a {
-      @include primary-button;
     }
   }
 

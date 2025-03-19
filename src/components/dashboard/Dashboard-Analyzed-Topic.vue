@@ -49,13 +49,15 @@
           </div>
         </div>
 
-        <button class="dropdown" v-if="hasLongText" @click="toggleExpand">
-          {{ isExpanded ? "Weniger anzeigen" : "Mehr anzeigen" }}
-          <i
-            class="fa-solid fa-chevron-down"
-            :class="{ rotated: isExpanded }"
-          ></i>
-        </button>
+        <ButtonBlue
+          v-if="hasLongText"
+          variant="dropdown"
+          :text="isExpanded ? 'Weniger anzeigen' : 'Mehr anzeigen'"
+          icon="fa-solid fa-chevron-down"
+          iconPosition="right"
+          :iconRotated="isExpanded"
+          @click="toggleExpand"
+        />
       </div>
     </div>
 
@@ -65,9 +67,7 @@
         <p>Sichere dein Verständnis durch Übungsfragen</p>
       </div>
       <div class="dashboard-analyzed-topic_row_col-2">
-        <button class="quiz primary-button" @click="startQuiz">
-          Quiz starten
-        </button>
+        <ButtonBlue variant="primary" text="Quiz starten" @click="startQuiz" />
       </div>
     </div>
 
@@ -78,12 +78,16 @@
       </div>
       <div class="dashboard-analyzed-topic_row_col-2">
         <div class="button-container">
-          <button class="quiz primary-button disabled" disabled>
-            Probeklausur starten
-          </button>
-          <button class="quiz upgrade-button" @click="upgradePaket">
-            Paket upgraden
-          </button>
+          <ButtonBlue
+            variant="primary"
+            text="Probeklausur starten"
+            :disabled="true"
+          />
+          <ButtonBlue
+            variant="primary"
+            text="Paket upgraden"
+            @click="upgradePaket"
+          />
         </div>
       </div>
     </div>
@@ -95,12 +99,16 @@
       </div>
       <div class="dashboard-analyzed-topic_row_col-2">
         <div class="button-container">
-          <button class="quiz primary-button disabled" disabled>
-            KI Tutor starten
-          </button>
-          <button class="quiz upgrade-button" @click="upgradePaket">
-            Paket upgraden
-          </button>
+          <ButtonBlue
+            variant="primary"
+            text="KI Tutor starten"
+            :disabled="true"
+          />
+          <ButtonBlue
+            variant="primary"
+            text="Paket upgraden"
+            @click="upgradePaket"
+          />
         </div>
       </div>
     </div>
@@ -342,74 +350,6 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
-      }
-
-      button {
-        &.dropdown {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin: $spacing-md 0 0 0;
-          padding: 10px $spacing-md;
-          font-size: calc($font-size-p-lg - 2px);
-          background-color: transparent;
-          color: $color-light-blue;
-          border: 1px solid rgba($color-light-blue, 0.2);
-          border-radius: $border-radius-sm;
-          cursor: pointer;
-          transition: all $transition-speed-medium $transition-timing;
-          font-weight: 500;
-
-          @include respond(laptop) {
-            font-size: calc($font-size-p-md - 1px);
-          }
-
-          i {
-            margin: 0 0 0 15px;
-            transition: transform $transition-speed-medium $transition-timing;
-            font-size: calc($font-size-p-lg - 5px);
-
-            &.rotated {
-              transform: rotate(180deg);
-            }
-          }
-        }
-
-        &.quiz {
-          @include primary-button;
-          align-self: flex-start;
-          border: none;
-          font-size: calc($font-size-p-lg - 2px);
-
-          @include respond(laptop) {
-            font-size: calc($font-size-p-md - 1px);
-          }
-
-          &.disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            background-color: #a0a0a0;
-            box-shadow: none;
-
-            &:hover {
-              background-color: #a0a0a0;
-              transform: none;
-              box-shadow: none;
-            }
-          }
-
-          &.upgrade-button {
-            background-color: $color-light-blue;
-            color: white;
-            font-weight: 500;
-            transition: all $transition-speed-medium $transition-timing;
-
-            &:hover {
-              background-color: darken($color-light-blue, 10%);
-              box-shadow: $shadow-md;
-            }
-          }
-        }
       }
     }
   }

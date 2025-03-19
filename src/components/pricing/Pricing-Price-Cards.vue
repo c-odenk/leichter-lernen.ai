@@ -8,22 +8,21 @@
         class="price-card"
         :class="{ mostWantedBody: plan.mostWanted }"
       >
-        <!-- "Coming Soon" Bild wird nur angezeigt, wenn der Plan nicht verfügbar ist -->
-        <img
-          v-if="!plan.available"
-          :src="require(`@/assets/coming-soon.png`)"
-          alt="User Image"
-        />
         <h3>{{ plan.title }}</h3>
         <p>{{ plan.description }}</p>
         <p>
           <span class="preis">{{ plan.price }}</span> {{ plan.priceModel }}
         </p>
-        <!-- Call-to-Action Button, abhängig von der Verfügbarkeit -->
-        <span v-if="!plan.available" class="disabled-button"
-          >Bald verfügbar</span
-        >
-        <router-link v-else to="/login">Jetzt loslegen</router-link>
+        <!-- Call-to-Action Button mit der global registrierten LinkButtonBlue-Komponente -->
+        <div class="button-container">
+          <LinkButtonBlue
+            to="/login"
+            :text="plan.available ? 'Jetzt loslegen' : ''"
+            :disabledText="!plan.available ? 'Bald verfügbar' : ''"
+            :disabled="!plan.available"
+            :block="true"
+          />
+        </div>
         <!-- Liste der Features für diesen Preisplan -->
         <ul>
           <li v-for="(feature, idx) in plan.features" :key="idx">
@@ -96,19 +95,7 @@ export default {
 
       /* Hover-Effekt für bessere Interaktivität */
       &:hover {
-        transform: translateY(-3px); // Leichte Anhebung bei Hover
         box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.15); // Verstärkter Schatten
-      }
-
-      /* Coming-Soon Bild Styling */
-      & img {
-        width: 90px;
-        height: 90px;
-        position: absolute;
-        top: -50px;
-        right: -40px;
-        transform: rotate(-15deg); // Leicht gedreht für visuellen Effekt
-        display: none;
       }
 
       /* Überschrift-Styling */
@@ -153,6 +140,16 @@ export default {
         }
       }
 
+      /* Container für den Button mit korrekten Abständen */
+      & .button-container {
+        width: 100%;
+        margin: 20px 0 50px 0;
+
+        @include respond(phone) {
+          margin: 20px 0 30px 0; // Kleinerer Abstand auf Smartphones
+        }
+      }
+
       /* Feature-Liste Styling */
       & ul {
         margin: 0 0 40px 0;
@@ -183,65 +180,6 @@ export default {
             content: "\f0e7"; // FontAwesome Blitz-Icon
             color: $color-warning;
           }
-        }
-      }
-
-      /* Styling für den CTA-Button */
-      & a {
-        display: block;
-        width: 100%;
-        margin: 20px 0 50px 0;
-        padding: 12.5px 18px;
-        line-height: $line-height;
-        letter-spacing: $letter-spacing;
-        text-decoration: none;
-        text-transform: uppercase;
-        text-align: center;
-        color: $color-text-white;
-        border-radius: 5px;
-        background-color: $color-light-blue;
-        box-sizing: border-box;
-        transition: background-color 0.3s ease;
-
-        /* Hover-Effekt für den Button */
-        &:hover {
-          background-color: $color-light-blue-darker;
-        }
-
-        /* Responsives Button-Styling */
-        @include respond(tablet) {
-          padding: 15px 20px; // Größere Padding auf Tablets für bessere Touch-Nutzung
-        }
-
-        @include respond(phone) {
-          margin: 20px 0 30px 0; // Kleinerer Abstand auf Smartphones
-        }
-      }
-
-      /* Styling für den deaktivierten Button */
-      & .disabled-button {
-        display: block;
-        width: 100%;
-        margin: 20px 0 50px 0;
-        padding: 12.5px 18px;
-        line-height: $line-height;
-        letter-spacing: $letter-spacing;
-        text-decoration: none;
-        text-transform: uppercase;
-        text-align: center;
-        color: $color-text-white;
-        border-radius: 5px;
-        // background-color: $color-grey;
-        background-color: gray;
-        cursor: not-allowed;
-        box-sizing: border-box;
-
-        @include respond(tablet) {
-          padding: 15px 20px; // Größere Padding auf Tablets für bessere Touch-Nutzung
-        }
-
-        @include respond(phone) {
-          margin: 20px 0 30px 0; // Kleinerer Abstand auf Smartphones
         }
       }
     }

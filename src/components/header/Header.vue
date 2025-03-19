@@ -46,7 +46,7 @@
         </nav>
 
         <div class="header_row_cta desktop-cta">
-          <router-link to="/login"> Anmelden </router-link>
+          <LinkButtonBlue text="Anmelden" to="/login" />
         </div>
       </div>
     </div>
@@ -371,10 +371,6 @@ export default {
 
       @include respond(tablet) {
         display: none;
-      }
-
-      & a {
-        @include primary-button;
       }
     }
   }

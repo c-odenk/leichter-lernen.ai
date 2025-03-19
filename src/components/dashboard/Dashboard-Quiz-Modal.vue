@@ -40,18 +40,24 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button
+        <!-- ButtonBlue Komponente mit alwaysBlue-Eigenschaft -->
+        <ButtonBlue
           v-if="!answerChecked"
-          type="submit"
-          class="submit-btn"
-          :disabled="answerChecked"
+          variant="primary"
+          text="Antwort bestätigen"
+          :disabled="selectedAnswer === null"
+          :alwaysBlue="true"
+          minWidth="220px"
           @click="checkAnswer"
-        >
-          Antwort bestätigen
-        </button>
-        <button v-else type="button" class="next-btn" @click="nextQuestion">
-          {{ isLastQuestion ? "Quiz beenden" : "Nächste Frage" }}
-        </button>
+        />
+        <ButtonBlue
+          v-else
+          variant="primary"
+          :text="isLastQuestion ? 'Quiz beenden' : 'Nächste Frage'"
+          :alwaysBlue="true"
+          minWidth="220px"
+          @click="nextQuestion"
+        />
       </div>
     </div>
   </div>
@@ -425,23 +431,6 @@ export default {
     background-color: $color-dark-blue;
     border-bottom-left-radius: $border-radius-md;
     border-bottom-right-radius: $border-radius-md;
-
-    .submit-btn,
-    .next-btn {
-      @include primary-button;
-      min-width: 220px;
-      border: none;
-      font-size: calc($font-size-p-lg - 2px);
-
-      @include respond(laptop) {
-        font-size: calc($font-size-p-md - 1px);
-      }
-
-      &:disabled {
-        background-color: #cccccc;
-        cursor: not-allowed;
-      }
-    }
   }
 }
 

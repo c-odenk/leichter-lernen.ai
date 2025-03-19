@@ -117,7 +117,7 @@ export default {
   &__link {
     color: $color-text-white;
     text-decoration: none;
-    font-size: $font-size-p-lg;
+    font-size: $font-size-p-xl;
     transition: color $transition-speed-medium $transition-timing;
     position: relative;
 
