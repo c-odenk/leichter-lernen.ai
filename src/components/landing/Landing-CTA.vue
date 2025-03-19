@@ -11,6 +11,8 @@
 <script>
 export default {
   name: "CTASection",
+
+  // Reaktive Daten der Komponente
   data() {
     return {
       heading: "Effizienter lernen, weniger Zeit verschwenden!",
@@ -18,6 +20,12 @@ export default {
         "Nutze künstliche Intelligenz, um deine Lernzeit zu optimieren und Wissen effizienter zu verinnerlichen.",
     };
   },
+
+  // Diese einfache Komponente benötigt keine weiteren Methoden oder Computed Properties,
+  // könnte aber in Zukunft erweitert werden, um beispielsweise:
+  // - A/B-Tests verschiedener Überschriften und Texte durchzuführen
+  // - Tracking der CTA-Button-Klicks zu implementieren
+  // - Dynamische Anpassung der Nachricht basierend auf Nutzerverhalten
 };
 </script>
 
@@ -27,6 +35,14 @@ export default {
 .landing-cta {
   width: 100%;
   margin: calc($spacing-lg + 0px) 0;
+
+  @include respond(laptop) {
+    margin: calc($spacing-lg + 25px) 0;
+  }
+
+  @include respond(tablet) {
+    margin: calc($spacing-lg) 0;
+  }
 
   &_row {
     @include content-container;
@@ -41,6 +57,20 @@ export default {
     position: relative;
     overflow: hidden;
 
+    @include respond(laptop) {
+      padding: 120px 0;
+    }
+
+    @include respond(tablet) {
+      padding: $spacing-lg 0;
+      border-radius: $border-radius-md;
+    }
+
+    @include respond(phone) {
+      padding: $spacing-md 0;
+      border-radius: $border-radius-sm;
+    }
+
     &::before {
       content: "";
       position: absolute;
@@ -54,20 +84,6 @@ export default {
         rgba(23, 43, 77, 0.12) 100%
       );
       z-index: 1;
-    }
-
-    @include respond(laptop) {
-      padding: $spacing-xl 0;
-    }
-
-    @include respond(tablet) {
-      padding: $spacing-lg 0;
-      border-radius: $border-radius-md;
-    }
-
-    @include respond(phone) {
-      padding: $spacing-md 0;
-      border-radius: $border-radius-sm;
     }
 
     & h2 {
@@ -102,6 +118,12 @@ export default {
       position: relative;
       z-index: 2;
 
+      @include respond(laptop) {
+        width: 80%;
+        margin: $spacing-xs auto calc($spacing-xs + 15px) auto;
+        font-size: $font-size-p-lg;
+      }
+
       @include respond(tablet) {
         font-size: $font-size-p-md;
         width: 80%;
@@ -118,6 +140,10 @@ export default {
       @include primary-button;
       position: relative;
       z-index: 2;
+
+      @include respond(laptop) {
+        font-size: $font-size-p-md;
+      }
     }
   }
 }

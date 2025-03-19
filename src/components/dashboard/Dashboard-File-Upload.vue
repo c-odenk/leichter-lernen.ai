@@ -506,6 +506,11 @@ export default {
   cursor: pointer;
   padding: 10px 20px;
   border: none;
+  font-size: calc($font-size-p-lg - 2px);
+
+  @include respond(laptop) {
+    font-size: calc($font-size-p-md - 2px);
+  }
 }
 
 .hidden-input {
@@ -544,10 +549,10 @@ export default {
   background: none;
   border: none;
   color: $color-light-blue;
-  font-size: 14px;
   cursor: pointer;
   padding: 5px 10px;
   transition: all $transition-speed-fast $transition-timing;
+  font-size: calc($font-size-p-lg - 2px);
 
   &:hover {
     text-decoration: underline;
@@ -656,9 +661,13 @@ export default {
   border: 1px solid #ddd;
   border-radius: $border-radius-sm;
   color: #666;
-  font-size: 14px;
+  font-size: calc($font-size-p-lg - 2px);
   cursor: pointer;
   transition: all $transition-speed-fast $transition-timing;
+
+  @include respond(laptop) {
+    ont-size: calc($font-size-p-md - 2px);
+  }
 
   &:hover {
     background-color: #f5f5f5;
@@ -669,6 +678,11 @@ export default {
   @include primary-button;
   padding: 10px 30px;
   border: none;
+  font-size: calc($font-size-p-lg - 2px);
+
+  @include respond(laptop) {
+    font-size: calc($font-size-p-md - 2px);
+  }
 
   &:disabled {
     background-color: lighten($color-light-blue, 25%);

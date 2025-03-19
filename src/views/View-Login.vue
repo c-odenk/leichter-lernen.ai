@@ -3,12 +3,12 @@
     <!-- Mobile-Ansicht -->
     <MobileNotice v-if="isMobile" />
 
-    <!-- Desktop-Ansicht -->
-    <div v-else class="desktop-view">
-      <div class="left-panel">
+    <!-- Desktop/Tablet-Ansicht -->
+    <div v-else class="desktop-view" :class="{ 'tablet-view': isTablet }">
+      <div class="left-panel" v-if="!isTablet">
         <LoginWallpaper />
       </div>
-      <div class="right-panel">
+      <div class="right-panel" :class="{ 'full-width': isTablet }">
         <LoginUserLogin />
       </div>
     </div>
@@ -53,10 +53,13 @@ export default {
   setup() {
     // Reaktive Zustände
     const isMobile = ref(false);
+    const isTablet = ref(false);
 
     // Hilfsfunktionen
     const checkDevice = () => {
-      isMobile.value = window.innerWidth <= 767; // Entspricht $breakpoint-smartphone
+      const width = window.innerWidth;
+      isMobile.value = width <= 767; // Entspricht $breakpoint-smartphone
+      isTablet.value = width > 767 && width <= 1024; // Zwischen smartphone und laptop (tablet-Bereich)
     };
 
     // Lifecycle-Hooks und Event-Handling
@@ -75,7 +78,7 @@ export default {
 
       window.addEventListener("resize", resizeHandler);
 
-      // Cleanup-Funktion für onUnmounted
+      // Cleanup-Funktion
       onUnmounted(() => {
         window.removeEventListener("resize", resizeHandler);
       });
@@ -83,6 +86,7 @@ export default {
 
     return {
       isMobile,
+      isTablet,
       LoginWaitlist, // Komponente an das Template übergeben
     };
   },
@@ -105,6 +109,11 @@ export default {
   display: flex;
   width: 100%;
   height: 100%;
+
+  &.tablet-view {
+    // Spezifische Anpassungen für Tablet-Ansicht
+    justify-content: center;
+  }
 }
 
 // Linke Spalte (Wallpaper)
@@ -118,10 +127,30 @@ export default {
   width: 50%;
   height: 100vh;
   position: relative;
+
+  &.full-width {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+  }
 }
 
 // Waitlist (initial versteckt)
 .waitlist-component {
   display: none;
+}
+
+// Mediaqueries nutzen, um das Verhalten zusätzlich über CSS zu steuern
+// Dies ist eine alternative Methode zur Vue-basierten Anzeigenlogik
+@include respond(tablet-only) {
+  .left-panel {
+    display: none;
+  }
+
+  .right-panel {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+  }
 }
 </style>

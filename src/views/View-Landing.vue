@@ -10,7 +10,7 @@
       <component
         :is="section.component"
         class="fade-item"
-        :class="index < 2 ? animationClass(section.key) : 'static-visible'"
+        :class="getAnimationClass(section.key, index)"
       />
     </div>
     <Footer />
@@ -52,6 +52,7 @@ export default {
 
     const visibleSections = ref({});
     const sectionRefs = ref({});
+    const isMobile = ref(false);
 
     const setSectionRef = (el, key) => {
       if (el) {
@@ -59,15 +60,36 @@ export default {
       }
     };
 
-    const animationClass = (key) => {
-      return {
-        "fade-in": visibleSections.value[key],
-        "slide-in-left": key === "hero" && visibleSections.value[key],
-        "slide-in-right delay": key === "product" && visibleSections.value[key],
-      };
+    const checkMobile = () => {
+      isMobile.value = window.innerWidth <= 768; // Standard Breakpoint für Smartphones
+    };
+
+    const getAnimationClass = (key, index) => {
+      // Wenn es die Product-Komponente ist und wir auf einem Smartphone sind
+      if (key === "product" && isMobile.value) {
+        return "static-visible";
+      }
+
+      // Für andere Komponenten oder nicht-mobile Ansichten
+      if (index < 2) {
+        return {
+          "fade-in": visibleSections.value[key],
+          "slide-in-left": key === "hero" && visibleSections.value[key],
+          "slide-in-right delay":
+            key === "product" && visibleSections.value[key],
+        };
+      } else {
+        return "static-visible";
+      }
     };
 
     onMounted(() => {
+      // Initial überprüfen, ob wir auf einem Smartphone sind
+      checkMobile();
+
+      // Event-Listener für Resize-Events
+      window.addEventListener("resize", checkMobile);
+
       nextTick(() => {
         const observer = new IntersectionObserver(
           (entries) => {
@@ -99,7 +121,13 @@ export default {
       });
     });
 
-    return { sections, visibleSections, setSectionRef, animationClass };
+    return {
+      sections,
+      visibleSections,
+      setSectionRef,
+      getAnimationClass,
+      isMobile,
+    };
   },
 };
 </script>

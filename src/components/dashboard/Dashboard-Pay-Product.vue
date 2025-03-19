@@ -827,7 +827,7 @@ export default {
   border: 1px solid #ddd;
   border-radius: $border-radius-sm;
   color: #666;
-  font-size: 14px;
+  font-size: calc($font-size-p-lg - 2px);
   cursor: pointer;
   transition: all $transition-speed-fast $transition-timing;
   box-sizing: border-box;
@@ -842,6 +842,7 @@ export default {
   padding: 10px 30px;
   border: none;
   box-sizing: border-box;
+  font-size: calc($font-size-p-lg - 2px);
 
   &:disabled {
     background-color: lighten($color-light-blue, 25%);

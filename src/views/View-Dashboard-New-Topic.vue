@@ -127,7 +127,6 @@ export default {
 
     &_col-1 {
       background-color: $color-dark-blue;
-      width: 250px;
       flex-shrink: 0;
     }
 

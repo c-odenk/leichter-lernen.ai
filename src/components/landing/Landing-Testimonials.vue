@@ -4,11 +4,16 @@
       <h2>💬 {{ heading }}</h2>
       <p>{{ paragraph }}</p>
 
-      <div class="masonry-container">
+      <div
+        class="masonry-container"
+        :class="{ 'mobile-scroll': isMobile, 'tablet-layout': isTablet }"
+        ref="masonryContainer"
+      >
         <div
-          class="masonry-item"
           v-for="(testimonial, index) in testimonials"
           :key="index"
+          class="masonry-item"
+          ref="masonryItems"
         >
           <div class="testimonial">
             <div class="testimonial_header">
@@ -32,6 +37,7 @@
 <script>
 export default {
   name: "TestimonialsSection",
+
   data() {
     return {
       heading: "Was unsere Nutzer sagen",
@@ -81,81 +87,118 @@ export default {
           image: "anonymous-user.png",
         },
       ],
+      isMobile: false,
+      isTablet: false,
+      resizeTimer: null,
     };
   },
+
   mounted() {
-    // Masonry Layout initialisieren, wenn die Komponente in den DOM eingehängt wird
-    this.$nextTick(() => {
-      this.initMasonry();
-      // Event-Listener für Fenstergrößenänderungen
-      window.addEventListener("resize", this.debounce(this.initMasonry, 200));
-    });
+    this.checkViewport();
+    this.initLayout();
+    window.addEventListener("resize", this.handleResize);
+
+    // Bilder laden abwarten und dann Layout neu berechnen
+    window.addEventListener("load", this.initLayout);
   },
+
   beforeUnmount() {
-    // Event-Listener entfernen, wenn die Komponente aus dem DOM entfernt wird
-    window.removeEventListener("resize", this.debounce(this.initMasonry, 200));
+    window.removeEventListener("resize", this.handleResize);
+    window.removeEventListener("load", this.initLayout);
   },
+
   methods: {
-    initMasonry() {
-      const container = document.querySelector(".masonry-container");
-      const items = Array.from(document.querySelectorAll(".masonry-item"));
+    checkViewport() {
+      const width = window.innerWidth;
+      this.isMobile = width < 768;
+      this.isTablet = width >= 768 && width < 1024;
+    },
+
+    handleResize() {
+      clearTimeout(this.resizeTimer);
+      this.resizeTimer = setTimeout(() => {
+        this.checkViewport();
+        this.initLayout();
+      }, 200);
+    },
+
+    initLayout() {
+      if (this.isMobile) {
+        this.initHorizontalScroll();
+      } else {
+        this.initMasonry();
+      }
+    },
+
+    initHorizontalScroll() {
+      const container = this.$refs.masonryContainer;
+      const items = this.$refs.masonryItems || [];
 
       if (!container || items.length === 0) return;
 
-      // Zurücksetzen
-      items.forEach((item) => {
-        item.style.position = "";
-        item.style.left = "";
-        item.style.top = "";
-      });
+      // Container-Höhe zurücksetzen
       container.style.height = "";
 
-      // Anzahl der Spalten basierend auf Viewport-Breite bestimmen
-      let columnCount = 3;
-      const containerWidth = container.offsetWidth - 32; // Abzüglich Padding
+      // Für mobile Ansicht als flex-scrollbaren Container stylen
+      items.forEach((item) => {
+        item.style.position = "";
+        item.style.top = "";
+        item.style.left = "";
+        item.style.width = "calc(95vw - 16px)"; // 95vw minus Abstand
+        item.style.marginRight = "16px";
+      });
+    },
 
-      if (containerWidth < 768) {
-        columnCount = 1;
-      } else if (containerWidth < 992) {
-        columnCount = 2;
-      }
+    initMasonry() {
+      const container = this.$refs.masonryContainer;
+      const items = this.$refs.masonryItems || [];
 
-      // Spaltenbreite berechnen (unter Berücksichtigung des Abstands)
-      const gap = 16; // $spacing-xs in Pixeln, passe es an deine Variablen an
+      if (!container || items.length === 0) return;
+
+      // Padding des Containers berücksichtigen
+      const style = window.getComputedStyle(container);
+      const paddingLeft = parseInt(style.paddingLeft) || 0;
+      const paddingRight = parseInt(style.paddingRight) || 0;
+
+      // Berechne die tatsächlich verfügbare Breite
+      const containerWidth = container.clientWidth - paddingLeft - paddingRight;
+
+      // Spaltenanzahl je nach Viewport
+      const columnCount = this.isTablet ? 2 : 3;
+
+      // Berechne Spaltenbreite und Abstand
+      const gap = 16; // $spacing-xs
       const columnWidth =
         (containerWidth - gap * (columnCount - 1)) / columnCount;
 
-      // Arrays für die Spalten und ihre Höhen initialisieren
-      const columns = Array(columnCount).fill(0);
+      // Höhen der Spalten zurücksetzen
+      const columnHeights = Array(columnCount).fill(0);
 
-      // Elemente in die Spalten einfügen
+      // Elemente positionieren
       items.forEach((item) => {
+        // Zurücksetzen für saubere Neuberechnung
+        item.style.width = `${columnWidth}px`;
+
         // Finde die kürzeste Spalte
-        const shortestColumnIndex = columns.indexOf(Math.min(...columns));
+        const minColumnIndex = columnHeights.indexOf(
+          Math.min(...columnHeights)
+        );
 
-        // Setze Position des Elements
+        // Berechne Position
+        const xPos = minColumnIndex * (columnWidth + gap) + paddingLeft;
+        const yPos = columnHeights[minColumnIndex];
+
+        // Element positionieren
         item.style.position = "absolute";
-        item.style.width = columnWidth + "px";
-        item.style.left = shortestColumnIndex * (columnWidth + gap) + "px";
-        item.style.top = columns[shortestColumnIndex] + "px";
+        item.style.left = `${xPos}px`;
+        item.style.top = `${yPos}px`;
 
-        // Aktualisiere die Höhe der Spalte
-        columns[shortestColumnIndex] += item.offsetHeight + gap;
+        // Aktualisiere Spaltenhöhe
+        columnHeights[minColumnIndex] += item.offsetHeight + gap;
       });
 
-      // Höhe des Containers anpassen
-      container.style.height = Math.max(...columns) + "px";
-    },
-    debounce(func, wait) {
-      let timeout;
-      return function executedFunction(...args) {
-        const later = () => {
-          clearTimeout(timeout);
-          func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-      };
+      // Container-Höhe anpassen
+      container.style.height = `${Math.max(...columnHeights)}px`;
     },
   },
 };
@@ -164,9 +207,27 @@ export default {
 <style lang="scss" scoped>
 @import "@/variables/variables.scss";
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 .landing-testimonials {
   width: 100%;
   margin: calc($spacing-lg + 50px) 0;
+
+  @include respond(laptop) {
+    margin: calc($spacing-lg + 25px) 0;
+  }
+
+  @include respond(tablet) {
+    margin: $spacing-lg 0;
+  }
+
+  @include respond(phone) {
+    margin: $spacing-lg 0;
+  }
 
   &_row {
     @include content-container;
@@ -195,6 +256,11 @@ export default {
       letter-spacing: $letter-spacing;
       text-align: center;
 
+      @include respond(laptop) {
+        width: 70%;
+        font-size: calc($font-size-p-md + 2px);
+      }
+
       @include respond(tablet) {
         width: 80%;
         font-size: $font-size-p-md;
@@ -212,24 +278,67 @@ export default {
   width: 100%;
   margin: $spacing-lg auto 0 auto;
   position: relative;
-  /*
-  background-color: rgba(
-    248,
-    241,
-    241,
-    0.3
-  ); */ /* Zarter Rosa-Hintergrund wie im Screenshot */
-  padding: $spacing-md;
+  padding: $spacing-md 0;
   border-radius: $border-radius-lg;
+
+  @include respond(tablet) {
+    margin: $spacing-md auto 0 auto;
+    padding: $spacing-sm 0;
+  }
+
+  @include respond(phone) {
+    margin: $spacing-sm auto 0 auto;
+    padding: $spacing-xs 0;
+  }
+
+  &.tablet-layout .testimonial {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-6px);
+      box-shadow: $shadow-lg;
+    }
+  }
+
+  &.mobile-scroll {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: $spacing-xs 0;
+    margin: 0 auto;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 }
 
 .masonry-item {
-  position: absolute;
   transition: transform 0.3s ease;
 
   &:hover {
-    transform: translateY(-5px);
+    // transform: translateY(-5px);
     z-index: 1;
+  }
+
+  .mobile-scroll & {
+    position: static;
+    scroll-snap-align: start;
+    flex: 0 0 auto;
+    margin: 0 $spacing-xs 0 $spacing-xs;
+
+    &:hover {
+      // transform: translateY(-3px) scale(1.02);
+    }
+
+    &:last-child {
+      // margin-right: $spacing-xs;
+    }
   }
 }
 
@@ -241,6 +350,24 @@ export default {
   background-color: white;
   position: relative;
   overflow: hidden;
+  width: 100%;
+  box-shadow: $shadow-md;
+  transition: box-shadow $transition-speed-medium $transition-timing,
+    transform $transition-speed-medium $transition-timing;
+
+  @include respond(tablet) {
+    padding: $spacing-sm $spacing-sm $spacing-md $spacing-sm;
+    border-radius: $border-radius-md;
+  }
+
+  @include respond(phone) {
+    padding: $spacing-xs $spacing-xs $spacing-sm $spacing-sm;
+    border-radius: $border-radius-sm;
+  }
+
+  &:hover {
+    box-shadow: $shadow-lg;
+  }
 
   &::before {
     content: "";
@@ -266,20 +393,14 @@ export default {
       rgba(0, 0, 0, 1) 0%,
       rgba(0, 0, 0, 0) 75%
     );
-  }
-  box-shadow: $shadow-md;
-  transition: box-shadow $transition-speed-medium $transition-timing;
 
-  &:hover {
-    box-shadow: $shadow-lg;
-  }
+    @include respond(tablet) {
+      background-size: 16px 16px;
+    }
 
-  @include respond(tablet) {
-    border-radius: $border-radius-md;
-  }
-
-  @include respond(phone) {
-    border-radius: $border-radius-sm;
+    @include respond(phone) {
+      background-size: 14px 14px;
+    }
   }
 
   &_header {
@@ -288,10 +409,33 @@ export default {
     position: relative;
     z-index: 1;
 
+    @include respond(tablet) {
+      margin: 0 0 $spacing-sm 0;
+    }
+
+    @include respond(phone) {
+      margin: 0 0 $spacing-xs 0;
+    }
+
     & img {
       width: 65px;
       height: 65px;
       border-radius: $border-radius-round;
+
+      @include respond(laptop) {
+        width: 50px;
+        height: 50px;
+      }
+
+      @include respond(tablet) {
+        width: 48px;
+        height: 48px;
+      }
+
+      @include respond(phone) {
+        width: 42px;
+        height: 42px;
+      }
     }
 
     & h3 {
@@ -299,6 +443,10 @@ export default {
       margin: 0 $spacing-xs 0 0;
       padding: 0;
       font-size: $font-size-h3-lg;
+
+      @include respond(laptop) {
+        font-size: $font-size-h3-md;
+      }
 
       @include respond(tablet) {
         font-size: $font-size-h3-md;
@@ -317,13 +465,20 @@ export default {
     & h3 {
       color: $color-dark-blue;
       font-size: $font-size-h3-lg;
+      margin: 0 0 $spacing-xs 0;
+
+      @include respond(laptop) {
+        font-size: $font-size-h3-md;
+      }
 
       @include respond(tablet) {
         font-size: $font-size-h3-md;
+        margin: 0 0 calc($spacing-xs - 2px) 0;
       }
 
       @include respond(phone) {
         font-size: $font-size-h3-sm;
+        margin: 0 0 calc($spacing-xs - 4px) 0;
       }
     }
 
@@ -333,12 +488,18 @@ export default {
       text-align: left;
       font-size: $font-size-p-lg;
 
+      @include respond(laptop) {
+        font-size: calc($font-size-p-md + 1px);
+      }
+
       @include respond(tablet) {
-        font-size: calc(#{$font-size-p-md} - 2px);
+        font-size: calc(#{$font-size-p-md} - 1px);
+        line-height: 1.4;
       }
 
       @include respond(phone) {
-        font-size: calc(#{$font-size-p-sm} - 2px);
+        font-size: calc(#{$font-size-p-sm} - 1px);
+        line-height: 1.3;
       }
     }
   }

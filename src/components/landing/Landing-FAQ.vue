@@ -36,12 +36,31 @@
 <script>
 export default {
   name: "FAQSection",
+
+  // Reaktive Daten der Komponente
   data() {
     return {
+      /**
+       * Hauptüberschrift der FAQ-Sektion
+       */
       heading: "Hast du Fragen? Unsere FAQs helfen dir weiter!",
+
+      /**
+       * Unterüberschrift/Beschreibung der FAQ-Sektion
+       */
       subheading:
         "Hier findest du Antworten auf die häufigsten Fragen rund um unser Angebot.",
+
+      /**
+       * Speichert den Index des aktuell geöffneten FAQ-Elements
+       * null bedeutet, dass kein Element geöffnet ist
+       */
       activeIndex: null,
+
+      /**
+       * Array mit den FAQ-Daten
+       * Jedes Objekt enthält eine Frage (question) und die zugehörige Antwort (answer)
+       */
       faqs: [
         {
           question: "Wie hilft mir die KI beim Lernen?",
@@ -77,7 +96,16 @@ export default {
       ],
     };
   },
+
+  // Methoden zur Interaktion mit der Komponente
   methods: {
+    /**
+     * Öffnet oder schließt ein FAQ-Element
+     * Wenn das Element bereits geöffnet ist, wird es geschlossen (activeIndex = null)
+     * Wenn das Element geschlossen ist, wird es geöffnet (activeIndex = index)
+     *
+     * @param {number} index - Der Index des zu öffnenden/schließenden FAQ-Elements
+     */
     toggleFAQ(index) {
       this.activeIndex = this.activeIndex === index ? null : index;
     },
@@ -88,14 +116,29 @@ export default {
 <style lang="scss" scoped>
 @import "@/variables/variables.scss";
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 .landing-faq {
   width: 100%;
-  // margin: $spacing-xl $spacing-xs $spacing-xl $spacing-xs;
-  margin: calc($spacing-lg + 100px) 0;
+  margin: calc($spacing-lg + 50px) 0;
+
+  @include respond(laptop) {
+  }
+
+  @include respond(tablet) {
+    margin: calc($spacing-lg) 0 calc($spacing-lg + 50px) 0;
+  }
+
+  @include respond(phone) {
+    margin: $spacing-lg 0 calc($spacing-lg + 20px) 0;
+  }
 
   &__row {
-    // @include content-container;
-    width: $width-desktop - 100px;
+    @include content-container;
     margin: 0 auto;
     display: flex;
     flex-direction: row;
@@ -108,7 +151,7 @@ export default {
 
     @include respond(tablet) {
       width: 100%;
-      margin-bottom: $spacing-lg;
+      margin-bottom: $spacing-md;
     }
 
     @include respond(phone) {
@@ -154,7 +197,7 @@ export default {
     letter-spacing: $letter-spacing;
 
     @include respond(tablet) {
-      @include text-content-responsive;
+      // @include text-content-responsive;
     }
   }
 }
@@ -166,13 +209,11 @@ export default {
   transition: background-color $transition-speed-medium $transition-timing,
     color $transition-speed-medium $transition-timing;
   cursor: pointer;
-  // margin-bottom: $spacing-xs;
 
   &--active {
     background-color: $color-dark-blue;
     color: $color-text-white;
     box-shadow: $shadow-sm;
-    // border-radius: $border-radius-sm $border-radius-sm 0 0;
   }
 
   &__question {
@@ -183,6 +224,10 @@ export default {
     margin: 0;
     padding: 0;
     font-size: calc($font-size-h3-lg - 1px);
+
+    @include respond(laptop) {
+      font-size: calc($font-size-h3-lg - 1px);
+    }
 
     @include respond(tablet) {
       font-size: $font-size-h3-md;
@@ -207,6 +252,10 @@ export default {
     font-size: $font-size-p-lg;
     line-height: $line-height;
     letter-spacing: $letter-spacing;
+
+    @include respond(tablet) {
+      font-size: $font-size-p-md;
+    }
 
     @include respond(tablet) {
       @include text-content-responsive;

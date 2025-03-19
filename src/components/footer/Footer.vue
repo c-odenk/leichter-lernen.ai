@@ -1,34 +1,53 @@
 <template>
   <footer class="footer">
-    <div class="footer_row">
-      <p>Copyright &copy; 2025 leichter-lernen.ai. Alle Rechte vorbehalten.</p>
-      <ul>
-        <li><router-link to="/terms"> AGB </router-link></li>
-        <li><router-link to="/imprint"> Impressum </router-link></li>
-      </ul>
-    </div>
-    <div class="footer_row">
-      <div class="social-icons">
-        <a
-          href="https://www.linkedin.com/"
-          target="_blank"
-          aria-label="LinkedIn"
-        >
-          <i class="fa-brands fa-linkedin"></i>
-        </a>
-        <a href="https://www.xing.com/" target="_blank" aria-label="Xing">
-          <i class="fa-brands fa-xing"></i>
-        </a>
-        <a
-          href="https://www.instagram.com/"
-          target="_blank"
-          aria-label="Instagram"
-        >
-          <i class="fa-brands fa-instagram"></i>
-        </a>
-        <a href="https://www.tiktok.com/" target="_blank" aria-label="TikTok">
-          <i class="fa-brands fa-tiktok"></i>
-        </a>
+    <div class="footer__container">
+      <div class="footer__main">
+        <div class="footer__nav">
+          <router-link to="/" class="footer__link">Home</router-link>
+          <router-link to="/terms" class="footer__link">AGBs</router-link>
+          <router-link to="/imprint" class="footer__link"
+            >Impressum</router-link
+          >
+        </div>
+        <div class="footer__social">
+          <a
+            href="https://www.xing.com/"
+            target="_blank"
+            aria-label="Xing"
+            class="footer__social-icon"
+          >
+            <i class="fa-brands fa-xing"></i>
+          </a>
+          <a
+            href="https://www.linkedin.com/"
+            target="_blank"
+            aria-label="LinkedIn"
+            class="footer__social-icon"
+          >
+            <i class="fa-brands fa-linkedin"></i>
+          </a>
+          <a
+            href="https://www.instagram.com/"
+            target="_blank"
+            aria-label="Instagram"
+            class="footer__social-icon"
+          >
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+          <a
+            href="https://www.tiktok.com/"
+            target="_blank"
+            aria-label="TikTok"
+            class="footer__social-icon"
+          >
+            <i class="fa-brands fa-tiktok"></i>
+          </a>
+        </div>
+      </div>
+      <div class="footer__copyright">
+        <p>
+          Copyright &copy; 2025 leichter-lernen.ai. Alle Rechte vorbehalten.
+        </p>
       </div>
     </div>
   </footer>
@@ -44,113 +63,123 @@ export default {
 @import "@/variables/variables.scss";
 
 .footer {
-  @include content-container;
-  margin-bottom: 0;
-  padding: 40px 35px 30px 35px;
-  background-color: rgb(33, 33, 33);
-  border-radius: $border-radius-lg $border-radius-lg 0 0;
-  box-sizing: border-box;
+  width: 100%;
+  margin: $spacing-xl 0 0 0;
+  padding: calc($spacing-lg + 10px) 0;
+  background-color: $color-dark-blue;
+  color: $color-text-white;
 
   @include respond(tablet) {
-    padding: $spacing-sm;
+    margin: 0;
   }
 
-  @include respond(phone) {
-    padding: $spacing-sm $spacing-xs;
+  &__container {
+    @include content-container;
+    // padding: 0 $spacing-md $spacing-md;
+
+    @include respond(laptop) {
+      // padding: 0 $spacing-md $spacing-md;
+    }
+
+    @include respond(tablet) {
+      // padding: 0 $spacing-sm $spacing-md;
+    }
+
+    @include respond(phone) {
+      // padding: 0 $spacing-xs $spacing-sm;
+    }
   }
 
-  &_row {
-    width: 100%;
-    @include flex-between;
-    box-sizing: border-box;
+  &__main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: $spacing-md;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
     @include respond(tablet) {
       flex-direction: column;
-      align-items: center;
-      text-align: center;
+      gap: calc($spacing-sm - 10px);
     }
+  }
 
-    &:last-child {
-      margin-bottom: 0;
-    }
+  &__nav {
+    display: flex;
+    gap: $spacing-md;
 
-    & p {
-      margin: 0;
-      padding: 0;
-      font-size: $font-size-p-xl;
-      line-height: $line-height;
-      letter-spacing: $letter-spacing;
-      color: $color-text-white;
-
-      @include respond(tablet) {
-        margin-bottom: $spacing-xs;
-        font-size: $font-size-p-md;
-      }
-
-      @include respond(phone) {
-        font-size: $font-size-p-sm;
-      }
-    }
-
-    & ul {
-      display: flex;
-      flex-direction: row;
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      gap: $spacing-md;
-
-      @include respond(tablet) {
-        margin-top: $spacing-xs;
-      }
-
-      @include respond(phone) {
-        gap: $spacing-sm;
-      }
-    }
-
-    & li {
-      display: inline-block;
-    }
-
-    & a {
-      padding: 0;
-      text-decoration: none;
-      font-size: $font-size-p-xl;
-      line-height: $line-height;
-      letter-spacing: $letter-spacing;
-      color: $color-text-white;
-      transition: color $transition-speed-medium $transition-timing;
-
-      @include respond(tablet) {
-        font-size: $font-size-p-md;
-      }
-
-      @include respond(phone) {
-        font-size: $font-size-p-sm;
-      }
-    }
-
-    .social-icons {
-      display: flex;
+    @include respond(phone) {
       gap: $spacing-sm;
-      margin: $spacing-xs 0 0 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
 
-      display: none;
+  &__link {
+    color: $color-text-white;
+    text-decoration: none;
+    font-size: $font-size-p-lg;
+    transition: color $transition-speed-medium $transition-timing;
+    position: relative;
 
-      @include respond(tablet) {
-        margin-top: $spacing-sm;
+    &:hover {
+      color: $color-light-blue-lighter;
+
+      &::after {
+        width: 100%;
       }
     }
 
-    .social-icons a {
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: $color-light-blue-lighter;
+      transition: width $transition-speed-medium $transition-timing;
+    }
+
+    @include respond(phone) {
+      font-size: $font-size-p-sm;
+    }
+  }
+
+  &__social {
+    display: flex;
+    gap: $spacing-sm;
+
+    @include respond(tablet) {
+      margin-top: $spacing-xs;
+    }
+  }
+
+  &__social-icon {
+    color: $color-text-white;
+    font-size: calc($font-size-p-xl + 1px);
+    transition: color $transition-speed-medium $transition-timing,
+      transform $transition-speed-medium $transition-timing;
+
+    &:hover {
+      color: $color-light-blue-lighter;
+    }
+
+    @include respond(phone) {
+      font-size: $font-size-p-lg;
+    }
+  }
+
+  &__copyright {
+    padding-top: $spacing-md;
+    text-align: center;
+
+    p {
       margin: 0;
-      color: $color-dark-blue-lighter;
-      font-size: 24px;
-      transition: color $transition-speed-medium $transition-timing;
+      font-size: $font-size-p-lg;
+      color: rgba(255, 255, 255, 0.7);
 
       @include respond(phone) {
-        font-size: 20px;
+        font-size: calc(#{$font-size-p-sm} - 2px);
       }
     }
   }

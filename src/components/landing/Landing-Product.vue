@@ -16,16 +16,24 @@ export default {
 .landing-product {
   width: 100%;
   margin: $spacing-lg 0;
-  // padding: 0 $spacing-sm;
+
+  @include respond(tablet) {
+    margin: calc($spacing-lg) 0;
+  }
+
+  @include respond(phone) {
+    margin: 0;
+  }
 
   &_row {
-    width: $width-desktop;
+    @include content-container;
     margin: 0 auto;
     height: 600px;
     background-color: $color-dark-blue;
     border-radius: 15px;
 
     @include respond(laptop) {
+      height: 400px;
     }
 
     @include respond(tablet) {

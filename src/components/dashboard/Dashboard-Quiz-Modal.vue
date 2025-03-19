@@ -256,7 +256,7 @@ export default {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.8);
   @include flex-center;
   z-index: 1000;
 }
@@ -293,6 +293,10 @@ export default {
       padding: 0;
       font-size: calc($font-size-p-lg - 3px);
 
+      @include respond(laptop) {
+        font-size: $font-size-p-md;
+      }
+
       @include respond(tablet) {
         font-size: $font-size-p-md;
       }
@@ -321,6 +325,11 @@ export default {
       color: $color-text-dark;
       transition: color $transition-speed-fast $transition-timing;
 
+      @include respond(laptop) {
+        font-size: 0.95rem;
+        margin: 0 2.5px 0 0;
+      }
+
       &:hover {
         color: $color-danger;
       }
@@ -338,6 +347,10 @@ export default {
       text-align: left;
       font-size: $font-size-h3-lg;
       color: $color-dark-blue;
+
+      @include respond(laptop) {
+        font-size: $font-size-h3-md;
+      }
 
       @include respond(tablet) {
         font-size: $font-size-h3-md;
@@ -365,6 +378,10 @@ export default {
       & label {
         cursor: pointer;
         font-size: calc($font-size-p-lg - 0px);
+
+        @include respond(laptop) {
+          font-size: $font-size-p-md;
+        }
 
         @include respond(tablet) {
           font-size: $font-size-p-md;
@@ -415,6 +432,10 @@ export default {
       min-width: 220px;
       border: none;
       font-size: calc($font-size-p-lg - 2px);
+
+      @include respond(laptop) {
+        font-size: calc($font-size-p-md - 1px);
+      }
 
       &:disabled {
         background-color: #cccccc;

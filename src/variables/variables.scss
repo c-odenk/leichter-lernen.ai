@@ -2,17 +2,34 @@
   SCREEN WIDTH VARIABLES
 ========================================================================== */
 
-$width-desktop: 1900px;
+$width-desktop: 1800px;
 $width-laptop: 90vw;
-$width-tablet: 94vw;
-$width-phone: 95vw;
-
-/* ==========================================================================
-  MODAL WIDTH VARIABLES
-========================================================================== */
+$width-tablet: 92.5vw;
+$width-phone: 94vw;
 
 $width-modal-desktop: 38vw;
 $width-modal-laptop: 62vw;
+
+/* ==========================================================================
+  LAYOUT UTILITIES
+========================================================================== */
+
+@mixin content-container {
+  width: $width-desktop;
+  margin: 0 auto;
+
+  @include respond(laptop) {
+    width: $width-laptop;
+  }
+
+  @include respond(tablet) {
+    width: $width-tablet;
+  }
+
+  @include respond(phone) {
+    width: $width-phone;
+  }
+}
 
 /* ==========================================================================
   BREAKPOINTS VARIABLES
@@ -103,19 +120,19 @@ $font-size-h3-lg: 1.2rem; // Abschnittsüberschriften auf Desktop
 // Tablet/Medium Screens
 $font-size-h1-logo-sm: 2rem; // Für das Logo auf kleineren Bildschirmen
 $font-size-h1-md: 1.5rem; // Hauptüberschriften auf Tablet
-$font-size-h2-md: 2rem; // Unterüberschriften auf Tablet
+$font-size-h2-md: 1.4rem; // Unterüberschriften auf Tablet
 $font-size-h3-md: 1.1rem; // Abschnittsüberschriften auf Tablet
 
 // Mobile/Small Screens
 $font-size-h1-sm: 1.5rem; // Hauptüberschriften auf Smartphone
 $font-size-h2-sm: 2rem; // Unterüberschriften auf Smartphone
-$font-size-h3-sm: 2rem; // Abschnittsüberschriften auf Smartphone
+$font-size-h3-sm: 1.1rem; // Abschnittsüberschriften auf Smartphone
 
 // Standard Text - einheitlich in rem
 // $font-size-p-lg: 1.125rem; // 18px umgerechnet
-$font-size-p-xl: 20px; // 20
-$font-size-p-lg: 18px;
-$font-size-p-md: 1.2rem;
+$font-size-p-xl: 19px; // 20
+$font-size-p-lg: 17px;
+$font-size-p-md: 16px;
 $font-size-p-sm: 1rem;
 
 // Zeilenabstand
@@ -141,7 +158,7 @@ $spacing-xs: 0.5rem; // 8px
 $spacing-sm: 1rem; // 16px
 $spacing-md: 1.5rem; // 24px
 $spacing-lg: 2.5rem; // 40px
-$spacing-xl: 150px;
+$spacing-xl: 9.5rem;
 
 /* ==========================================================================
   BORDER & SHADOW VARIABLES
@@ -234,7 +251,6 @@ $blog-post-padding-bottom: $spacing-lg;
   font-size: $font-size-p-lg;
   font-weight: 500;
   line-height: $line-height;
-  // letter-spacing: $letter-spacing;
   letter-spacing: 1px;
   color: $color-text-white;
   padding: 14px 40px;
@@ -280,27 +296,6 @@ $blog-post-padding-bottom: $spacing-lg;
 
   &:hover::after {
     width: 100%;
-  }
-}
-
-/* ==========================================================================
-  LAYOUT UTILITIES
-========================================================================== */
-
-@mixin content-container {
-  width: $width-desktop;
-  margin: 0 auto;
-
-  @include respond(laptop) {
-    width: $width-laptop;
-  }
-
-  @include respond(tablet) {
-    width: $width-tablet;
-  }
-
-  @include respond(phone) {
-    width: $width-phone;
   }
 }
 

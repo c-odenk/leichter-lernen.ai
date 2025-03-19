@@ -200,11 +200,11 @@ export default {
 
 .dashboard-analyzed-topic {
   margin: 0;
-  padding: $spacing-lg $spacing-xl $spacing-lg $spacing-lg;
+  padding: $spacing-lg $spacing-lg $spacing-lg $spacing-lg;
 
   @include respond(laptop) {
-    padding: calc($spacing-md + 5px) calc($spacing-md + 10px) $spacing-md
-      $spacing-md;
+    padding: calc($spacing-md + 5px) calc($spacing-md + 0px) $spacing-md
+      calc($spacing-md - 5px);
   }
 
   &_row {
@@ -218,11 +218,17 @@ export default {
       margin-right: $spacing-md;
 
       @include respond(laptop) {
-        width: 15vw;
+        width: 16vw;
+        margin-right: calc($spacing-md - 5px);
+        // display: none;
+      }
+
+      @include respond(tablet) {
+        display: none;
       }
 
       h3 {
-        margin: 0 0 5px 0;
+        margin: 0 0 0px 0;
         padding: 0;
         font-size: $font-size-h3-lg;
         color: $color-dark-blue;
@@ -230,19 +236,19 @@ export default {
 
         @include respond(laptop) {
           font-size: $font-size-h3-md;
-          margin: 0;
+          margin: 0 0 1.5px 0;
         }
       }
 
       p {
         margin: 0;
         padding: 0;
-        font-size: calc($font-size-p-lg - 5px);
+        font-size: calc($font-size-p-lg - 3px);
         font-weight: 500;
         color: #707070;
 
-        @include respond(tablet) {
-          font-size: calc($font-size-p-md - 2px);
+        @include respond(laptop) {
+          font-size: calc($font-size-p-md - 1px);
         }
       }
     }
@@ -263,12 +269,10 @@ export default {
         box-shadow: $shadow-md;
       }
 
-      // Textstile
       h2 {
         margin: 0 0 $spacing-xs 0;
         padding: 0;
-        font-size: $font-size-h3-lg;
-        color: $color-dark-blue;
+        font-size: $font-size-p-lg;
         font-weight: 500;
 
         @include respond(tablet) {
@@ -280,13 +284,14 @@ export default {
         width: 95%;
         margin: 0 auto 0 0;
         padding: 0;
-        font-size: calc($font-size-p-lg - 2px);
-        line-height: $line-height;
+        font-size: calc($font-size-p-lg - 1px);
+        line-height: 1.5;
         word-wrap: break-word;
 
         @include respond(laptop) {
           width: 100%;
           margin: 0;
+          font-size: $font-size-p-md;
         }
       }
 
@@ -346,7 +351,7 @@ export default {
           justify-content: center;
           margin: $spacing-md 0 0 0;
           padding: 10px $spacing-md;
-          font-size: calc($font-size-p-lg - 3px);
+          font-size: calc($font-size-p-lg - 2px);
           background-color: transparent;
           color: $color-light-blue;
           border: 1px solid rgba($color-light-blue, 0.2);
@@ -355,8 +360,8 @@ export default {
           transition: all $transition-speed-medium $transition-timing;
           font-weight: 500;
 
-          @include respond(tablet) {
-            font-size: $font-size-p-md;
+          @include respond(laptop) {
+            font-size: calc($font-size-p-md - 1px);
           }
 
           i {
@@ -374,7 +379,11 @@ export default {
           @include primary-button;
           align-self: flex-start;
           border: none;
-          font-size: calc($font-size-p-lg - 3px);
+          font-size: calc($font-size-p-lg - 2px);
+
+          @include respond(laptop) {
+            font-size: calc($font-size-p-md - 1px);
+          }
 
           &.disabled {
             opacity: 0.6;
@@ -397,7 +406,6 @@ export default {
 
             &:hover {
               background-color: darken($color-light-blue, 10%);
-              transform: translateY(-2px);
               box-shadow: $shadow-md;
             }
           }

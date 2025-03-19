@@ -13,9 +13,7 @@
         </p>
         <router-link to="/login"> Jetzt ausprobieren </router-link>
       </div>
-      <div class="landing-hero_image" aria-hidden="true">
-        <!-- Hintergrundbild wird per CSS geladen -->
-      </div>
+      <div class="landing-hero_image" aria-hidden="true"></div>
     </div>
   </section>
 </template>
@@ -29,17 +27,27 @@ export default {
 <style lang="scss" scoped>
 @import "@/variables/Variables.scss";
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 .landing-hero {
   width: 100%;
-  margin: $spacing-lg 0;
-  padding: 0 $spacing-sm;
-  box-sizing: border-box;
+  margin: calc($spacing-lg + 75px) auto;
 
-  // Content-Container mixin anwenden für responsive Breite
+  @include respond(laptop) {
+    margin: calc($spacing-lg + 45px) 0;
+  }
+
+  @include respond(tablet) {
+    margin: calc($spacing-xl + 20px) 0;
+  }
+
   &_container {
     @include content-container;
     @include flex-between;
-    gap: $spacing-lg;
 
     @include respond(tablet) {
       flex-direction: column;
@@ -51,13 +59,18 @@ export default {
     width: 50%;
 
     @include respond(tablet) {
-      width: 100%;
+      width: 90%;
+      margin: 0 auto;
       text-align: center;
+    }
+
+    @include respond(phone) {
+      width: 100%;
     }
 
     h1 {
       margin: 0;
-      font-size: 40px; // Feste Größe wie gewünscht
+      font-size: 40px;
       line-height: 1.2;
       letter-spacing: $letter-spacing;
       color: $color-dark-blue;
@@ -67,7 +80,7 @@ export default {
       }
 
       @include respond(laptop) {
-        font-size: 36px;
+        font-size: 30px;
       }
 
       @include respond(phone) {
@@ -82,8 +95,9 @@ export default {
       letter-spacing: $letter-spacing;
       color: $color-text-dark;
 
-      @include respond(tablet) {
-        font-size: $font-size-p-md;
+      @include respond(laptop) {
+        margin: 10px 0 20px 0;
+        font-size: calc($font-size-p-md + 2px);
       }
 
       @include respond(phone) {
@@ -113,6 +127,8 @@ export default {
     @include respond(tablet) {
       width: 100%;
       height: 400px;
+
+      display: none;
     }
 
     @include respond(phone) {

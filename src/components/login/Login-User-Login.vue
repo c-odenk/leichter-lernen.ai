@@ -514,6 +514,11 @@ export default {
   padding: $spacing-md;
   box-sizing: border-box;
   background-color: $color-body-background;
+
+  @include respond(tablet-only) {
+    padding: $spacing-xs; // Reduziere das Padding auf Tablets
+    background-color: $color-text-white; // Ändere den Hintergrund auf Weiß, um die Ränder zu eliminieren
+  }
 }
 
 .form-container {
@@ -524,6 +529,12 @@ export default {
   box-shadow: $shadow-lg;
   overflow: hidden;
   position: relative;
+
+  @include respond(tablet-only) {
+    max-width: 750px; // Erhöhe die maximale Breite für Tablets
+    box-shadow: none; // Entferne den Schatten auf Tablets
+    border-radius: 0; // Entferne die abgerundeten Ecken auf Tablets
+  }
 }
 
 /* Zurück zur Startseite Link */
@@ -581,6 +592,10 @@ export default {
 /* Form */
 .form {
   padding: $spacing-lg calc($spacing-lg - 10px);
+
+  @include respond(tablet-only) {
+    padding: $spacing-md $spacing-lg; // Angepasstes Padding für Tablets
+  }
 }
 
 .form h2 {

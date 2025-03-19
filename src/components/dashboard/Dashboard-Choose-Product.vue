@@ -317,6 +317,11 @@ export default {
   font-size: 14px;
   cursor: pointer;
   transition: all $transition-speed-fast $transition-timing;
+  font-size: calc($font-size-p-lg - 2px);
+
+  @include respond(laptop) {
+    font-size: calc($font-size-p-md - 2px);
+  }
 
   &:hover {
     background-color: #f5f5f5;
@@ -327,6 +332,11 @@ export default {
   @include primary-button;
   padding: 10px 30px;
   border: none;
+  font-size: calc($font-size-p-lg - 2px);
+
+  @include respond(laptop) {
+    font-size: calc($font-size-p-md - 2px);
+  }
 
   &:disabled {
     background-color: lighten($color-light-blue, 25%);
