@@ -52,7 +52,12 @@ export default {
 
     const visibleSections = ref({});
     const sectionRefs = ref({});
-    const isMobile = ref(false);
+
+    // Gerätetype-Erkennung
+    const isSmartphone = ref(false);
+    const isTablet = ref(false);
+    const isLaptop = ref(false);
+    const isDesktop = ref(false);
 
     const setSectionRef = (el, key) => {
       if (el) {
@@ -60,35 +65,47 @@ export default {
       }
     };
 
-    const checkMobile = () => {
-      isMobile.value = window.innerWidth <= 768; // Standard Breakpoint für Smartphones
+    const checkDeviceType = () => {
+      // Breakpoints für die verschiedenen Ansichten
+      isSmartphone.value = window.innerWidth <= 768;
+      isTablet.value = window.innerWidth > 768 && window.innerWidth <= 1024;
+      isLaptop.value = window.innerWidth > 1024 && window.innerWidth <= 1440;
+      isDesktop.value = window.innerWidth > 1440;
+    };
+
+    // Prüft, ob die Product-Komponente animiert werden soll
+    const shouldAnimateProduct = () => {
+      return isTablet.value || isDesktop.value;
     };
 
     const getAnimationClass = (key, index) => {
-      // Wenn es die Product-Komponente ist und wir auf einem Smartphone sind
-      if (key === "product" && isMobile.value) {
+      // Wenn es die Product-Komponente ist und sie KEINE Animation haben soll (Smartphone oder Laptop)
+      if (key === "product" && !shouldAnimateProduct()) {
         return "static-visible";
       }
 
-      // Für andere Komponenten oder nicht-mobile Ansichten
+      // Für die ersten zwei Komponenten (Hero und Product) mit Animationen
       if (index < 2) {
         return {
           "fade-in": visibleSections.value[key],
           "slide-in-left": key === "hero" && visibleSections.value[key],
           "slide-in-right delay":
-            key === "product" && visibleSections.value[key],
+            key === "product" &&
+            shouldAnimateProduct() &&
+            visibleSections.value[key],
         };
       } else {
+        // Für alle anderen Komponenten
         return "static-visible";
       }
     };
 
     onMounted(() => {
-      // Initial überprüfen, ob wir auf einem Smartphone sind
-      checkMobile();
+      // Initial überprüfen, welches Gerät wir haben
+      checkDeviceType();
 
       // Event-Listener für Resize-Events
-      window.addEventListener("resize", checkMobile);
+      window.addEventListener("resize", checkDeviceType);
 
       nextTick(() => {
         const observer = new IntersectionObserver(
@@ -96,12 +113,16 @@ export default {
             entries.forEach((entry, index) => {
               setTimeout(() => {
                 if (!entry.isIntersecting) return;
-                if (index >= 2) {
+
+                const key = entry.target.getAttribute("data-key");
+
+                // Wenn es die Product-Komponente ist und sie KEINE Animation haben soll
+                if (key === "product" && !shouldAnimateProduct()) {
+                  entry.target.classList.add("static-visible");
+                } else if (index >= 2) {
                   entry.target.classList.add("static-visible");
                 } else {
-                  visibleSections.value[
-                    entry.target.getAttribute("data-key")
-                  ] = true;
+                  visibleSections.value[key] = true;
                 }
               }, index * 300 || 0);
             });
@@ -113,7 +134,9 @@ export default {
           if (el) {
             el.setAttribute("data-key", key);
             observer.observe(el);
-            if (index >= 2) {
+
+            // Product-Komponente sofort sichtbar machen, wenn sie keine Animation haben soll
+            if (index >= 2 || (key === "product" && !shouldAnimateProduct())) {
               el.classList.add("static-visible");
             }
           }
@@ -126,7 +149,10 @@ export default {
       visibleSections,
       setSectionRef,
       getAnimationClass,
-      isMobile,
+      isSmartphone,
+      isTablet,
+      isLaptop,
+      isDesktop,
     };
   },
 };

@@ -38,7 +38,8 @@ export default {
   margin: calc($spacing-lg + 75px) auto;
 
   @include respond(laptop) {
-    margin: calc($spacing-lg + 45px) 0;
+    // margin: calc($spacing-lg + 45px) 0;
+    margin: calc($spacing-xl - 30px) 0;
   }
 
   @include respond(tablet) {
@@ -58,6 +59,10 @@ export default {
   &_content {
     width: 50%;
 
+    @include respond(laptop) {
+      width: 50%;
+    }
+
     @include respond(tablet) {
       width: 90%;
       margin: 0 auto;
@@ -70,6 +75,7 @@ export default {
 
     h1 {
       margin: 0;
+      padding: 0;
       font-size: 40px;
       line-height: 1.2;
       letter-spacing: $letter-spacing;
@@ -97,7 +103,7 @@ export default {
 
       @include respond(laptop) {
         margin: 10px 0 20px 0;
-        font-size: calc($font-size-p-md + 2px);
+        font-size: $font-size-p-lg;
       }
 
       @include respond(phone) {

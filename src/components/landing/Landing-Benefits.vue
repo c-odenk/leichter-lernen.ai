@@ -25,23 +25,13 @@
 export default {
   name: "BenefitsSection",
 
-  // Reaktive Daten der Komponente
   data() {
     return {
-      /**
-       * Hauptüberschrift der Benefits-Sektion
-       * Betont den zentralen Mehrwert der Plattform (effizienteres Lernen)
-       */
       heading: "Lerne effizienter mit KI-Unterstützung",
-
-      /**
-       * Erweiterter Text unter der Hauptüberschrift
-       * Erklärt die konkreten Vorteile für den Lernenden
-       */
       subheading:
         "Wir helfen dir, schneller zu verstehen, gezielt zu wiederholen und dein Wissen aktiv zu festigen. So lernst du nicht nur effektiver, sondern auch zeitsparender.",
 
-      /**
+      /*
        * Array mit den drei Hauptvorteilen/Funktionen
        * Jeder Vorteil enthält einen Titel mit Emoji, eine Beschreibung und ein Hintergrundbild
        */
@@ -131,7 +121,7 @@ export default {
 
     @include respond(laptop) {
       width: 70%;
-      font-size: calc($font-size-p-md + 2px);
+      font-size: $font-size-p-lg;
     }
 
     @include respond(tablet) {

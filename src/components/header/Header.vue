@@ -51,38 +51,9 @@
       </div>
     </div>
 
-    <!-- Mobiles Menü - Mit Animation von rechts und voller Bildschirmbreite -->
+    <!-- Mobiles Menü - Mit Animation von rechts und angepasster Breite -->
     <div class="mobile-menu" :class="{ open: menuOpen }">
       <div class="mobile-menu__container">
-        <div class="mobile-menu__top">
-          <div class="mobile-menu__branding">
-            <img
-              :src="logoSrc"
-              width="70"
-              height="70"
-              alt="leichter-lernen Logo"
-              v-if="imageLoaded"
-            />
-            <span>leichter-lernen.ai</span>
-          </div>
-          <div class="mobile-menu__close" @click="closeMenu">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </div>
-        </div>
-
         <nav class="mobile-menu__nav">
           <router-link to="/" class="mobile-menu__link" @click="closeMenu">
             <span class="mobile-menu__icon">🏠</span>
@@ -236,7 +207,8 @@ export default {
   width: 100%;
   padding: $spacing-md 0;
   position: relative;
-  z-index: 100;
+  z-index: 1002; // Höherer z-index als das mobile Menü
+  background-color: $color-text-white; // Hintergrund hinzufügen, um sichtbar zu bleiben
 
   @include respond(laptop) {
     padding: calc($spacing-md - 20px) 0;
@@ -262,6 +234,7 @@ export default {
 
     &_logo {
       width: 20%;
+      z-index: 1002; // Höherer z-index als das mobile Menü
 
       @include respond(laptop) {
         width: 25%;
@@ -384,7 +357,7 @@ export default {
   border-radius: $border-radius-md;
   cursor: pointer;
   margin-left: $spacing-sm;
-  z-index: 1001;
+  z-index: 1002; // Höherer z-index als das mobile Menü
   display: none;
   justify-content: center;
   align-items: center;
@@ -443,17 +416,17 @@ export default {
   }
 }
 
-// Mobiles Menü - Mit Animation von rechts und voller Bildschirmbreite
+// Mobiles Menü - Mit Animation von rechts - neu strukturiert
 .mobile-menu {
   position: fixed;
   top: 0;
-  right: -100%;
-  width: 100%;
+  right: -100vw;
+  width: 100vw;
   height: 100%; // Statt 100vh für iOS-Kompatibilität
-  background-color: rgba($color-dark-blue, 0.5);
-  z-index: 1000;
+  z-index: 1001;
   transition: right $transition-speed-medium $transition-timing;
   display: none;
+  pointer-events: none; // Damit Klicks durch den transparenten Bereich durchgehen
 
   @include respond(tablet) {
     display: block;
@@ -461,6 +434,7 @@ export default {
 
   &.open {
     right: 0;
+    pointer-events: auto;
   }
 
   &__container {
@@ -474,12 +448,12 @@ export default {
     flex-direction: column;
     transition: right $transition-speed-medium $transition-timing;
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch; // Verbessert das Scrolling auf iOS
+    -webkit-overflow-scrolling: touch;
     padding: $spacing-sm;
-    padding: $spacing-sm $spacing-sm 0 $spacing-sm;
+    padding-top: calc($spacing-md + 70px);
 
     @include respond(phone) {
-      padding: $spacing-xs $spacing-xs 0 $spacing-xs;
+      padding-top: calc($spacing-md + 55px);
     }
 
     .open & {
@@ -487,65 +461,18 @@ export default {
     }
   }
 
-  &__top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-bottom: $spacing-sm;
-    border-bottom: 1px solid rgba($color-dark-blue, 0.1);
-    margin-bottom: $spacing-xs;
-  }
-
-  &__branding {
-    display: flex;
-    align-items: center;
-
-    img {
-      height: 70px;
-      width: auto;
-      margin-right: $spacing-xs;
-
-      @include respond(phone) {
-        height: 55px;
-      }
-    }
-
-    span {
-      font-size: 25px;
-      font-weight: 600;
-      color: $color-dark-blue;
-      white-space: nowrap;
-
-      @include respond(tablet) {
-        font-size: 22px;
-      }
-
-      @include respond(phone) {
-        font-size: 18px;
-      }
-    }
-  }
-
-  &__close {
-    width: 36px;
-    height: 36px;
-    border-radius: $border-radius-round;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: $color-dark-blue;
-    transition: background-color $transition-speed-medium $transition-timing;
-
-    &:hover {
-      background-color: rgba($color-dark-blue, 0.05);
-    }
-  }
-
   &__nav {
     display: flex;
     flex-direction: column;
     flex: 1;
+
+    @include respond(tablet) {
+      padding: 20px 0 0 20px;
+    }
+
+    @include respond(phone) {
+      padding: 3.5px 0 0 4px;
+    }
   }
 
   &__link {
@@ -599,7 +526,7 @@ export default {
 
   &__footer {
     margin-top: auto;
-    margin-bottom: 20px; // Zusätzlicher Abstand nach unten
+    margin-bottom: 20px;
     padding-top: $spacing-sm;
     border-top: 1px solid rgba($color-dark-blue, 0.1);
   }

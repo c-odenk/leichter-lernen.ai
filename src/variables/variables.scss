@@ -110,30 +110,30 @@ $font-family2: "Helvetica Neue", Helvetica, Arial, sans-serif;
 $base-font-size: 1rem;
 $scale-ratio: 1.25;
 
-//Überschriften
-// Desktop/Large Screens
 $font-size-h1-logo-lg: 2.5rem; // Für das Logo auf großen Bildschirmen
-$font-size-h1-lg: 1.8rem; // Hauptüberschriften auf Desktop
-$font-size-h2-lg: 1.4rem; // Unterüberschriften auf Desktop
-$font-size-h3-lg: 1.2rem; // Abschnittsüberschriften auf Desktop
-
-// Tablet/Medium Screens
 $font-size-h1-logo-sm: 2rem; // Für das Logo auf kleineren Bildschirmen
-$font-size-h1-md: 1.5rem; // Hauptüberschriften auf Tablet
-$font-size-h2-md: 1.4rem; // Unterüberschriften auf Tablet
-$font-size-h3-md: 1.1rem; // Abschnittsüberschriften auf Tablet
 
-// Mobile/Small Screens
+$font-size-h1-lg: 1.8rem; // Hauptüberschriften auf Desktop
+$font-size-h1-lg: 1.8rem; // Hauptüberschriften auf Laptop
+$font-size-h1-md: 1.5rem; // Hauptüberschriften auf Tablet
 $font-size-h1-sm: 1.5rem; // Hauptüberschriften auf Smartphone
+
+$font-size-h2-xl: 1.4rem; // Unterüberschriften auf Desktop
+$font-size-h2-lg: 1.4rem; // Unterüberschriften auf Laptop
+$font-size-h2-md: 1.4rem; // Unterüberschriften auf Tablet
 $font-size-h2-sm: 2rem; // Unterüberschriften auf Smartphone
+
+$font-size-h3-lg: 1.2rem; // Abschnittsüberschriften auf Desktop
+$font-size-h3-lg: 1.2rem; // Abschnittsüberschriften auf Laptop
+$font-size-h3-md: 1.1rem; // Abschnittsüberschriften auf Tablet
 $font-size-h3-sm: 1.1rem; // Abschnittsüberschriften auf Smartphone
 
-// Standard Text - einheitlich in rem
-// $font-size-p-lg: 1.125rem; // 18px umgerechnet
 $font-size-p-xl: 19px; // 20
+// $font-size-p-lg: 1.125rem; // 18px umgerechnet
 $font-size-p-lg: 17px;
 $font-size-p-md: 16px;
 $font-size-p-sm: 1rem;
+$font-size-p-xs: 1rem;
 
 // Zeilenabstand
 $line-height: 1.3;

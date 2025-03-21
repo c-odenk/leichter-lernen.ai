@@ -258,7 +258,7 @@ export default {
 
       @include respond(laptop) {
         width: 70%;
-        font-size: calc($font-size-p-md + 2px);
+        font-size: $font-size-p-lg;
       }
 
       @include respond(tablet) {
@@ -493,7 +493,7 @@ export default {
       }
 
       @include respond(tablet) {
-        font-size: calc(#{$font-size-p-md} - 1px);
+        font-size: calc($font-size-p-md - 1px);
         line-height: 1.4;
       }
 
