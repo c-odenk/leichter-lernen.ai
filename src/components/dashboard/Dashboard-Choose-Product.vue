@@ -28,7 +28,6 @@
             <div v-if="!product.available" class="product-availability">
               <i class="fa-solid fa-clock"></i> Bald verfügbar
             </div>
-            <!-- Bestseller-Badge wurde entfernt -->
           </div>
           <div class="product-price-section">
             <p class="product-price">{{ product.price }}</p>
@@ -38,16 +37,24 @@
       </div>
 
       <div class="navigation-buttons">
-        <button class="secondary-button" @click="$emit('cancel')">
-          Zurück
-        </button>
-        <button
-          class="primary-button"
-          :disabled="!isProductSelected"
-          @click="continueWithProduct"
-        >
-          Weiter
-        </button>
+        <!-- Wiederverwendbarer ButtonGray für "Zurück" -->
+        <div class="button-container">
+          <ButtonGray
+            variant="primary"
+            text="Zurück"
+            @click="$emit('cancel')"
+          />
+        </div>
+
+        <!-- Wiederverwendbarer ButtonBlue für "Weiter" -->
+        <div class="button-container">
+          <ButtonBlue
+            variant="primary"
+            text="Weiter"
+            :disabled="!isProductSelected"
+            @click="continueWithProduct"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -308,39 +315,13 @@ export default {
   border-top: 1px solid #eee;
 }
 
-.secondary-button {
-  padding: 10px 20px;
-  background-color: transparent;
-  border: 1px solid #ddd;
-  border-radius: $border-radius-sm;
-  color: #666;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all $transition-speed-fast $transition-timing;
-  font-size: calc($font-size-p-lg - 2px);
+/* Container für einzelne Buttons in der Navigation */
+.button-container {
+  width: 120px;
 
-  @include respond(laptop) {
-    font-size: calc($font-size-p-md - 2px);
-  }
-
-  &:hover {
-    background-color: #f5f5f5;
-  }
-}
-
-.primary-button {
-  @include primary-button;
-  padding: 10px 30px;
-  border: none;
-  font-size: calc($font-size-p-lg - 2px);
-
-  @include respond(laptop) {
-    font-size: calc($font-size-p-md - 2px);
-  }
-
-  &:disabled {
-    background-color: lighten($color-light-blue, 25%);
-    cursor: not-allowed;
+  :deep(.button-blue),
+  :deep(.button-gray) {
+    width: 100% !important;
   }
 }
 </style>

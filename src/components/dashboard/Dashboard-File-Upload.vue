@@ -26,15 +26,24 @@
           </div>
           <p class="upload-text">Datei zum Hochladen auswählen</p>
           <p class="upload-subtext">oder hierher ziehen</p>
-          <label for="file-input" class="file-select-button">
-            Dateien durchsuchen
-          </label>
+
+          <!-- ButtonBlue für "Dateien durchsuchen" -->
+          <div class="centered-button-container">
+            <ButtonBlue
+              variant="primary"
+              text="Dateien durchsuchen"
+              @click="triggerFileInput"
+              :isFileInputTrigger="true"
+            />
+          </div>
+
           <input
             type="file"
             id="file-input"
             accept=".csv,.doc,.docx,.pdf,.txt,.rtf"
             @change="handleFileSelect"
             class="hidden-input"
+            ref="fileInput"
           />
         </div>
 
@@ -64,11 +73,15 @@
             <div class="progress-text">{{ uploadProgress }}%</div>
           </div>
           <p class="uploading-text">Datei wird hochgeladen...</p>
-          <ButtonBlue
-            variant="dropdown"
-            text="Abbrechen"
-            @click="cancelUpload"
-          />
+
+          <!-- ButtonGray für "Abbrechen" während des Uploads -->
+          <div class="centered-button-container">
+            <ButtonGray
+              variant="primary"
+              text="Abbrechen"
+              @click="cancelUpload"
+            />
+          </div>
         </div>
 
         <div v-if="selectedFile && !isUploading" class="file-selected-state">
@@ -82,7 +95,14 @@
                 {{ formatFileSize(selectedFile.size) }}
               </p>
             </div>
-            <button class="remove-file-button" @click="removeFile">×</button>
+
+            <!-- ButtonBlue für den Remove-Button -->
+            <ButtonBlue
+              variant="dropdown"
+              text="×"
+              @click="removeFile"
+              class="remove-button"
+            />
           </div>
           <div
             class="upload-progress-bar"
@@ -100,13 +120,24 @@
       </div>
 
       <div class="navigation-buttons">
-        <ButtonBlue variant="dropdown" text="Abbrechen" @click="handleCancel" />
-        <ButtonBlue
-          variant="primary"
-          text="Weiter"
-          :disabled="!uploadComplete"
-          @click="handleContinue"
-        />
+        <!-- ButtonGray für "Abbrechen" in der Navigation -->
+        <div class="button-container">
+          <ButtonGray
+            variant="primary"
+            text="Abbrechen"
+            @click="handleCancel"
+          />
+        </div>
+
+        <!-- ButtonBlue für "Weiter" -->
+        <div class="button-container">
+          <ButtonBlue
+            variant="primary"
+            text="Weiter"
+            :disabled="!uploadComplete"
+            @click="handleContinue"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -116,89 +147,64 @@
 export default {
   name: "FileUpload",
 
-  // Props: Konfigurationseigenschaften, die von der übergeordneten Komponente übergeben werden
+  // Keine components-Definition mehr, da ButtonBlue und ButtonGray global registriert sind
+
   props: {
-    /**
-     * Maximale Dateigröße in Bytes, die hochgeladen werden kann
-     * Default: 10MB (10 * 1024 * 1024 Bytes)
-     */
     maxFileSize: {
       type: Number,
       default: 10 * 1024 * 1024, // 10MB default max size
     },
   },
 
-  // Reaktive Daten der Komponente
   data() {
     return {
-      /**
-       * Speichert die aktuell ausgewählte Datei
-       * null bedeutet, dass keine Datei ausgewählt ist
-       */
       selectedFile: null,
-
-      /**
-       * Flag, das anzeigt, ob gerade ein Upload im Gange ist
-       */
       isUploading: false,
-
-      /**
-       * Flag, das anzeigt, ob der Benutzer gerade eine Datei über die Drop-Zone zieht
-       */
       isDragging: false,
-
-      /**
-       * Aktueller Fortschritt des Uploads in Prozent (0-100)
-       */
       uploadProgress: 0,
-
-      /**
-       * Liste der erlaubten Dateierweiterungen
-       */
       allowedFileTypes: [".csv", ".doc", ".docx", ".pdf", ".txt", ".rtf"],
-
-      /**
-       * Flag, das anzeigt, ob der Upload vollständig abgeschlossen ist
-       */
       uploadComplete: false,
+
+      // Zusätzlicher Schutz für triggerFileInput
+      isInputTriggered: false,
     };
   },
 
-  // Berechnete Eigenschaften
   computed: {
-    /**
-     * Berechnet den Versatz für den Fortschrittskreis bei kreisförmiger Anzeige
-     * Wird verwendet, um den SVG-Kreis proportional zum Upload-Fortschritt zu füllen
-     *
-     * @returns {number} Der Versatz für das stroke-dashoffset Attribut des SVG-Kreises
-     */
     dashOffset() {
       const circumference = 2 * Math.PI * 36;
       return circumference - (this.uploadProgress / 100) * circumference;
     },
   },
 
-  // Methoden zur Interaktion mit der Komponente
   methods: {
-    /**
-     * Setzt den Status auf "aktives Ziehen", wenn eine Datei über die Drop-Zone gezogen wird
-     */
+    // Verbesserte triggerFileInput-Methode
+    triggerFileInput() {
+      // Doppelklick-Schutz auf dieser Seite
+      if (this.isInputTriggered) {
+        return;
+      }
+
+      // Setze Flag
+      this.isInputTriggered = true;
+
+      // Führe Aktion aus
+      this.$refs.fileInput.click();
+
+      // Setze Flag zurück nach Verzögerung
+      setTimeout(() => {
+        this.isInputTriggered = false;
+      }, 1000); // Lange Verzögerung für sicheren Schutz
+    },
+
     setDragActive() {
       this.isDragging = true;
     },
 
-    /**
-     * Setzt den Status auf "inaktives Ziehen", wenn eine Datei die Drop-Zone verlässt
-     */
     setDragInactive() {
       this.isDragging = false;
     },
 
-    /**
-     * Verarbeitet eine Datei, die per Drag & Drop in die Drop-Zone gezogen wurde
-     *
-     * @param {DragEvent} event - Das Drop-Event
-     */
     handleFileDrop(event) {
       this.isDragging = false;
       const files = event.dataTransfer.files;
@@ -207,11 +213,6 @@ export default {
       }
     },
 
-    /**
-     * Verarbeitet eine Datei, die über den Datei-Dialog ausgewählt wurde
-     *
-     * @param {Event} event - Das Change-Event des Datei-Inputs
-     */
     handleFileSelect(event) {
       const files = event.target.files;
       if (files.length > 0) {
@@ -219,12 +220,6 @@ export default {
       }
     },
 
-    /**
-     * Verarbeitet und validiert eine Datei vor dem Upload
-     * Prüft Dateigröße und Dateityp und beginnt den Upload-Prozess
-     *
-     * @param {File} file - Die zu verarbeitende Datei
-     */
     processFile(file) {
       // Validate file size
       if (file.size > this.maxFileSize) {
@@ -250,32 +245,14 @@ export default {
       }
     },
 
-    /**
-     * Extrahiert die Dateierweiterung aus einem Dateinamen
-     *
-     * @param {string} filename - Der Dateiname inklusive Erweiterung
-     * @returns {string} Die Dateierweiterung mit führendem Punkt (z.B. ".pdf")
-     */
     getFileExtension(filename) {
       return "." + filename.split(".").pop().toLowerCase();
     },
 
-    /**
-     * Prüft, ob eine Dateierweiterung zu den erlaubten Typen gehört
-     *
-     * @param {string} extension - Die zu prüfende Dateierweiterung
-     * @returns {boolean} True, wenn der Dateityp erlaubt ist
-     */
     isAllowedFileType(extension) {
       return this.allowedFileTypes.includes(extension.toLowerCase());
     },
 
-    /**
-     * Bestimmt das passende Icon für einen Dateityp basierend auf der Erweiterung
-     *
-     * @param {string} filename - Der Dateiname inklusive Erweiterung
-     * @returns {string} Die CSS-Klasse für das passende FontAwesome-Icon
-     */
     getFileIcon(filename) {
       const extension = this.getFileExtension(filename);
       switch (extension) {
@@ -294,33 +271,22 @@ export default {
       }
     },
 
-    /**
-     * Entfernt die ausgewählte Datei und setzt den Zustand zurück
-     */
     removeFile() {
       this.selectedFile = null;
       this.uploadProgress = 0;
       this.uploadComplete = false;
       // Reset input
-      const input = document.getElementById("file-input");
-      if (input) {
-        input.value = "";
+      if (this.$refs.fileInput) {
+        this.$refs.fileInput.value = "";
       }
     },
 
-    /**
-     * Bricht den laufenden Upload ab und setzt den Zustand zurück
-     */
     cancelUpload() {
       this.isUploading = false;
       this.uploadProgress = 0;
       this.uploadComplete = false;
     },
 
-    /**
-     * Simuliert einen Upload-Prozess mit schrittweise ansteigendem Fortschritt
-     * In einer echten Anwendung würde hier der tatsächliche API-Aufruf zum Upload erfolgen
-     */
     simulateUpload() {
       this.isUploading = true;
       this.uploadProgress = 0;
@@ -338,12 +304,6 @@ export default {
       }, 100);
     },
 
-    /**
-     * Formatiert eine Dateigröße in Bytes in eine besser lesbare Form (KB, MB, GB)
-     *
-     * @param {number} bytes - Die Dateigröße in Bytes
-     * @returns {string} Die formatierte Dateigröße mit Einheit (z.B. "2.5 MB")
-     */
     formatFileSize(bytes) {
       if (bytes === 0) return "0 Bytes";
 
@@ -354,10 +314,6 @@ export default {
       return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
     },
 
-    /**
-     * Behandelt den Klick auf den "Abbrechen"-Button
-     * Setzt den Zustand zurück und emittiert ein "cancel"-Event
-     */
     handleCancel() {
       // Vollständig zurücksetzen
       this.removeFile();
@@ -366,11 +322,6 @@ export default {
       this.$emit("cancel");
     },
 
-    /**
-     * Behandelt den Klick auf den "Weiter"-Button
-     * Emittiert ein "continue"-Event mit der hochgeladenen Datei als Payload,
-     * wenn der Upload abgeschlossen ist
-     */
     handleContinue() {
       // Only allow continue if upload is complete
       if (this.uploadComplete) {
@@ -464,6 +415,14 @@ export default {
   }
 }
 
+/* Container für zentrierte Buttons */
+.centered-button-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: $spacing-sm;
+}
+
 .upload-initial-state {
   @include flex-center;
   flex-direction: column;
@@ -499,19 +458,6 @@ export default {
   margin: 5px 0 15px;
   color: #666;
   font-size: 14px;
-}
-
-.file-select-button {
-  @include primary-button;
-  margin-bottom: $spacing-sm;
-  cursor: pointer;
-  padding: 10px 20px;
-  border: none;
-  font-size: calc($font-size-p-lg - 2px);
-
-  @include respond(laptop) {
-    font-size: calc($font-size-p-md - 2px);
-  }
 }
 
 .hidden-input {
@@ -598,16 +544,16 @@ export default {
     }
   }
 
-  .remove-file-button {
-    background: none;
-    border: none;
-    color: #999;
-    font-size: 18px;
-    cursor: pointer;
-    transition: color $transition-speed-fast $transition-timing;
+  /* Styling für den Remove-Button */
+  .remove-button {
+    width: 30px !important;
+    height: 30px !important;
+    padding: 0 !important;
+    margin: 0 !important;
 
-    &:hover {
-      color: #666;
+    :deep(.button-blue__text) {
+      font-size: 20px;
+      line-height: 1;
     }
   }
 }
@@ -637,8 +583,19 @@ export default {
 .navigation-buttons {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-top: $spacing-md;
   padding-top: $spacing-sm;
   border-top: 1px solid #eee;
+}
+
+/* Container für einzelne Buttons in der Navigation */
+.button-container {
+  width: 120px;
+
+  :deep(.button-blue),
+  :deep(.button-gray) {
+    width: 100% !important;
+  }
 }
 </style>

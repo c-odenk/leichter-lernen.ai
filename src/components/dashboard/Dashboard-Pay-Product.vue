@@ -192,14 +192,20 @@
       </div>
 
       <div class="navigation-buttons">
-        <button class="secondary-button" @click="handleCancel">Zurück</button>
-        <button
-          class="primary-button"
-          :disabled="!isPaymentValid"
-          @click="processPayment"
-        >
-          Jetzt bezahlen
-        </button>
+        <!-- ButtonGray für "Zurück" -->
+        <div class="button-container">
+          <ButtonGray variant="primary" text="Zurück" @click="handleCancel" />
+        </div>
+
+        <!-- ButtonBlue für "Jetzt bezahlen" -->
+        <div class="button-container">
+          <ButtonBlue
+            variant="primary"
+            text="Jetzt bezahlen"
+            :disabled="!isPaymentValid"
+            @click="processPayment"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -821,32 +827,15 @@ export default {
   box-sizing: border-box;
 }
 
-.secondary-button {
-  padding: 10px 20px;
-  background-color: transparent;
-  border: 1px solid #ddd;
-  border-radius: $border-radius-sm;
-  color: #666;
-  font-size: calc($font-size-p-lg - 2px);
-  cursor: pointer;
-  transition: all $transition-speed-fast $transition-timing;
-  box-sizing: border-box;
+/* Container für einzelne Buttons in der Navigation */
+.button-container {
+  width: 200px;
 
-  &:hover {
-    background-color: #f5f5f5;
+  :deep(.button-blue),
+  :deep(.button-gray) {
+    // width: 100% !important;
   }
 }
 
-.primary-button {
-  @include primary-button;
-  padding: 10px 30px;
-  border: none;
-  box-sizing: border-box;
-  font-size: calc($font-size-p-lg - 2px);
-
-  &:disabled {
-    background-color: lighten($color-light-blue, 25%);
-    cursor: not-allowed;
-  }
-}
+/* Nicht mehr benötigte Button-Styles wurden entfernt */
 </style>

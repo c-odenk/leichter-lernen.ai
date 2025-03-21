@@ -40,23 +40,23 @@
         </form>
       </div>
       <div class="modal-footer">
-        <!-- ButtonBlue Komponente mit alwaysBlue-Eigenschaft -->
+        <!-- Wichtig: alwaysBlue muss auf true gesetzt sein! -->
         <ButtonBlue
           v-if="!answerChecked"
-          variant="primary"
+          variant="upgrade"
           text="Antwort bestätigen"
           :disabled="selectedAnswer === null"
           :alwaysBlue="true"
           minWidth="220px"
-          @click="checkAnswer"
+          @click.stop="checkAnswer"
         />
         <ButtonBlue
           v-else
-          variant="primary"
+          variant="upgrade"
           :text="isLastQuestion ? 'Quiz beenden' : 'Nächste Frage'"
           :alwaysBlue="true"
           minWidth="220px"
-          @click="nextQuestion"
+          @click.stop="nextQuestion"
         />
       </div>
     </div>
@@ -71,11 +71,10 @@ export default {
   props: {
     /**
      * Das Thema mit zugehörigen Quizfragen
-     * Erwartet ein Array von Fragen oder ein verschachteltes Array,
-     * das zu einem flachen Array von Fragen umgewandelt wird
+     * Kann entweder ein Array von Fragen oder ein Objekt mit einem questions-Property sein
      */
     topic: {
-      type: Array,
+      type: [Array, Object],
       required: true,
     },
   },
@@ -118,19 +117,56 @@ export default {
        * Verlauf der gegebenen Antworten mit Details zu jeder Antwort
        */
       answerHistory: [],
+
+      /**
+       * Flag gegen doppelte Button-Klicks
+       */
+      isProcessing: false,
+      lastClickTime: 0,
     };
   },
 
   // Berechnete Eigenschaften
   computed: {
     /**
-     * Konvertiert das möglicherweise verschachtelte topic-Array in ein flaches Array von Quizfragen
+     * Extrahiert die Quizfragen aus dem topic-Prop, unabhängig vom Format
      *
      * @returns {Array} Flaches Array mit allen Quizfragen
      */
     quizQuestions() {
-      // Flacht das Array ab, falls es verschachtelt ist
-      return this.topic.flat();
+      let questions = [];
+
+      if (Array.isArray(this.topic)) {
+        // Fall 1: topic ist direkt ein Array
+        questions = this.topic;
+      } else if (this.topic && typeof this.topic === "object") {
+        // Fall 2: topic ist ein Objekt
+        // Versuche, ein questions-Property zu finden
+        if (Array.isArray(this.topic.questions)) {
+          questions = this.topic.questions;
+        } else if (Array.isArray(this.topic.topicQuestions)) {
+          questions = this.topic.topicQuestions;
+        } else if (Array.isArray(this.topic.quizQuestions)) {
+          questions = this.topic.quizQuestions;
+        } else {
+          // Fallback: Suche nach dem ersten Array-Property
+          for (const key in this.topic) {
+            if (Array.isArray(this.topic[key])) {
+              questions = this.topic[key];
+              break;
+            }
+          }
+        }
+      }
+
+      // Versuche, das Array zu flatten, falls es verschachtelt ist
+      try {
+        questions = questions.flat();
+      } catch (e) {
+        console.error("Fehler beim Flatten der Fragen:", e);
+      }
+
+      return questions;
     },
 
     /**
@@ -139,6 +175,19 @@ export default {
      * @returns {Object} Die aktuelle Quizfrage mit ihren Antwortoptionen
      */
     currentQuestion() {
+      if (!this.quizQuestions || this.quizQuestions.length === 0) {
+        console.error("Keine Quizfragen verfügbar!");
+        return { question: "Keine Fragen verfügbar", answers: [] };
+      }
+
+      if (this.currentQuestionIndex >= this.quizQuestions.length) {
+        console.error(
+          "Fragen-Index außerhalb des gültigen Bereichs:",
+          this.currentQuestionIndex
+        );
+        return this.quizQuestions[0]; // Fallback zur ersten Frage
+      }
+
       return this.quizQuestions[this.currentQuestionIndex];
     },
 
@@ -164,11 +213,34 @@ export default {
     },
 
     /**
+     * Überprüft, ob eine Aktion verarbeitet werden kann oder ob es ein doppelter Klick ist
+     *
+     * @returns {boolean} True, wenn die Aktion verarbeitet werden kann
+     */
+    canProcessAction() {
+      const now = Date.now();
+      if (this.isProcessing || now - this.lastClickTime < 300) {
+        return false;
+      }
+
+      this.isProcessing = true;
+      this.lastClickTime = now;
+
+      setTimeout(() => {
+        this.isProcessing = false;
+      }, 50);
+
+      return true;
+    },
+
+    /**
      * Überprüft die ausgewählte Antwort und aktualisiert den Punktestand
      * Wird aufgerufen, wenn der Benutzer eine Antwort bestätigt
      */
     checkAnswer() {
-      if (this.selectedAnswer !== null) {
+      if (!this.canProcessAction()) return;
+
+      if (this.selectedAnswer !== null && !this.answerChecked) {
         this.answerChecked = true;
         this.totalAnswered++;
 
@@ -181,6 +253,7 @@ export default {
           questionIndex: this.currentQuestionIndex,
           selectedAnswer: this.selectedAnswer,
           isCorrect: isCorrect,
+          question: this.currentQuestion.question,
         });
 
         // Erhöhe den Zähler für korrekte Antworten, wenn die Antwort richtig war
@@ -207,6 +280,8 @@ export default {
      * Wird aufgerufen, wenn der Benutzer auf "Nächste Frage" oder "Quiz beenden" klickt
      */
     nextQuestion() {
+      if (!this.canProcessAction()) return;
+
       if (this.currentQuestionIndex < this.quizQuestions.length - 1) {
         this.currentQuestionIndex++;
         this.selectedAnswer = null;
@@ -316,7 +391,8 @@ export default {
       }
 
       .score-display {
-        display: none;
+        // display: none;
+        margin-left: $spacing-sm;
 
         @include respond(tablet) {
           display: inline-block;

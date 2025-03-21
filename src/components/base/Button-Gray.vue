@@ -1,11 +1,10 @@
 <template>
   <button
-    class="button-blue"
+    class="button-gray"
     :class="[
-      `button-blue--${variant}`,
+      `button-gray--${variant}`,
       {
-        'button-blue--disabled': disabled || isBlocked,
-        'button-blue--always-blue': alwaysBlue,
+        'button-gray--disabled': disabled || isBlocked,
       },
     ]"
     :style="{ minWidth: minWidth }"
@@ -16,30 +15,30 @@
     <i
       v-if="icon && iconPosition === 'left'"
       :class="[
-        'button-blue__icon',
+        'button-gray__icon',
         icon,
-        { 'button-blue__icon--rotated': iconRotated },
+        { 'button-gray__icon--rotated': iconRotated },
       ]"
     ></i>
 
     <!-- Button Text -->
-    <span class="button-blue__text">{{ text }}</span>
+    <span class="button-gray__text">{{ text }}</span>
 
     <!-- Icon rechts vom Text, falls vorhanden und Position ist 'right' -->
     <i
       v-if="icon && iconPosition === 'right'"
       :class="[
-        'button-blue__icon',
+        'button-gray__icon',
         icon,
-        { 'button-blue__icon--rotated': iconRotated },
+        { 'button-gray__icon--rotated': iconRotated },
       ]"
     ></i>
   </button>
 </template>
 
 <script>
-// Globaler State, um Datei-Auswahl-Aktionen zu sperren
-const fileInputBlocker = {
+// Globaler State, um Aktionen zu sperren (geteilt mit ButtonBlue)
+const actionBlocker = {
   isBlocked: false,
   timeout: null,
 
@@ -54,12 +53,12 @@ const fileInputBlocker = {
     // Setze Timeout zum Entsperren
     this.timeout = setTimeout(() => {
       this.isBlocked = false;
-    }, 1000); // Lange Sperrzeit für sicheren Schutz
+    }, 1000);
   },
 };
 
 export default {
-  name: "ButtonBlue",
+  name: "ButtonGray",
 
   props: {
     // Text im Button
@@ -68,21 +67,15 @@ export default {
       default: "Button",
     },
 
-    // Button-Variante: primary, upgrade
+    // Button-Variante: primary, secondary
     variant: {
       type: String,
       default: "primary",
-      validator: (value) => ["primary", "upgrade"].includes(value),
+      validator: (value) => ["primary", "secondary"].includes(value),
     },
 
     // Ob der Button deaktiviert sein soll
     disabled: {
-      type: Boolean,
-      default: false,
-    },
-
-    // Ob der Button immer blau bleiben soll, auch wenn er deaktiviert ist
-    alwaysBlue: {
       type: Boolean,
       default: false,
     },
@@ -100,7 +93,7 @@ export default {
       validator: (value) => ["left", "right"].includes(value),
     },
 
-    // Ob das Icon rotiert werden soll (z.B. für Dropdown-Buttons)
+    // Ob das Icon rotiert werden soll
     iconRotated: {
       type: Boolean,
       default: false,
@@ -112,8 +105,8 @@ export default {
       default: "",
     },
 
-    // Ist dieser Button ein Trigger für einen Datei-Input?
-    isFileInputTrigger: {
+    // Ist dieser Button ein spezieller Trigger? (z.B. für ActionBlocker)
+    isSpecialTrigger: {
       type: Boolean,
       default: false,
     },
@@ -129,8 +122,8 @@ export default {
   computed: {
     // Kombinierter Sperrzustand aus globalem und lokalem Status
     isBlocked() {
-      // Bei File-Input-Triggern prüfen wir auch den globalen Blocker
-      if (this.isFileInputTrigger && fileInputBlocker.isBlocked) {
+      // Bei speziellen Triggern prüfen wir auch den globalen Blocker
+      if (this.isSpecialTrigger && actionBlocker.isBlocked) {
         return true;
       }
       return this.isLocallyBlocked;
@@ -153,9 +146,9 @@ export default {
       // Lokale Sperre aktivieren
       this.isLocallyBlocked = true;
 
-      // Bei File-Input-Triggern auch globale Sperre aktivieren
-      if (this.isFileInputTrigger) {
-        fileInputBlocker.block();
+      // Bei speziellen Triggern auch globale Sperre aktivieren
+      if (this.isSpecialTrigger) {
+        actionBlocker.block();
       }
 
       // Event emittieren
@@ -173,12 +166,11 @@ export default {
 <style lang="scss" scoped>
 @import "@/variables/variables.scss";
 
-.button-blue {
+.button-gray {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-weight: 500;
-  border: none;
   cursor: pointer;
   transition: all $transition-speed-medium $transition-timing;
   padding: 12.5px 18px;
@@ -198,6 +190,7 @@ export default {
       margin-left: 15px;
     }
 
+    // Rotiertes Icon
     &--rotated {
       transform: rotate(180deg);
     }
@@ -205,81 +198,32 @@ export default {
 
   // Primary Button Variante (Standard)
   &--primary {
-    background-color: $color-light-blue;
-    color: $color-text-white;
-    letter-spacing: 1px;
     padding: 14px 40px;
+    background-color: transparent;
+    border: 1px solid #ddd;
     border-radius: 10px;
-    align-self: flex-start;
-
-    &:hover:not(:disabled) {
-      background-color: $color-light-blue-darker;
-      box-shadow: $shadow-sm;
-    }
+    color: #666;
+    font-size: 14px;
+    transition: all $transition-speed-fast $transition-timing;
+    font-size: calc($font-size-p-lg - 2px);
 
     @include respond(laptop) {
-      padding: 12px 35px;
-      font-size: calc($font-size-p-md - 1px);
+      font-size: calc($font-size-p-md - 2px);
     }
 
-    @include respond(tablet) {
-      padding: 10px 30px;
-    }
-
-    @include respond(phone) {
-      padding: 8px 25px;
-      font-size: $font-size-p-sm;
+    &:hover:not(:disabled) {
+      background-color: #f5f5f5;
     }
   }
 
-  // Upgrade Button Variante
-  &--upgrade {
-    background-color: $color-light-blue;
-    color: $color-text-white;
-    letter-spacing: 1px;
-    padding: 14px 40px;
-    border-radius: 10px;
-    align-self: flex-start;
-
-    &:hover:not(:disabled) {
-      background-color: $color-light-blue-darker;
-      box-shadow: $shadow-sm;
-    }
-
-    @include respond(laptop) {
-      padding: 12px 35px;
-      font-size: calc($font-size-p-md - 1px);
-    }
-
-    @include respond(tablet) {
-      padding: 10px 30px;
-    }
-
-    @include respond(phone) {
-      padding: 8px 25px;
-      font-size: $font-size-p-sm;
-    }
-  }
-
-  // Disabled Zustand
   &--disabled {
     opacity: 0.6;
-    // cursor: not-allowed;
-    background-color: #a0a0a0;
-    box-shadow: none;
+    // cursor: not-allowed;;
 
     &:hover {
-      background-color: #a0a0a0;
       transform: none;
       box-shadow: none;
-    }
-
-    // Überschreibung für alwaysBlue
-    &.button-blue--always-blue {
-      &.button-blue--primary,
-      &.button-blue--upgrade {
-        background-color: $color-light-blue;
-      }
+      background-color: transparent;
     }
   }
 }

@@ -1,12 +1,12 @@
 <template>
-  <div class="dashboard-analyzed-topic">
+  <div class="dashboard-analyzed-topic" v-if="topic">
     <div class="dashboard-analyzed-topic_row">
       <div class="dashboard-analyzed-topic_row_col-1">
         <h3>📚 Thema</h3>
         <p>Dein analysiertes Thema</p>
       </div>
       <div class="dashboard-analyzed-topic_row_col-2">
-        <b>{{ topic.topicTitle }}</b>
+        <b>{{ topic?.topicTitle || "Kein Titel verfügbar" }}</b>
       </div>
     </div>
 
@@ -17,7 +17,10 @@
       </div>
       <div class="dashboard-analyzed-topic_row_col-2">
         <ul>
-          <li v-for="(overview, index) in topic.topicOverview" :key="index">
+          <li
+            v-for="(overview, index) in topic?.topicOverview || []"
+            :key="index"
+          >
             {{ overview }}
           </li>
         </ul>
@@ -32,7 +35,7 @@
 
       <div class="dashboard-analyzed-topic_row_col-2">
         <div v-if="!isExpanded">
-          <h2 v-if="topic.topicSummary && topic.topicSummary.length > 0">
+          <h2 v-if="topic?.topicSummary && topic.topicSummary.length > 0">
             {{ topic.topicSummary[0].subtitle }}
           </h2>
           <p>{{ previewText }}...</p>
@@ -41,7 +44,7 @@
         <div v-else class="expanded-content">
           <div
             class="paragraph"
-            v-for="(summary, index) in topic.topicSummary"
+            v-for="(summary, index) in topic?.topicSummary || []"
             :key="index"
           >
             <h2>{{ summary.subtitle }}</h2>
@@ -49,14 +52,10 @@
           </div>
         </div>
 
-        <ButtonBlue
+        <ButtonDropdown
           v-if="hasLongText"
-          variant="dropdown"
-          :text="isExpanded ? 'Weniger anzeigen' : 'Mehr anzeigen'"
-          icon="fa-solid fa-chevron-down"
-          iconPosition="right"
-          :iconRotated="isExpanded"
-          @click="toggleExpand"
+          :is-expanded="isExpanded"
+          @toggle="toggleExpand"
         />
       </div>
     </div>
@@ -67,7 +66,7 @@
         <p>Sichere dein Verständnis durch Übungsfragen</p>
       </div>
       <div class="dashboard-analyzed-topic_row_col-2">
-        <ButtonBlue variant="primary" text="Quiz starten" @click="startQuiz" />
+        <button-blue variant="primary" text="Quiz starten" @click="startQuiz" />
       </div>
     </div>
 
@@ -78,12 +77,12 @@
       </div>
       <div class="dashboard-analyzed-topic_row_col-2">
         <div class="button-container">
-          <ButtonBlue
+          <button-blue
             variant="primary"
             text="Probeklausur starten"
             :disabled="true"
           />
-          <ButtonBlue
+          <button-blue
             variant="primary"
             text="Paket upgraden"
             @click="upgradePaket"
@@ -99,12 +98,12 @@
       </div>
       <div class="dashboard-analyzed-topic_row_col-2">
         <div class="button-container">
-          <ButtonBlue
+          <button-blue
             variant="primary"
             text="KI Tutor starten"
             :disabled="true"
           />
-          <ButtonBlue
+          <button-blue
             variant="primary"
             text="Paket upgraden"
             @click="upgradePaket"
@@ -126,6 +125,11 @@ export default {
     topic: {
       type: Object,
       required: true,
+      default: () => ({
+        topicTitle: "",
+        topicOverview: [],
+        topicSummary: [],
+      }),
     },
   },
 
@@ -145,6 +149,8 @@ export default {
      * @returns {string} Der vollständige Text der Zusammenfassung
      */
     fullText() {
+      if (!this.topic?.topicSummary?.length) return "";
+
       return this.topic.topicSummary
         .map((summary) => summary.content)
         .join(" ");
@@ -155,8 +161,8 @@ export default {
      * @returns {string} Gekürzte Version des Textes (max. 350 Zeichen)
      */
     previewText() {
-      return this.fullText.length > 350
-        ? this.fullText.slice(0, 350)
+      return this.fullText.length > 550
+        ? this.fullText.slice(0, 550)
         : this.fullText;
     },
 
@@ -165,17 +171,19 @@ export default {
      * @returns {boolean} True wenn Text länger als 350 Zeichen ist
      */
     hasLongText() {
-      return this.fullText.length > 350;
+      return this.fullText.length > 550;
     },
   },
 
   // Methoden für Benutzerinteraktionen
   methods: {
     /**
-     * Schaltet zwischen erweiterter und kompakter Ansicht der Zusammenfassung um
+     * Toggle-Methode zum Ein- und Ausklappen der Zusammenfassung
      */
     toggleExpand() {
+      console.log("Toggle wurde geklickt, alter Status:", this.isExpanded);
       this.isExpanded = !this.isExpanded;
+      console.log("Neuer Status:", this.isExpanded);
     },
 
     /**
@@ -193,6 +201,13 @@ export default {
     upgradePaket() {
       this.$emit("upgrade-paket");
     },
+  },
+
+  // Stellt sicher, dass topic im Provide/Inject-System verfügbar ist
+  provide() {
+    return {
+      topic: this.topic,
+    };
   },
 };
 </script>
@@ -257,6 +272,7 @@ export default {
 
         @include respond(laptop) {
           font-size: calc($font-size-p-md - 1px);
+          display: none;
         }
       }
     }

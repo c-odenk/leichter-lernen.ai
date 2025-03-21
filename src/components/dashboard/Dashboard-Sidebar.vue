@@ -17,13 +17,16 @@
 
     <div class="dashboard-sidebar__menu">
       <div class="dashboard-sidebar__menu__section top">
-        <button
-          @click="$router.push('/newtopic')"
-          class="primary-button sidebar-button"
-        >
-          <i class="fa-solid fa-plus"></i>
-          <span v-if="!isCollapsed">Neues Thema</span>
-        </button>
+        <div class="sidebar-button-wrapper">
+          <button-blue
+            @click="$router.push('/newtopic')"
+            class="sidebar-button"
+            variant="primary"
+            :text="isCollapsed ? '' : 'Neues Thema'"
+            icon="fa-solid fa-plus"
+            :iconPosition="isCollapsed ? 'right' : 'left'"
+          />
+        </div>
 
         <div v-if="menuItems.length > 0" class="theme-section">
           <h3 class="section-title" v-if="!isCollapsed">Deine Themen</h3>
@@ -218,16 +221,21 @@ export default {
         display: none;
       }
 
-      .sidebar-button {
-        padding: 10px;
+      .sidebar-button-wrapper {
         margin-bottom: calc($spacing-xs - 6px);
 
-        @include respond(laptop) {
-        }
+        :deep(.button-blue) {
+          padding: 10px !important;
+          justify-content: center !important;
 
-        i {
-          margin: 0;
-          font-size: $font-size-p-lg;
+          .button-blue__text {
+            display: none;
+          }
+
+          .button-blue__icon {
+            margin: 0 !important;
+            font-size: $font-size-p-lg !important;
+          }
         }
       }
 
@@ -340,25 +348,24 @@ export default {
       transition: opacity $transition-speed-medium $transition-timing;
     }
 
-    .sidebar-button {
+    .sidebar-button-wrapper {
       width: 100%;
-      margin-bottom: $spacing-md; // Normaler Abstand in Desktop-Ansicht
-      justify-content: center;
-      align-items: center;
-      gap: $spacing-xs;
-      font-weight: 500;
-      border: none;
-      padding: 12px 15px;
-      border-radius: $border-radius-sm;
-      font-size: calc($font-size-p-lg - 2px);
-      transition: padding $transition-speed-medium $transition-timing,
-        margin-bottom $transition-speed-medium $transition-timing;
+      margin-bottom: $spacing-md;
 
-      i {
-        font-size: calc($font-size-p-lg - 4px);
-        margin: 0 10px 0 0;
-        transition: margin $transition-speed-medium $transition-timing,
-          font-size $transition-speed-medium $transition-timing;
+      :deep(.button-blue) {
+        width: 100%;
+        margin: 0;
+        padding: 12px 15px;
+        font-size: calc($font-size-p-lg - 2px);
+        transition: padding $transition-speed-medium $transition-timing;
+        border-radius: $border-radius-sm;
+
+        .button-blue__icon {
+          font-size: calc($font-size-p-lg - 4px);
+          margin: 0 10px 0 0;
+          transition: margin $transition-speed-medium $transition-timing,
+            font-size $transition-speed-medium $transition-timing;
+        }
       }
     }
 
@@ -443,9 +450,5 @@ export default {
       color: $color-text-white;
     }
   }
-}
-
-.primary-button {
-  @include primary-button;
 }
 </style>
