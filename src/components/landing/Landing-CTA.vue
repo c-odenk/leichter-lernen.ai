@@ -24,6 +24,12 @@ export default {
 <style lang="scss" scoped>
 @import "@/variables/variables.scss";
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 .landing-cta {
   width: 100%;
   margin: calc($spacing-lg + 0px) 0;
@@ -33,7 +39,7 @@ export default {
   }
 
   @include respond(tablet) {
-    margin: calc($spacing-lg) 0;
+    margin: calc($spacing-md) 0;
   }
 
   &_row {
@@ -54,13 +60,14 @@ export default {
     }
 
     @include respond(tablet) {
-      padding: $spacing-lg 0;
+      padding: 80px 0;
       border-radius: $border-radius-md;
     }
 
     @include respond(phone) {
-      padding: $spacing-md 0;
-      border-radius: $border-radius-sm;
+      padding: calc($spacing-md + 10px) $spacing-md calc($spacing-md + 15px)
+        $spacing-md;
+      // text-align: left;
     }
 
     &::before {
@@ -93,7 +100,8 @@ export default {
 
       @include respond(phone) {
         font-size: $font-size-h2-sm;
-        padding: 0 $spacing-sm;
+        margin: 0 0 $spacing-sm 0;
+        padding: 0;
       }
     }
 
@@ -123,8 +131,9 @@ export default {
 
       @include respond(phone) {
         font-size: $font-size-p-sm;
-        width: 90%;
-        margin: $spacing-xs 0 $spacing-md 0;
+        width: 100%;
+        // margin: $spacing-xs 0 $spacing-md 0;
+        // background-color: red;
       }
     }
   }

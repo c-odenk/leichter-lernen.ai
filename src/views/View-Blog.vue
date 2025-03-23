@@ -1,7 +1,7 @@
 <template>
   <div class="view-blog">
     <Header />
-    <BlogHero />
+    <BlogHero :heading="heroHeading" :subheading="heroSubheading" />
     <div class="view-blog_blog-container">
       <div class="view-blog_blog-container_post-prev">
         <BlogPostPrev
@@ -20,7 +20,7 @@
 
 <script>
 import Header from "@/components/header/Header.vue";
-import BlogHero from "@/components/blog/Blog-Hero.vue";
+import BlogHero from "@/components/base/Hero-Section.vue";
 import BlogPostPrev from "@/components/blog/Blog-Post-Prev.vue";
 import BlogWidget from "@/components/blog/Blog-Widget.vue";
 import Footer from "@/components/footer/Footer.vue";
@@ -39,6 +39,10 @@ export default {
   data() {
     return {
       BlogPosts,
+      heroHeading:
+        "Erkenntnisse zu den häufigsten Problemen bei der Prüfungsvorbereitung.",
+      heroSubheading:
+        "Stressige Prüfungsphasen und die richtige Lernstrategie: in unseren Blogbeiträgen zeigen wir dir, welche Herausforderungen es gibt und wie du sie effektiv überwindest.",
     };
   },
 };
@@ -55,12 +59,24 @@ export default {
     width: $width-desktop - 300px;
     margin: 0 auto;
 
+    @include respond(laptop) {
+      @include content-container;
+    }
+
     &_post-prev {
       width: 68%;
+
+      @include respond(tablet) {
+        width: 100%;
+      }
     }
 
     &_widget {
       width: 29.5%;
+
+      @include respond(tablet) {
+        display: none;
+      }
     }
   }
 }

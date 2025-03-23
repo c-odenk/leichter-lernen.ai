@@ -64,12 +64,12 @@ export default {
 
 .footer {
   width: 100%;
-  margin: $spacing-xl 0 0 0;
+  margin: 0;
   padding: calc($spacing-lg + 10px) 0;
   background-color: $color-dark-blue;
   color: $color-text-white;
 
-  @include respond(tablet) {
+  @include respond(laptop) {
     margin: 0;
   }
 

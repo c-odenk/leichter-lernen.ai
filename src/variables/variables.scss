@@ -121,7 +121,7 @@ $font-size-h1-sm: 1.5rem; // Hauptüberschriften auf Smartphone
 $font-size-h2-xl: 1.4rem; // Unterüberschriften auf Desktop
 $font-size-h2-lg: 1.4rem; // Unterüberschriften auf Laptop
 $font-size-h2-md: 1.4rem; // Unterüberschriften auf Tablet
-$font-size-h2-sm: 2rem; // Unterüberschriften auf Smartphone
+$font-size-h2-sm: 1.16rem; // Unterüberschriften auf Smartphone
 
 $font-size-h3-lg: 1.2rem; // Abschnittsüberschriften auf Desktop
 $font-size-h3-lg: 1.2rem; // Abschnittsüberschriften auf Laptop
@@ -220,6 +220,7 @@ $blog-post-padding-bottom: $spacing-lg;
 ========================================================================== */
 
 /* Blog Post Styling Mixin */
+/*
 @mixin blog-post-container {
   margin: 0 0 $blog-post-margin-bottom 0;
   padding: 0 0 $blog-post-padding-bottom 0;
@@ -228,6 +229,7 @@ $blog-post-padding-bottom: $spacing-lg;
   background-color: $color-text-white;
   transition: box-shadow $transition-speed-medium $transition-timing;
 }
+  */
 
 @mixin text-content-responsive {
   @include respond(tablet) {

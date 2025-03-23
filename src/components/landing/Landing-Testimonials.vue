@@ -4,9 +4,11 @@
       <h2>💬 {{ heading }}</h2>
       <p>{{ paragraph }}</p>
 
+      <!-- Auf Desktop/Tablet: Masonry Layout -->
       <div
+        v-if="!isMobile"
         class="masonry-container"
-        :class="{ 'mobile-scroll': isMobile, 'tablet-layout': isTablet }"
+        :class="{ 'tablet-layout': isTablet }"
         ref="masonryContainer"
       >
         <div
@@ -28,6 +30,42 @@
               <p class="testimonial-text">{{ testimonial.testimonial }}</p>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- Auf Smartphone: Horizontales Scroll Layout mit neuem Design -->
+      <div v-if="isMobile" class="mobile-testimonials-container">
+        <div class="mobile-testimonials-carousel" ref="mobileCarousel">
+          <div
+            v-for="(testimonial, index) in testimonials"
+            :key="index"
+            class="mobile-testimonial-card"
+            ref="mobileTestimonialCards"
+          >
+            <div class="quote-icon">❝</div>
+            <div class="testimonial-content">
+              <p class="testimonial-quote">{{ testimonial.testimonial }}</p>
+              <div class="testimonial-headline">{{ testimonial.headline }}</div>
+            </div>
+            <div class="testimonial-author">
+              <img
+                :src="require(`@/assets/${testimonial.image}`)"
+                alt="User Image"
+              />
+              <span>{{ testimonial.name }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scroll-Indikatoren für Smartphone -->
+        <div class="scroll-indicators">
+          <div
+            v-for="(testimonial, index) in testimonials"
+            :key="`dot-${index}`"
+            class="scroll-dot"
+            :class="{ active: index === activeIndex }"
+            @click="scrollToItem(index)"
+          ></div>
         </div>
       </div>
     </div>
@@ -90,6 +128,9 @@ export default {
       isMobile: false,
       isTablet: false,
       resizeTimer: null,
+      activeIndex: 0,
+      touchStartX: 0,
+      touchEndX: 0,
     };
   },
 
@@ -97,14 +138,24 @@ export default {
     this.checkViewport();
     this.initLayout();
     window.addEventListener("resize", this.handleResize);
-
-    // Bilder laden abwarten und dann Layout neu berechnen
     window.addEventListener("load", this.initLayout);
+
+    // Touch events für Mobile Swipe
+    if (this.isMobile) {
+      this.setupTouchEvents();
+    }
   },
 
   beforeUnmount() {
     window.removeEventListener("resize", this.handleResize);
     window.removeEventListener("load", this.initLayout);
+
+    // Touch events entfernen
+    const carousel = this.$refs.mobileCarousel;
+    if (carousel) {
+      carousel.removeEventListener("touchstart", this.handleTouchStart);
+      carousel.removeEventListener("touchend", this.handleTouchEnd);
+    }
   },
 
   methods: {
@@ -112,41 +163,135 @@ export default {
       const width = window.innerWidth;
       this.isMobile = width < 768;
       this.isTablet = width >= 768 && width < 1024;
+
+      // Setup touch events wenn Mobile
+      if (this.isMobile) {
+        this.$nextTick(() => {
+          this.setupTouchEvents();
+          this.addScrollListener();
+        });
+      }
     },
 
     handleResize() {
       clearTimeout(this.resizeTimer);
       this.resizeTimer = setTimeout(() => {
+        const wasMobile = this.isMobile;
         this.checkViewport();
-        this.initLayout();
+
+        // Wenn der Viewport geändert wurde (Mobile <-> Desktop)
+        if (wasMobile !== this.isMobile) {
+          this.initLayout();
+        }
       }, 200);
     },
 
     initLayout() {
       if (this.isMobile) {
-        this.initHorizontalScroll();
+        // Mobile Layout initialisieren
+        this.activeIndex = 0;
       } else {
         this.initMasonry();
       }
     },
 
-    initHorizontalScroll() {
-      const container = this.$refs.masonryContainer;
-      const items = this.$refs.masonryItems || [];
+    setupTouchEvents() {
+      this.$nextTick(() => {
+        const carousel = this.$refs.mobileCarousel;
+        if (carousel) {
+          carousel.removeEventListener("touchstart", this.handleTouchStart);
+          carousel.removeEventListener("touchend", this.handleTouchEnd);
+
+          carousel.addEventListener("touchstart", this.handleTouchStart, {
+            passive: true,
+          });
+          carousel.addEventListener("touchend", this.handleTouchEnd, {
+            passive: true,
+          });
+        }
+      });
+    },
+
+    handleTouchStart(e) {
+      this.touchStartX = e.changedTouches[0].screenX;
+    },
+
+    handleTouchEnd(e) {
+      this.touchEndX = e.changedTouches[0].screenX;
+      this.handleSwipe();
+    },
+
+    handleSwipe() {
+      const swipeThreshold = 50; // Minimale Swipe-Distanz
+
+      if (this.touchEndX < this.touchStartX - swipeThreshold) {
+        // Swipe nach links -> nächstes Testimonial
+        if (this.activeIndex < this.testimonials.length - 1) {
+          this.scrollToItem(this.activeIndex + 1);
+        }
+      }
+
+      if (this.touchEndX > this.touchStartX + swipeThreshold) {
+        // Swipe nach rechts -> vorheriges Testimonial
+        if (this.activeIndex > 0) {
+          this.scrollToItem(this.activeIndex - 1);
+        }
+      }
+    },
+
+    addScrollListener() {
+      // Warten auf DOM-Update
+      this.$nextTick(() => {
+        const container = this.$refs.mobileCarousel;
+        if (container) {
+          // Altes Event-Listener entfernen (falls vorhanden)
+          container.removeEventListener("scroll", this.handleScroll);
+          // Neues Event-Listener hinzufügen
+          container.addEventListener("scroll", this.handleScroll);
+        }
+      });
+    },
+
+    handleScroll() {
+      const container = this.$refs.mobileCarousel;
+      const items = this.$refs.mobileTestimonialCards || [];
 
       if (!container || items.length === 0) return;
 
-      // Container-Höhe zurücksetzen
-      container.style.height = "";
+      // Bestimme welche Karte am meisten sichtbar ist
+      let maxVisibleIndex = 0;
+      let maxVisible = 0;
 
-      // Für mobile Ansicht als flex-scrollbaren Container stylen
-      items.forEach((item) => {
-        item.style.position = "";
-        item.style.top = "";
-        item.style.left = "";
-        item.style.width = "calc(95vw - 16px)"; // 95vw minus Abstand
-        item.style.marginRight = "16px";
+      items.forEach((item, index) => {
+        const rect = item.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+
+        // Berechne, wie viel der Karte im sichtbaren Bereich ist
+        const leftVisible = Math.max(rect.left, containerRect.left);
+        const rightVisible = Math.min(rect.right, containerRect.right);
+        const visibleWidth = Math.max(0, rightVisible - leftVisible);
+
+        if (visibleWidth > maxVisible) {
+          maxVisible = visibleWidth;
+          maxVisibleIndex = index;
+        }
       });
+
+      this.activeIndex = maxVisibleIndex;
+    },
+
+    scrollToItem(index) {
+      const container = this.$refs.mobileCarousel;
+      const items = this.$refs.mobileTestimonialCards || [];
+
+      if (!container || !items || !items[index]) return;
+
+      const item = items[index];
+
+      // Zum ausgewählten Item scrollen
+      item.scrollIntoView({ behavior: "smooth", inline: "center" });
+
+      this.activeIndex = index;
     },
 
     initMasonry() {
@@ -222,11 +367,11 @@ export default {
   }
 
   @include respond(tablet) {
-    margin: $spacing-lg 0;
+    margin: $spacing-md 0;
   }
 
   @include respond(phone) {
-    margin: $spacing-lg 0;
+    margin: $spacing-sm 0 $spacing-sm 0;
   }
 
   &_row {
@@ -269,11 +414,13 @@ export default {
       @include respond(phone) {
         width: 95%;
         font-size: $font-size-p-sm;
+        margin-bottom: $spacing-md;
       }
     }
   }
 }
 
+/* Desktop/Tablet Layout */
 .masonry-container {
   width: 100%;
   margin: $spacing-lg auto 0 auto;
@@ -286,11 +433,6 @@ export default {
     padding: $spacing-sm 0;
   }
 
-  @include respond(phone) {
-    margin: $spacing-sm auto 0 auto;
-    padding: $spacing-xs 0;
-  }
-
   &.tablet-layout .testimonial {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 
@@ -299,46 +441,13 @@ export default {
       box-shadow: $shadow-lg;
     }
   }
-
-  &.mobile-scroll {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    padding: $spacing-xs 0;
-    margin: 0 auto;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  }
 }
 
 .masonry-item {
   transition: transform 0.3s ease;
 
   &:hover {
-    // transform: translateY(-5px);
     z-index: 1;
-  }
-
-  .mobile-scroll & {
-    position: static;
-    scroll-snap-align: start;
-    flex: 0 0 auto;
-    margin: 0 $spacing-xs 0 $spacing-xs;
-
-    &:hover {
-      // transform: translateY(-3px) scale(1.02);
-    }
-
-    &:last-child {
-      // margin-right: $spacing-xs;
-    }
   }
 }
 
@@ -358,11 +467,6 @@ export default {
   @include respond(tablet) {
     padding: $spacing-sm $spacing-sm $spacing-md $spacing-sm;
     border-radius: $border-radius-md;
-  }
-
-  @include respond(phone) {
-    padding: $spacing-xs $spacing-xs $spacing-sm $spacing-sm;
-    border-radius: $border-radius-sm;
   }
 
   &:hover {
@@ -397,10 +501,6 @@ export default {
     @include respond(tablet) {
       background-size: 16px 16px;
     }
-
-    @include respond(phone) {
-      background-size: 14px 14px;
-    }
   }
 
   &_header {
@@ -411,10 +511,6 @@ export default {
 
     @include respond(tablet) {
       margin: 0 0 $spacing-sm 0;
-    }
-
-    @include respond(phone) {
-      margin: 0 0 $spacing-xs 0;
     }
 
     & img {
@@ -431,11 +527,6 @@ export default {
         width: 48px;
         height: 48px;
       }
-
-      @include respond(phone) {
-        width: 42px;
-        height: 42px;
-      }
     }
 
     & h3 {
@@ -450,10 +541,6 @@ export default {
 
       @include respond(tablet) {
         font-size: $font-size-h3-md;
-      }
-
-      @include respond(phone) {
-        font-size: $font-size-h3-sm;
       }
     }
   }
@@ -475,11 +562,6 @@ export default {
         font-size: $font-size-h3-md;
         margin: 0 0 calc($spacing-xs - 2px) 0;
       }
-
-      @include respond(phone) {
-        font-size: $font-size-h3-sm;
-        margin: 0 0 calc($spacing-xs - 4px) 0;
-      }
     }
 
     & p.testimonial-text {
@@ -496,10 +578,140 @@ export default {
         font-size: calc($font-size-p-md - 1px);
         line-height: 1.4;
       }
+    }
+  }
+}
 
-      @include respond(phone) {
-        font-size: calc(#{$font-size-p-sm} - 1px);
-        line-height: 1.3;
+/* MOBILE LAYOUT - Kombiniertes Design mit horizontalem Scroll */
+@include respond(phone) {
+  .mobile-testimonials-container {
+    @include content-container;
+    margin: 0 auto $spacing-xs auto;
+    padding: 0;
+    position: relative;
+  }
+
+  .mobile-testimonials-carousel {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: 0;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+    scroll-behavior: smooth;
+
+    &::-webkit-scrollbar {
+      display: none; /* Chrome/Safari/Opera */
+    }
+  }
+
+  .mobile-testimonial-card {
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+    margin-right: $spacing-sm;
+    background: $color-dark-blue;
+    border-radius: $border-radius-md;
+    padding: $spacing-md;
+    color: white;
+    box-shadow: $shadow-md;
+    min-height: 250px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    &:first-child {
+      margin-left: $spacing-xs;
+    }
+
+    &:last-child {
+      margin-right: $spacing-xs;
+    }
+
+    .quote-icon {
+      position: absolute;
+      top: $spacing-xs;
+      left: $spacing-xs;
+      font-size: 2.5rem;
+      color: rgba(255, 255, 255, 0.3);
+      line-height: 1;
+    }
+
+    .testimonial-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: $spacing-xs $spacing-xs $spacing-sm $spacing-xs;
+      z-index: 1;
+    }
+
+    .testimonial-quote {
+      margin: 0 0 $spacing-sm;
+      font-size: $font-size-p-md;
+      line-height: 1.4;
+      text-align: center;
+      font-style: italic;
+      color: white;
+    }
+
+    .testimonial-headline {
+      font-size: $font-size-p-sm;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: $spacing-sm;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: auto;
+      padding-top: $spacing-sm;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+
+      img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 2px solid white;
+        margin-right: $spacing-xs;
+        object-fit: cover;
+      }
+
+      span {
+        font-size: $font-size-p-sm;
+        font-weight: 600;
+        color: white;
+      }
+    }
+  }
+
+  /* Scroll-Indikatoren für Mobile */
+  .scroll-indicators {
+    display: flex;
+    justify-content: center;
+    margin: 15px auto 0;
+    padding: 0;
+
+    .scroll-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin: 0 5px;
+      background-color: rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      cursor: pointer;
+
+      &.active {
+        background-color: $color-light-blue;
+        transform: scale(1.3);
+      }
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.4);
       }
     }
   }

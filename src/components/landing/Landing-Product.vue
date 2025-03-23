@@ -18,7 +18,7 @@ export default {
   margin: $spacing-lg 0;
 
   @include respond(tablet) {
-    margin: calc($spacing-lg) 0;
+    margin: $spacing-md 0;
   }
 
   @include respond(phone) {

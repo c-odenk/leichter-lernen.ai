@@ -40,6 +40,23 @@ export default {
     position: relative;
     overflow: hidden;
 
+    @include respond(laptop) {
+      @include content-container;
+      margin: $spacing-md auto calc($spacing-md + 25px) auto;
+      padding: calc($spacing-lg + 30px) $spacing-lg;
+    }
+
+    @include respond(tablet) {
+      padding: $spacing-lg $spacing-md;
+      margin: $spacing-md auto;
+    }
+
+    @include respond(phone) {
+      margin: -20px auto $spacing-sm auto;
+      padding: calc($spacing-md + 10px) $spacing-md calc($spacing-md + 15px)
+        $spacing-md;
+    }
+
     &::before {
       content: "";
       position: absolute;
@@ -53,25 +70,6 @@ export default {
         rgba(23, 43, 77, 0.08) 100%
       );
       z-index: 1;
-    }
-
-    @include respond(laptop) {
-      width: 75%;
-      padding: $spacing-lg $spacing-md;
-    }
-
-    @include respond(tablet) {
-      width: 85%;
-      padding: $spacing-md;
-      margin: $spacing-md auto;
-      border-radius: $border-radius-md;
-    }
-
-    @include respond(phone) {
-      width: 95%;
-      padding: $spacing-md $spacing-sm;
-      margin: $spacing-sm auto;
-      border-radius: $border-radius-sm;
     }
 
     & h2 {
@@ -88,6 +86,7 @@ export default {
 
       @include respond(phone) {
         font-size: $font-size-h2-sm;
+        margin: 0 0 $spacing-sm 0;
       }
     }
 
@@ -100,6 +99,10 @@ export default {
       color: $color-text-white;
       position: relative;
       z-index: 2;
+
+      @include respond(laptop) {
+        font-size: $font-size-p-lg;
+      }
 
       @include respond(tablet) {
         font-size: $font-size-p-md;

@@ -44,7 +44,27 @@ export default {
 @import "@/variables/Variables.scss";
 
 .blog-post-prev {
-  @include blog-post-container;
+  margin: 0 0 $spacing-lg 0;
+  padding: 0 0 $spacing-lg 0;
+  box-shadow: $shadow-md;
+  border-radius: $border-radius-lg;
+  background-color: $color-text-white;
+  transition: box-shadow $transition-speed-medium $transition-timing;
+
+  @include respond(tablet) {
+    margin: 0 0 $spacing-md 0;
+    padding: 0 0 $spacing-xs 0;
+  }
+
+  @include respond(tablet) {
+    margin: 0 0 $spacing-md 0;
+    padding: 0 0 $spacing-xs 0;
+  }
+
+  @include respond(phone) {
+    margin: 0 0 $spacing-md 0;
+    padding: 0 0 calc($spacing-md + 7.5px) 0;
+  }
 
   .image-container {
     position: relative;
@@ -55,6 +75,9 @@ export default {
     background-color: #f0f0f0; /* Leichte Hintergrundfarbe für den Placeholder */
     border-top-left-radius: $border-radius-md;
     border-top-right-radius: $border-radius-md;
+
+    @include respond(laptop) {
+    }
   }
 
   .image-placeholder {
@@ -64,6 +87,9 @@ export default {
     width: 100%;
     height: 100%;
     background-color: #f0f0f0;
+
+    @include respond(laptop) {
+    }
   }
 
   & img {
@@ -79,6 +105,9 @@ export default {
     will-change: transform;
     opacity: 0; /* Bild ist standardmäßig transparent */
     transition: opacity 0.3s ease; /* Sanfter Übergang beim Laden */
+
+    @include respond(laptop) {
+    }
   }
 
   & img.image-loaded {
@@ -98,7 +127,7 @@ export default {
     }
 
     @include respond(phone) {
-      padding: $spacing-sm $spacing-sm 0 $spacing-sm;
+      padding: $spacing-md $spacing-sm 0 $spacing-sm;
       font-size: $font-size-h2-sm;
     }
   }
@@ -111,7 +140,23 @@ export default {
     line-height: $line-height;
     letter-spacing: $letter-spacing;
     @include themed(color, text);
-    @include text-content-responsive;
+
+    @include respond(laptop) {
+      margin: $spacing-md 0;
+      font-size: $font-size-p-xl;
+    }
+
+    @include respond(tablet) {
+      margin: $spacing-md 0;
+      padding: 0 $spacing-md;
+      font-size: $font-size-p-md;
+    }
+
+    @include respond(phone) {
+      padding: 0 $spacing-sm;
+      font-size: $font-size-p-sm;
+      text-align: left;
+    }
   }
 
   .read-more {
@@ -119,7 +164,6 @@ export default {
     margin: 0;
     padding: 0 $spacing-lg $spacing-md $spacing-lg;
     text-decoration: none;
-    // text-transform: uppercase;
     font-size: $font-size-p-xl;
     line-height: $line-height;
     letter-spacing: $letter-spacing;
@@ -128,13 +172,18 @@ export default {
 
     @include link-hover-effect;
 
+    @include respond(laptop) {
+      padding: 0 $spacing-lg 0 $spacing-lg;
+      font-size: $font-size-p-xl;
+    }
+
     @include respond(tablet) {
       padding: 0 $spacing-md $spacing-md $spacing-md;
       font-size: $font-size-p-md;
     }
 
     @include respond(phone) {
-      padding: 0 $spacing-sm $spacing-sm $spacing-sm;
+      padding: 0 $spacing-sm;
       font-size: $font-size-p-sm;
     }
 

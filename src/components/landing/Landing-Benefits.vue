@@ -1,8 +1,8 @@
 <template>
   <section class="benefits">
-    <div class="benefits__header">
-      <h2 class="benefits__title">⚡ {{ heading }}</h2>
-      <p class="benefits__subtitle">{{ subheading }}</p>
+    <div class="benefits_header">
+      <h2>⚡ {{ heading }}</h2>
+      <p>{{ subheading }}</p>
     </div>
 
     <div class="benefits__grid">
@@ -17,6 +17,16 @@
           <p class="benefits__card-text">{{ benefit.description }}</p>
         </div>
       </div>
+    </div>
+
+    <!-- Scroll-Indikatoren für mobile Ansichten -->
+    <div class="benefits__scroll-indicators">
+      <div
+        v-for="(benefit, index) in benefits"
+        :key="index"
+        class="scroll-dot"
+        :class="{ active: index === 0 }"
+      ></div>
     </div>
   </section>
 </template>
@@ -57,6 +67,46 @@ export default {
       ],
     };
   },
+
+  mounted() {
+    // Nach dem Mounting der Komponente Scroll-Indikatoren initialisieren
+    this.initScrollIndicators();
+  },
+
+  methods: {
+    initScrollIndicators() {
+      // Nur für Tablet- und Phone-Ansicht: Initialisiere Scroll-Indikatoren
+      const isTabletOrPhone = window.matchMedia("(max-width: 1024px)").matches;
+
+      if (isTabletOrPhone) {
+        const container = this.$el.querySelector(".benefits__grid");
+        const dots = this.$el.querySelectorAll(".scroll-dot");
+
+        if (container && dots.length) {
+          // Initial ersten Dot aktivieren
+          dots[0].classList.add("active");
+
+          container.addEventListener("scroll", () => {
+            // Berechne den Fortschritt des Scrollens
+            const scrollPosition = container.scrollLeft;
+            const totalWidth = container.scrollWidth;
+            const viewportWidth = container.clientWidth;
+
+            // Berechne, welche Karte gerade am sichtbarsten ist
+            const activeIndex = Math.round(
+              (scrollPosition / (totalWidth - viewportWidth)) *
+                (dots.length - 1)
+            );
+
+            // Setze die aktive Klasse auf den entsprechenden Indikator
+            dots.forEach((dot, index) => {
+              dot.classList.toggle("active", index === activeIndex);
+            });
+          });
+        }
+      }
+    },
+  },
 };
 </script>
 
@@ -72,14 +122,14 @@ export default {
   }
 
   @include respond(tablet) {
-    margin: $spacing-lg 0;
+    margin: $spacing-md 0;
   }
 
   @include respond(phone) {
-    margin: calc($spacing-lg + 50px) 0 $spacing-lg 0;
+    margin: $spacing-lg 0 $spacing-sm 0;
   }
 
-  &__header {
+  &_header {
     @include content-container;
     margin-bottom: $spacing-lg;
 
@@ -90,51 +140,50 @@ export default {
     @include respond(phone) {
       margin-bottom: $spacing-sm;
     }
-  }
 
-  &__title {
-    margin: 0 0 $spacing-xs;
-    padding: 0;
-    font-size: $font-size-h2-lg;
-    text-align: left;
-
-    @include respond(tablet) {
-      font-size: $font-size-h2-md;
-      text-align: center;
-    }
-
-    @include respond(phone) {
-      font-size: $font-size-h2-sm;
-      margin-bottom: calc($spacing-xs - 2px);
+    & h2 {
+      margin: 0 0 $spacing-xs;
+      padding: 0;
+      font-size: $font-size-h2-lg;
       text-align: left;
+
+      @include respond(tablet) {
+        font-size: $font-size-h2-md;
+        text-align: center;
+      }
+
+      @include respond(phone) {
+        font-size: $font-size-h2-sm;
+        margin-bottom: calc($spacing-xs - 2px);
+        text-align: left;
+      }
     }
-  }
-
-  &__subtitle {
-    width: 45%;
-    margin: 0;
-    padding: 0;
-    font-size: $font-size-p-xl;
-    line-height: $line-height;
-    letter-spacing: $letter-spacing;
-    text-align: left;
-
-    @include respond(laptop) {
-      width: 70%;
-      font-size: $font-size-p-lg;
-    }
-
-    @include respond(tablet) {
-      width: 80%;
-      margin: 0 auto;
-      font-size: $font-size-p-md;
-      text-align: center;
-    }
-
-    @include respond(phone) {
-      width: 100%;
-      font-size: $font-size-p-sm;
+    & p {
+      width: 45%;
+      margin: 0;
+      padding: 0;
+      font-size: $font-size-p-xl;
+      line-height: $line-height;
+      letter-spacing: $letter-spacing;
       text-align: left;
+
+      @include respond(laptop) {
+        width: 70%;
+        font-size: $font-size-p-lg;
+      }
+
+      @include respond(tablet) {
+        width: 80%;
+        margin: 0 auto 0 auto;
+        font-size: $font-size-p-md;
+        text-align: center;
+      }
+
+      @include respond(phone) {
+        width: 100%;
+        font-size: $font-size-p-sm;
+        text-align: left;
+      }
     }
   }
 
@@ -145,11 +194,39 @@ export default {
     justify-content: space-between;
 
     @include respond(tablet) {
-      gap: $spacing-sm;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      overflow-y: hidden;
+      justify-content: flex-start;
+      gap: $spacing-md;
+      padding: 10px 0 20px;
+      // margin-bottom: 5px;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      &::-webkit-scrollbar {
+        display: none;
+      }
     }
 
     @include respond(phone) {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      overflow-y: hidden;
+      justify-content: flex-start;
       gap: $spacing-sm;
+      padding: 5px 0 15px;
+      margin-bottom: 5px;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+
+      /* Verstecke die Scrollbar auch für Smartphones */
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      &::-webkit-scrollbar {
+        display: none;
+      }
     }
   }
 
@@ -176,16 +253,20 @@ export default {
     }
 
     @include respond(tablet) {
-      width: calc(50% - #{$spacing-xs});
+      min-width: 280px;
+      width: 70%;
       height: 350px;
-      margin-bottom: $spacing-sm;
+      flex: 0 0 auto;
+      margin: 0;
       padding: $spacing-sm;
     }
 
     @include respond(phone) {
+      min-width: 260px;
       width: 100%;
       height: 300px;
-      margin-bottom: calc($spacing-sm - 10px);
+      flex: 0 0 auto;
+      margin-bottom: 0;
       padding: calc($spacing-sm - 7.5px);
     }
 
@@ -271,6 +352,34 @@ export default {
       margin: calc($spacing-xs - 4px) 0 0;
       line-height: 1.4;
       text-align: left;
+    }
+  }
+
+  /* Scroll-Indikatoren */
+  &__scroll-indicators {
+    display: none;
+    justify-content: center;
+
+    @include respond(tablet) {
+      display: flex;
+    }
+
+    @include respond(phone) {
+      display: flex;
+    }
+
+    .scroll-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin: 0 5px;
+      background-color: rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease, transform 0.2s ease;
+
+      &.active {
+        background-color: $color-light-blue;
+        transform: scale(1.3);
+      }
     }
   }
 }

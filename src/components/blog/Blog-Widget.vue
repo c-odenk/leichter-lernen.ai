@@ -37,6 +37,10 @@ export default {
   border-radius: $border-radius-md;
   background-color: $color-text-white;
 
+  @include respond(laptop) {
+    padding: $spacing-md calc($spacing-md - 5px);
+  }
+
   @include respond(tablet) {
     padding: $spacing-md;
   }

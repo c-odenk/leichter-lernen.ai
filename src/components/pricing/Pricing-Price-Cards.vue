@@ -31,6 +31,12 @@
         </ul>
       </div>
     </div>
+    <!-- Scroll-Indikatoren nur für Tablet-Ansicht -->
+    <div class="scroll-indicators tablet-only">
+      <div class="scroll-dot active"></div>
+      <div class="scroll-dot"></div>
+      <div class="scroll-dot"></div>
+    </div>
   </div>
 </template>
 
@@ -43,59 +49,129 @@ export default {
       required: true,
     },
   },
+  mounted() {
+    // Nur für Tablet-Ansicht: Initialisiere Scroll-Indikatoren
+    this.initScrollIndicators();
+  },
+  methods: {
+    initScrollIndicators() {
+      // Prüfen, ob wir in der Tablet-Ansicht sind
+      const isTablet = window.matchMedia(
+        "(max-width: 1024px) and (min-width: 768px)"
+      ).matches;
+
+      if (isTablet) {
+        const container = this.$el.querySelector(".pricing-price-cards_row");
+        const dots = this.$el.querySelectorAll(".scroll-dot");
+
+        if (container && dots.length) {
+          container.addEventListener("scroll", () => {
+            // Berechne den Fortschritt des Scrollens (0 bis 1)
+            const scrollProgress =
+              container.scrollLeft /
+              (container.scrollWidth - container.clientWidth);
+
+            // Bestimme, welcher Indikator aktiv sein sollte
+            const activeIndex = Math.round(scrollProgress * (dots.length - 1));
+
+            // Setze die aktive Klasse auf den entsprechenden Indikator
+            dots.forEach((dot, index) => {
+              dot.classList.toggle("active", index === activeIndex);
+            });
+          });
+        }
+      }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 @import "@/variables/variables.scss";
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 .pricing-price-cards {
   width: 100%;
 
   &_row {
-    /* Zentrale Container-Zeile für die Preiskarten */
     width: 62%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     margin: 100px auto 50px auto;
+    scroll-behavior: smooth; // Für sanftes Scrollen
 
-    /* Responsives Verhalten für verschiedene Bildschirmgrößen */
     @include respond(laptop) {
-      width: 80%; // Breiteren Container auf Laptops verwenden
+      @include content-container;
+      margin: 0 auto;
     }
 
     @include respond(tablet) {
-      width: 90%; // Noch breiteren Container auf Tablets
-      flex-direction: column; // Untereinander anordnen statt nebeneinander
+      @include content-container;
+      overflow-x: auto;
+      overflow-y: hidden;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      gap: 20px;
+      padding: 20px 0;
+      margin: 0 auto 0 auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      &::after {
+        content: "";
+        // flex: 0 0 20px;
+      }
+    }
+
+    @include respond(phone) {
+      @include content-container;
+      flex-direction: column;
       align-items: center;
-      gap: 80px; // Abstand zwischen den Karten
+      overflow-x: visible;
+      margin: 0 auto;
+      // gap: 20px;
     }
 
     & .price-card {
-      /* Grundlegende Stilisierung der Preiskarten */
-      width: 31%;
+      width: 31.5%;
       margin: 0;
       padding: 40px 25px;
       box-sizing: border-box;
       border: 1px solid rgba(0, 0, 0, 0.07);
-      border-radius: 15px;
+      border-radius: $border-radius-lg;
       box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);
       position: relative;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
 
-      /* Responsives Verhalten der Karten */
+      @include respond(laptop) {
+        width: 31.5%;
+        padding: 40px 25px 20px 25px;
+      }
+
       @include respond(tablet) {
-        width: 75%; // Breitere Karten auf Tablets
+        min-width: 280px;
+        max-width: 500px;
+        width: 65%;
+        flex: 0 0 auto; // Verhindert Schrumpfen der Karten
       }
 
       @include respond(phone) {
-        width: 100%; // Volle Breite auf Smartphones
+        width: 100%;
+        min-width: unset;
       }
 
-      /* Hover-Effekt für bessere Interaktivität */
       &:hover {
-        box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.15); // Verstärkter Schatten
+        box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.15);
       }
 
       /* Überschrift-Styling */
@@ -120,10 +196,14 @@ export default {
 
         &:first-of-type {
           margin: 0 0 20px 0;
-          min-height: 95px; // Feste Höhe für einheitliches Layout
+          min-height: 95px;
+
+          @include respond(tablet) {
+            min-height: 60px;
+          }
 
           @include respond(phone) {
-            min-height: auto; // Auf Smartphones automatische Höhe
+            min-height: auto;
           }
         }
 
@@ -137,6 +217,10 @@ export default {
           padding: 0;
           font-size: 2.8125rem; // 45px in rem
           font-weight: 500;
+
+          @include respond(tablet) {
+            font-size: 2.2rem;
+          }
         }
       }
 
@@ -152,7 +236,7 @@ export default {
 
       /* Feature-Liste Styling */
       & ul {
-        margin: 0 0 40px 0;
+        margin: 0;
         padding: 0;
         list-style: none;
 
@@ -204,6 +288,42 @@ export default {
         letter-spacing: 0.5px;
         font-weight: 600;
       }
+    }
+  }
+
+  /* Scroll-Indikatoren (nur für Tablets) */
+  .scroll-indicators {
+    display: none;
+    justify-content: center;
+
+    @include respond(tablet) {
+      display: flex;
+    }
+
+    @include respond(phone) {
+      display: none;
+    }
+
+    .scroll-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin: 0 5px;
+      background-color: rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease;
+
+      &.active {
+        background-color: $color-light-blue;
+      }
+    }
+  }
+
+  /* Hilfsklasse für Elemente, die nur auf Tablets angezeigt werden */
+  .tablet-only {
+    display: none;
+
+    @include respond(tablet-only) {
+      display: flex;
     }
   }
 }

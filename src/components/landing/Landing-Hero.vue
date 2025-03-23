@@ -1,7 +1,7 @@
 <template>
   <section class="landing-hero">
     <div class="landing-hero_container">
-      <div class="landing-hero_content">
+      <div class="landing-hero_col-1">
         <h1>
           Effizienter <span class="highlight">lernen mit KI</span> – schneller
           verstehen, besser merken!
@@ -13,7 +13,7 @@
         </p>
         <LinkButtonBlue text="Jetzt ausprobieren" to="/login" />
       </div>
-      <div class="landing-hero_image" aria-hidden="true"></div>
+      <div class="landing-hero_col-2" aria-hidden="true"></div>
     </div>
   </section>
 </template>
@@ -56,7 +56,7 @@ export default {
     }
   }
 
-  &_content {
+  &_col-1 {
     width: 50%;
 
     @include respond(laptop) {
@@ -112,7 +112,7 @@ export default {
     }
   }
 
-  &_image {
+  &_col-2 {
     width: 45%;
     height: 600px;
     background-position: center;

@@ -1,11 +1,11 @@
 <template>
   <div class="landing-faq">
-    <div class="landing-faq__row">
-      <div class="landing-faq__column-left">
-        <h2 class="landing-faq__heading">🔍 {{ heading }}</h2>
-        <p class="landing-faq__subheading">{{ subheading }}</p>
+    <div class="landing-faq_row">
+      <div class="landing-faq_col-1">
+        <h2>🔍 {{ heading }}</h2>
+        <p>{{ subheading }}</p>
       </div>
-      <div class="landing-faq__column-right">
+      <div class="landing-faq_col-2">
         <div
           class="faq-item"
           :class="{ 'faq-item--active': activeIndex === index }"
@@ -124,7 +124,7 @@ export default {
 
 .landing-faq {
   width: 100%;
-  margin: calc($spacing-lg + 50px) 0;
+  margin: calc($spacing-lg + 50px) 0 $spacing-xl 0;
 
   @include respond(laptop) {
   }
@@ -137,29 +137,60 @@ export default {
     margin: $spacing-lg 0 calc($spacing-lg + 20px) 0;
   }
 
-  &__row {
+  &_row {
     @include content-container;
     margin: 0 auto;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     flex-wrap: wrap;
+
+    @include respond(tablet) {
+    }
   }
 
-  &__column-left {
+  &_col-1 {
     width: 50%;
 
     @include respond(tablet) {
       width: 100%;
-      margin-bottom: $spacing-md;
+      margin: 0 $spacing-sm $spacing-sm $spacing-sm;
     }
 
     @include respond(phone) {
       width: 100%;
     }
+
+    & h2 {
+      margin: 0 0 $spacing-xs 0;
+      padding: 0;
+      line-height: $line-height;
+      letter-spacing: $letter-spacing;
+      font-size: $font-size-h2-lg;
+
+      @include respond(tablet) {
+        font-size: $font-size-h2-md;
+      }
+
+      @include respond(phone) {
+        font-size: $font-size-h2-sm;
+      }
+    }
+
+    & p {
+      margin: 0;
+      padding: 0;
+      font-size: $font-size-p-xl;
+      line-height: $line-height;
+      letter-spacing: $letter-spacing;
+
+      @include respond(tablet) {
+        // @include text-content-responsive;
+      }
+    }
   }
 
-  &__column-right {
+  &_col-2 {
     width: 40%;
     display: flex;
     flex-direction: column;
@@ -170,34 +201,6 @@ export default {
 
     @include respond(phone) {
       width: 100%;
-    }
-  }
-
-  &__heading {
-    margin: 0 0 $spacing-xs 0;
-    padding: 0;
-    line-height: $line-height;
-    letter-spacing: $letter-spacing;
-    font-size: $font-size-h2-lg;
-
-    @include respond(tablet) {
-      font-size: $font-size-h2-md;
-    }
-
-    @include respond(phone) {
-      font-size: $font-size-h2-sm;
-    }
-  }
-
-  &__subheading {
-    margin: 0;
-    padding: 0;
-    font-size: $font-size-p-xl;
-    line-height: $line-height;
-    letter-spacing: $letter-spacing;
-
-    @include respond(tablet) {
-      // @include text-content-responsive;
     }
   }
 }

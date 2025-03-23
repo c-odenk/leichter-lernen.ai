@@ -1,7 +1,7 @@
 <template>
   <div class="view-pricing">
     <Header />
-    <PricingHero />
+    <PricingHero :heading="heroHeading" :subheading="heroSubheading" />
     <PricingPriceCards :productSortiment="productSortiment" />
     <PricingWaranty />
     <Footer />
@@ -10,7 +10,7 @@
 
 <script>
 import Header from "@/components/header/Header.vue";
-import PricingHero from "@/components/pricing/Pricing-Hero.vue";
+import PricingHero from "@/components/base/Hero-Section.vue";
 import PricingPriceCards from "@/components/pricing/Pricing-Price-Cards.vue";
 import PricingWaranty from "@/components/pricing/Pricing-Waranty.vue";
 import Footer from "@/components/footer/Footer.vue";
@@ -28,15 +28,11 @@ export default {
   },
   data() {
     return {
-      productSortiment: ProductSortiment, // Sicherstellen, dass das Array korrekt übergeben wird
+      productSortiment: ProductSortiment,
+      heroHeading: "Finde das beste Angebot für deine Klausurenphase.",
+      heroSubheading:
+        "Wähle das passende Paket für deine Prüfungsvorbereitung und starte noch heute mit KI-gestütztem Lernen und Üben.",
     };
   },
 };
 </script>
-
-<style lang="scss" scoped>
-@import "@/variables/Variables.scss";
-
-.view-pricing {
-}
-</style>

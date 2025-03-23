@@ -1,6 +1,6 @@
 <template>
-  <div class="blog-hero">
-    <div class="blog-hero_row">
+  <div class="hero-section">
+    <div class="hero-section_row">
       <h2>{{ heading }}</h2>
       <p>{{ subheading }}</p>
     </div>
@@ -9,14 +9,16 @@
 
 <script>
 export default {
-  name: "BlogHeroSection",
-  data() {
-    return {
-      heading:
-        "Erkenntnisse zu den häufigsten Problemen bei der Prüfungsvorbereitung.",
-      subheading:
-        "Stressige Prüfungsphasen und die richtige Lernstrategie: in unseren Blogbeiträgen zeigen wir dir, welche Herausforderungen es gibt und wie du sie effektiv überwindest.",
-    };
+  name: "HeroSection",
+  props: {
+    heading: {
+      type: String,
+      default: "HEADING",
+    },
+    subheading: {
+      type: String,
+      default: "subheading",
+    },
   },
 };
 </script>
@@ -24,7 +26,7 @@ export default {
 <style lang="scss" scoped>
 @import "@/variables/variables.scss";
 
-.blog-hero {
+.hero-section {
   width: 100%;
 
   &_row {
@@ -33,32 +35,35 @@ export default {
     text-align: center;
 
     @include respond(laptop) {
-      margin: $spacing-lg auto;
+      margin: calc($spacing-lg + 55px) auto calc($spacing-lg + 75px) auto;
     }
 
     @include respond(tablet) {
-      margin: $spacing-md auto;
+      margin: calc($spacing-lg + 35px) auto calc($spacing-lg + 50px) auto;
     }
 
     @include respond(phone) {
-      margin: $spacing-sm auto;
     }
 
     & h2 {
-      width: 80%;
-      margin: 0 auto $spacing-xs auto;
       font-size: $font-size-h1-lg;
+      margin: 0 0 $spacing-xs 0;
       color: $color-dark-blue;
       line-height: $line-height;
 
+      @include respond(laptop) {
+      }
+
       @include respond(tablet) {
-        width: 90%;
         font-size: $font-size-h1-md;
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
       }
 
       @include respond(phone) {
-        width: 100%;
         font-size: $font-size-h1-sm;
+        width: 100%;
       }
     }
 
@@ -70,6 +75,9 @@ export default {
       line-height: $line-height;
       letter-spacing: $letter-spacing;
       color: $color-text-dark;
+
+      @include respond(laptop) {
+      }
 
       @include respond(tablet) {
         width: 80%;
