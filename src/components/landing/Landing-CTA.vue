@@ -65,9 +65,8 @@ export default {
     }
 
     @include respond(phone) {
-      padding: calc($spacing-md + 10px) $spacing-md calc($spacing-md + 15px)
+      padding: calc($spacing-md + 20px) $spacing-md calc($spacing-md + 25px)
         $spacing-md;
-      // text-align: left;
     }
 
     &::before {

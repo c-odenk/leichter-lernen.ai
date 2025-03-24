@@ -56,11 +56,6 @@ export default {
     padding: 0 0 $spacing-xs 0;
   }
 
-  @include respond(tablet) {
-    margin: 0 0 $spacing-md 0;
-    padding: 0 0 $spacing-xs 0;
-  }
-
   @include respond(phone) {
     margin: 0 0 $spacing-md 0;
     padding: 0 0 calc($spacing-md + 7.5px) 0;
@@ -70,13 +65,18 @@ export default {
     position: relative;
     width: 100%;
     height: 0;
-    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio für Desktop */
     overflow: hidden;
     background-color: #f0f0f0; /* Leichte Hintergrundfarbe für den Placeholder */
     border-top-left-radius: $border-radius-md;
     border-top-right-radius: $border-radius-md;
 
     @include respond(laptop) {
+      padding-bottom: 50%; /* Etwas niedrigeres Verhältnis für Laptop */
+    }
+
+    @include respond(tablet) {
+      padding-bottom: 51%; /* Angepasstes Verhältnis für Tablet */
     }
   }
 
@@ -87,9 +87,6 @@ export default {
     width: 100%;
     height: 100%;
     background-color: #f0f0f0;
-
-    @include respond(laptop) {
-    }
   }
 
   & img {
@@ -105,9 +102,6 @@ export default {
     will-change: transform;
     opacity: 0; /* Bild ist standardmäßig transparent */
     transition: opacity 0.3s ease; /* Sanfter Übergang beim Laden */
-
-    @include respond(laptop) {
-    }
   }
 
   & img.image-loaded {
@@ -121,9 +115,15 @@ export default {
     font-size: $font-size-h2-lg;
     @include themed(color, heading);
 
+    @include respond(laptop) {
+      padding: $spacing-md $spacing-lg 0 $spacing-lg;
+      font-size: $font-size-h2-lg;
+    }
+
     @include respond(tablet) {
       padding: $spacing-md $spacing-md 0 $spacing-md;
       font-size: $font-size-h2-md;
+      margin-top: 0; /* Keine zusätzliche Anpassung nötig bei 51% */
     }
 
     @include respond(phone) {

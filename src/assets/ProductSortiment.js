@@ -9,7 +9,7 @@ export const ProductSortiment = [
       "Identifikation & klare Strukturierung der Kernthemen deines Dokuments.",
       "Detaillierte, KI-gestützte Zusammenfassung deines Dokuments.",
       "Automatisch generiertes Multiple-Choice-Quiz zur Wissensüberprüfung.",
-      "Ideal für schnelles, effektives Lernen mit aktiver Wiederholungzz.",
+      "Ideal für schnelles, effektives Lernen mit aktiver Wiederholung.",
     ],
     available: true,
     mostWanted: true,

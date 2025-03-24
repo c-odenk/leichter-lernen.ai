@@ -15,14 +15,13 @@ export default {
 
 .landing-product {
   width: 100%;
-  margin: $spacing-lg 0;
+  margin: calc($spacing-lg + 50px) 0;
 
   @include respond(tablet) {
     margin: $spacing-md 0;
   }
 
   @include respond(phone) {
-    margin: 0;
   }
 
   &_row {

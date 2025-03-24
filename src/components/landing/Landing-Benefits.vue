@@ -126,7 +126,7 @@ export default {
   }
 
   @include respond(phone) {
-    margin: $spacing-lg 0 $spacing-sm 0;
+    margin: $spacing-md 0 $spacing-md 0;
   }
 
   &_header {
@@ -142,30 +142,28 @@ export default {
     }
 
     & h2 {
-      margin: 0 0 $spacing-xs;
+      margin: 0 0 $spacing-xs 0;
       padding: 0;
+      text-align: center;
       font-size: $font-size-h2-lg;
-      text-align: left;
 
       @include respond(tablet) {
         font-size: $font-size-h2-md;
-        text-align: center;
       }
 
       @include respond(phone) {
         font-size: $font-size-h2-sm;
-        margin-bottom: calc($spacing-xs - 2px);
-        text-align: left;
       }
     }
+
     & p {
-      width: 45%;
-      margin: 0;
+      width: 60%;
+      margin: 0 auto;
       padding: 0;
       font-size: $font-size-p-xl;
       line-height: $line-height;
       letter-spacing: $letter-spacing;
-      text-align: left;
+      text-align: center; /* Immer zentriert */
 
       @include respond(laptop) {
         width: 70%;
@@ -174,15 +172,13 @@ export default {
 
       @include respond(tablet) {
         width: 80%;
-        margin: 0 auto 0 auto;
         font-size: $font-size-p-md;
-        text-align: center;
       }
 
       @include respond(phone) {
-        width: 100%;
+        width: 95%;
         font-size: $font-size-p-sm;
-        text-align: left;
+        margin-bottom: $spacing-md;
       }
     }
   }

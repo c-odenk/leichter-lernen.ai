@@ -159,17 +159,17 @@ export default {
 
     @include respond(phone) {
       width: 100%;
+      margin: 0 $spacing-sm $spacing-md $spacing-sm;
     }
 
     & h2 {
       margin: 0 0 $spacing-xs 0;
       padding: 0;
-      line-height: $line-height;
-      letter-spacing: $letter-spacing;
       font-size: $font-size-h2-lg;
 
       @include respond(tablet) {
         font-size: $font-size-h2-md;
+        text-align: center;
       }
 
       @include respond(phone) {
@@ -178,14 +178,27 @@ export default {
     }
 
     & p {
+      width: 80%;
       margin: 0;
       padding: 0;
       font-size: $font-size-p-xl;
       line-height: $line-height;
       letter-spacing: $letter-spacing;
 
+      @include respond(laptop) {
+        width: 70%;
+        font-size: $font-size-p-lg;
+      }
+
       @include respond(tablet) {
-        // @include text-content-responsive;
+        width: 80%;
+        font-size: $font-size-p-md;
+        text-align: center;
+      }
+
+      @include respond(phone) {
+        width: 95%;
+        font-size: $font-size-p-sm;
       }
     }
   }
@@ -233,10 +246,12 @@ export default {
     }
 
     @include respond(tablet) {
+      width: 100%;
       font-size: $font-size-h3-md;
     }
 
     @include respond(phone) {
+      width: 90%;
       font-size: $font-size-h3-sm;
     }
   }
@@ -261,7 +276,7 @@ export default {
     }
 
     @include respond(tablet) {
-      @include text-content-responsive;
+      // @include text-content-responsive;
     }
   }
 }

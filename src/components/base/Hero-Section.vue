@@ -69,6 +69,7 @@ export default {
 
     & p {
       width: 60%;
+      min-height: 60px;
       margin: 0 auto;
       padding: 0;
       font-size: $font-size-p-xl;
@@ -77,6 +78,7 @@ export default {
       color: $color-text-dark;
 
       @include respond(laptop) {
+        height: auto;
       }
 
       @include respond(tablet) {

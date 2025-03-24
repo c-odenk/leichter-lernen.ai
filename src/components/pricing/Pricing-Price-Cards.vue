@@ -103,8 +103,8 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin: 100px auto 50px auto;
-    scroll-behavior: smooth; // Für sanftes Scrollen
+    margin: 0 auto 50px auto;
+    scroll-behavior: smooth;
 
     @include respond(laptop) {
       @include content-container;
@@ -129,7 +129,6 @@ export default {
 
       &::after {
         content: "";
-        // flex: 0 0 20px;
       }
     }
 
@@ -139,7 +138,6 @@ export default {
       align-items: center;
       overflow-x: visible;
       margin: 0 auto;
-      // gap: 20px;
     }
 
     & .price-card {
@@ -162,7 +160,7 @@ export default {
         min-width: 280px;
         max-width: 500px;
         width: 65%;
-        flex: 0 0 auto; // Verhindert Schrumpfen der Karten
+        flex: 0 0 auto;
       }
 
       @include respond(phone) {
@@ -174,7 +172,6 @@ export default {
         box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.15);
       }
 
-      /* Überschrift-Styling */
       & h3 {
         min-height: 40px;
         margin: 0 0 25px 0;
@@ -182,11 +179,10 @@ export default {
         font-size: $font-size-h3-lg;
 
         @include respond(phone) {
-          font-size: $font-size-h3-sm; // Kleinere Schrift auf Smartphones
+          font-size: $font-size-h3-sm;
         }
       }
 
-      /* Paragraph-Styling für Beschreibungen und Preise */
       & p {
         margin: 0;
         padding: 0;
@@ -211,11 +207,10 @@ export default {
           font-size: $font-size-p-lg;
         }
 
-        /* Preisbetrags-Styling */
         & .preis {
           margin: 0;
           padding: 0;
-          font-size: 2.8125rem; // 45px in rem
+          font-size: 2.8125rem;
           font-weight: 500;
 
           @include respond(tablet) {
@@ -224,17 +219,15 @@ export default {
         }
       }
 
-      /* Container für den Button mit korrekten Abständen */
       & .button-container {
         width: 100%;
         margin: 20px 0 50px 0;
 
         @include respond(phone) {
-          margin: 20px 0 30px 0; // Kleinerer Abstand auf Smartphones
+          margin: 20px 0 30px 0;
         }
       }
 
-      /* Feature-Liste Styling */
       & ul {
         margin: 0;
         padding: 0;
@@ -248,9 +241,8 @@ export default {
           letter-spacing: $letter-spacing;
           position: relative;
 
-          /* Haken-Icon vor jedem Listenelement */
           &::before {
-            content: "\f00c"; // FontAwesome Haken-Icon
+            content: "\f00c";
             font-family: "Font Awesome 6 Free";
             font-weight: 900;
             position: absolute;
@@ -259,21 +251,18 @@ export default {
             color: $color-success;
           }
 
-          /* Spezial-Icon für das letzte Feature (Blitz) */
           &:last-child::before {
-            content: "\f0e7"; // FontAwesome Blitz-Icon
+            content: "\f0e7";
             color: $color-warning;
           }
         }
       }
     }
 
-    /* Spezial-Styling für die "beliebteste" Karte */
     & .mostWantedBody {
       background-color: $color-dark-blue;
       color: $color-text-white;
 
-      /* "Beliebt"-Badge auf der hervorgehobenen Karte */
       &::before {
         content: "Beliebt";
         position: absolute;
