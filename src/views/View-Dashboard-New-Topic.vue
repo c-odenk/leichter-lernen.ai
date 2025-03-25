@@ -1,6 +1,7 @@
 <template>
   <div class="view-dashboard-new-topic">
-    <div class="view-dashboard-new-topic_row">
+    <MobileNotice v-if="isMobile" />
+    <div v-else class="view-dashboard-new-topic_row">
       <div class="view-dashboard-new-topic_row_col-1">
         <DashboardSidebar />
       </div>
@@ -13,7 +14,6 @@
               @continue="handleFileUploadComplete"
               @cancel="handleCancel"
             />
-
             <!-- Choose Product Component -->
             <ChooseProduct
               v-if="currentStep === 1"
@@ -21,7 +21,6 @@
               @product-selected="handleProductSelected"
               @cancel="currentStep = 0"
             />
-
             <!-- Pay Product Component -->
             <PayProduct
               v-if="currentStep === 2"
@@ -34,7 +33,6 @@
               @payment-complete="handlePaymentComplete"
               @cancel="currentStep = 1"
             />
-
             <!-- Success Screen -->
             <div v-if="currentStep === 3" class="success-screen">
               <div class="success-icon">
@@ -57,55 +55,102 @@
 </template>
 
 <script>
+import { ref, onMounted, onUnmounted } from "vue";
 import DashboardSidebar from "@/components/dashboard/Dashboard-Sidebar.vue";
 import FileUpload from "@/components/dashboard/Dashboard-File-Upload.vue";
 import ChooseProduct from "@/components/dashboard/Dashboard-Choose-Product.vue";
 import PayProduct from "@/components/dashboard/Dashboard-Pay-Product.vue";
+import MobileNotice from "@/components/mobilenotice/Mobile-Notice.vue";
 
 import { AnalyzedTopic } from "@/assets/AnalyzedTopic.js";
 import { ProductSortiment } from "@/assets/ProductSortiment.js";
 
 export default {
-  name: "ViewDashboard",
+  name: "ViewDashboardNewTopic",
   components: {
     DashboardSidebar,
     FileUpload,
     ChooseProduct,
     PayProduct,
+    MobileNotice,
   },
-  data() {
-    return {
-      AnalyzedTopic,
-      ProductSortiment,
-      currentStep: 0,
-      selectedFile: null,
-      selectedProduct: null,
-      orderNumber: null,
+  setup() {
+    // Reaktive Zustände
+    const isMobile = ref(false);
+    const currentStep = ref(0);
+    const selectedFile = ref(null);
+    const selectedProduct = ref(null);
+    const orderNumber = ref(null);
+
+    // Hilfsfunktionen
+    const checkIfMobile = () => {
+      // Entspricht $breakpoint-smartphone
+      isMobile.value = window.innerWidth <= 767;
     };
-  },
-  methods: {
-    handleFileUploadComplete(file) {
-      this.selectedFile = file;
-      this.currentStep = 1;
-    },
-    handleProductSelected(product) {
-      this.selectedProduct = product;
-      this.currentStep = 2;
-    },
-    handlePaymentComplete(paymentData) {
-      this.orderNumber = paymentData.orderId;
-      this.currentStep = 3;
-    },
-    handleCancel() {
+
+    const handleFileUploadComplete = (file) => {
+      selectedFile.value = file;
+      currentStep.value = 1;
+    };
+
+    const handleProductSelected = (product) => {
+      selectedProduct.value = product;
+      currentStep.value = 2;
+    };
+
+    const handlePaymentComplete = (paymentData) => {
+      orderNumber.value = paymentData.orderId;
+      currentStep.value = 3;
+    };
+
+    const handleCancel = () => {
       // Handle cancel from first step - could redirect or show confirmation
       // For now just stays on the first step
-    },
-    resetProcess() {
-      this.currentStep = 0;
-      this.selectedFile = null;
-      this.selectedProduct = null;
-      this.orderNumber = null;
-    },
+    };
+
+    const resetProcess = () => {
+      currentStep.value = 0;
+      selectedFile.value = null;
+      selectedProduct.value = null;
+      orderNumber.value = null;
+    };
+
+    // Lifecycle-Hooks und Event-Handling
+    onMounted(() => {
+      // Initial prüfen
+      checkIfMobile();
+
+      // Event-Listener hinzufügen mit throttling
+      const resizeHandler = (function () {
+        let timeout;
+        return function () {
+          clearTimeout(timeout);
+          timeout = setTimeout(checkIfMobile, 150);
+        };
+      })();
+
+      window.addEventListener("resize", resizeHandler);
+
+      // Cleanup-Funktion für Component Unmount
+      onUnmounted(() => {
+        window.removeEventListener("resize", resizeHandler);
+      });
+    });
+
+    return {
+      isMobile,
+      currentStep,
+      selectedFile,
+      selectedProduct,
+      orderNumber,
+      ProductSortiment,
+      AnalyzedTopic,
+      handleFileUploadComplete,
+      handleProductSelected,
+      handlePaymentComplete,
+      handleCancel,
+      resetProcess,
+    };
   },
 };
 </script>
@@ -120,6 +165,11 @@ export default {
 }
 
 .view-dashboard-new-topic {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+
   &_row {
     display: flex;
     flex-direction: row;
@@ -156,7 +206,6 @@ export default {
   align-items: center;
   padding: $spacing-md 0;
   min-height: 500px;
-  /* Positioniert die Komponenten etwas näher zur Mitte, aber immer noch leicht darüber */
   margin-top: -5vh;
 }
 
@@ -211,7 +260,6 @@ export default {
   }
 }
 
-// Responsive adjustments
 @include respond(tablet) {
   .view-dashboard-new-topic_row {
     flex-direction: column;
@@ -224,7 +272,7 @@ export default {
 
   .component-container {
     min-height: 400px;
-    margin-top: -4vh; /* Angepasst für Tablets */
+    margin-top: -4vh;
   }
 }
 
@@ -236,7 +284,7 @@ export default {
   .component-container {
     min-height: 350px;
     padding: $spacing-sm 0;
-    margin-top: -2vh; /* Angepasst für Mobilgeräte */
+    margin-top: -2vh;
   }
 }
 </style>

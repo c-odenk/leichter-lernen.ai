@@ -43,6 +43,7 @@ export default {
     }
 
     @include respond(phone) {
+      margin: calc($spacing-lg + 35px) auto calc($spacing-lg + 30px) auto;
     }
 
     & h2 {

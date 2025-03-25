@@ -501,10 +501,8 @@ export default {
 </script>
 
 <style lang="scss">
-/* Import der globalen SCSS-Variablen */
 @import "@/variables/variables.scss";
 
-/* Basis-Styling mit globalen Variablen */
 .login-container {
   width: 100%;
   height: 100%;
@@ -516,8 +514,8 @@ export default {
   background-color: $color-body-background;
 
   @include respond(tablet-only) {
-    padding: $spacing-xs; // Reduziere das Padding auf Tablets
-    background-color: $color-text-white; // Ändere den Hintergrund auf Weiß, um die Ränder zu eliminieren
+    padding: $spacing-sm;
+    background-color: #fff;
   }
 }
 
@@ -531,13 +529,12 @@ export default {
   position: relative;
 
   @include respond(tablet-only) {
-    max-width: 750px; // Erhöhe die maximale Breite für Tablets
-    box-shadow: none; // Entferne den Schatten auf Tablets
-    border-radius: 0; // Entferne die abgerundeten Ecken auf Tablets
+    max-width: 500px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-radius: $border-radius-md;
   }
 }
 
-/* Zurück zur Startseite Link */
 .back-link-container {
   margin-top: calc($spacing-md - 5px);
 }
@@ -561,7 +558,6 @@ export default {
   font-size: 16px;
 }
 
-/* Tabs */
 .tabs {
   display: flex;
   border-bottom: 1px solid #ddd;
@@ -589,12 +585,11 @@ export default {
   background-color: #f9f9f9;
 }
 
-/* Form */
 .form {
   padding: $spacing-lg calc($spacing-lg - 10px);
 
   @include respond(tablet-only) {
-    padding: $spacing-md $spacing-lg; // Angepasstes Padding für Tablets
+    padding: $spacing-md $spacing-lg;
   }
 }
 
@@ -649,7 +644,6 @@ export default {
   box-shadow: 0 0 0 2px rgba($color-light-blue, 0.1);
 }
 
-/* Password Input */
 .password-input {
   position: relative;
 }
@@ -681,7 +675,6 @@ export default {
   line-height: 1;
 }
 
-/* Password Strength */
 .password-strength {
   margin-top: $spacing-xs;
 }
@@ -728,7 +721,6 @@ export default {
   color: $color-success;
 }
 
-/* Password Match */
 .password-match {
   margin-top: $spacing-xs;
   font-size: 12px;
@@ -742,7 +734,6 @@ export default {
   color: $color-danger;
 }
 
-/* Form actions */
 .form-actions {
   display: flex;
   justify-content: space-between;
@@ -750,7 +741,6 @@ export default {
   margin-bottom: $spacing-md;
 }
 
-/* Checkbox */
 .checkbox-wrapper {
   display: flex;
   align-items: center;
@@ -770,21 +760,18 @@ export default {
   margin: $spacing-md 0;
 }
 
-/* Links */
 .link {
   color: $color-light-blue;
   text-decoration: none;
   transition: color $transition-speed-fast;
-  @include link-hover-effect; /* Verwendet das definierte Link-Hover-Mixin */
+  @include link-hover-effect;
 }
 
-/* Buttons */
 .btn {
   width: 100%;
   padding: $spacing-xs;
   border: none;
   border-radius: $border-radius-sm;
-  // font-size: calc($font-size-p-lg - 3px);
   font-weight: 600;
   cursor: pointer;
   transition: all $transition-speed-medium;
@@ -800,7 +787,7 @@ export default {
 }
 
 .btn-primary {
-  @include primary-button; /* Verwendet das definierte Button-Mixin */
+  @include primary-button;
   font-size: calc($font-size-p-lg - 2px);
 }
 
@@ -828,7 +815,6 @@ export default {
   font-weight: bold;
 }
 
-/* Loading spinner */
 .loading-spinner {
   display: inline-block;
   width: 16px;
@@ -849,7 +835,6 @@ export default {
   }
 }
 
-/* Divider */
 .divider {
   position: relative;
   margin: $spacing-md 0;
@@ -874,7 +859,6 @@ export default {
   }
 }
 
-/* Error message */
 .error-message {
   margin-top: $spacing-sm;
   padding: $spacing-xs;
@@ -885,7 +869,6 @@ export default {
   text-align: center;
 }
 
-/* Responsive Design mit den definierten Breakpoints */
 @include respond(phone) {
   .form {
     padding: $spacing-md;

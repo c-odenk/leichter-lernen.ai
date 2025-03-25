@@ -75,19 +75,6 @@ export default {
 
   &__container {
     @include content-container;
-    // padding: 0 $spacing-md $spacing-md;
-
-    @include respond(laptop) {
-      // padding: 0 $spacing-md $spacing-md;
-    }
-
-    @include respond(tablet) {
-      // padding: 0 $spacing-sm $spacing-md;
-    }
-
-    @include respond(phone) {
-      // padding: 0 $spacing-xs $spacing-sm;
-    }
   }
 
   &__main {
@@ -156,7 +143,7 @@ export default {
 
   &__social-icon {
     color: $color-text-white;
-    font-size: calc($font-size-p-xl + 1px);
+    font-size: calc($font-size-p-xl + 3px);
     transition: color $transition-speed-medium $transition-timing,
       transform $transition-speed-medium $transition-timing;
 

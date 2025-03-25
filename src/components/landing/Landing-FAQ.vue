@@ -2,7 +2,7 @@
   <div class="landing-faq">
     <div class="landing-faq_row">
       <div class="landing-faq_col-1">
-        <h2>🔍 {{ heading }}</h2>
+        <h2>{{ heading }}</h2>
         <p>{{ subheading }}</p>
       </div>
       <div class="landing-faq_col-2">

@@ -89,7 +89,7 @@ export default {
       }
 
       @include respond(phone) {
-        font-size: 32px;
+        font-size: 26px;
       }
     }
 

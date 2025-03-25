@@ -53,7 +53,7 @@ export default {
 
     @include respond(phone) {
       margin: -20px auto $spacing-sm auto;
-      padding: calc($spacing-md + 10px) $spacing-md calc($spacing-md + 15px)
+      padding: calc($spacing-md + 20px) $spacing-md calc($spacing-md + 25px)
         $spacing-md;
     }
 
@@ -82,11 +82,13 @@ export default {
 
       @include respond(tablet) {
         font-size: $font-size-h2-md;
+        text-align: left;
       }
 
       @include respond(phone) {
         font-size: $font-size-h2-sm;
         margin: 0 0 $spacing-sm 0;
+        text-align: center;
       }
     }
 
@@ -106,10 +108,12 @@ export default {
 
       @include respond(tablet) {
         font-size: $font-size-p-md;
+        text-align: left;
       }
 
       @include respond(phone) {
         font-size: $font-size-p-sm;
+        text-align: center;
       }
     }
   }
