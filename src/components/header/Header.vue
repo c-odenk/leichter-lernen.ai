@@ -127,7 +127,8 @@ export default {
   },
   created() {
     // Logo URL vorbereiten
-    this.logoSrc = require("@/assets/leichter-lernen-logo.png");
+    // this.logoSrc = require("@/assets/leichter-lernen-logo.png");
+    this.logoSrc = require("@/assets/logo-2.png");
   },
   mounted() {
     // Bild im Hintergrund vorladen
@@ -257,21 +258,21 @@ export default {
         transition: color $transition-speed-medium $transition-timing;
 
         img {
-          height: 100px;
+          height: 80px;
           width: auto;
           display: block;
 
           @include respond(tablet) {
-            height: 70px;
+            height: 60px;
           }
 
           @include respond(phone) {
-            height: 55px;
+            height: 45px;
           }
         }
 
         h2 {
-          margin-left: $spacing-sm;
+          margin-left: 5px;
           font-size: 25px;
           line-height: $line-height;
           letter-spacing: $letter-spacing;
@@ -284,7 +285,7 @@ export default {
 
           @include respond(phone) {
             font-size: 18px;
-            margin-left: $spacing-xs;
+            // margin-left: $spacing-md;
           }
         }
       }
