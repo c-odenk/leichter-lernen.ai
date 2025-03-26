@@ -41,7 +41,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/variables/Variables.scss";
+@use "../../variables/variables.scss" as *;
 
 .blog-post-prev {
   margin: 0 0 $spacing-lg 0;

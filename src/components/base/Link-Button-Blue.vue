@@ -50,7 +50,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/variables/variables.scss";
+@use "../../variables/variables.scss" as *;
 
 .link-button-blue {
   // Basisstil aus dem ursprünglichen primary-button mixin

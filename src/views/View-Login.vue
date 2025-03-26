@@ -97,7 +97,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/variables/Variables.scss";
+@use "../variables/variables.scss" as *;
 
 // Haupt-Container
 .view-login {

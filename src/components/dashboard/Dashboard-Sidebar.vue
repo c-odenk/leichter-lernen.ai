@@ -158,7 +158,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/variables/variables.scss";
+@use "../../variables/variables.scss" as *;
 
 *,
 *::before,

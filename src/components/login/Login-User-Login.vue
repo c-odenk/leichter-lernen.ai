@@ -510,7 +510,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/variables/variables.scss";
+@use "../../variables/variables.scss" as *;
 
 .login-container {
   width: 100%;

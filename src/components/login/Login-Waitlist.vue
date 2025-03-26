@@ -160,7 +160,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/variables/variables.scss";
+@use "../../variables/variables.scss" as *;
 
 // Basis-Styling
 .login-waitlist {

@@ -98,7 +98,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/variables/Variables.scss";
+@use "../variables/variables.scss" as *;
 
 .view-dashboard {
   position: relative;

@@ -111,8 +111,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/variables/variables.scss";
-
+@use "../../variables/variables.scss" as *;
 .benefits {
   width: 100%;
   margin: calc($spacing-lg + 50px) 0;
