@@ -159,7 +159,7 @@ export default {
       @include respond(tablet) {
         min-width: 280px;
         max-width: 500px;
-        width: 65%;
+        width: 60%;
         flex: 0 0 auto;
       }
 
@@ -195,7 +195,7 @@ export default {
           min-height: 95px;
 
           @include respond(tablet) {
-            min-height: 60px;
+            min-height: 67px;
           }
 
           @include respond(phone) {

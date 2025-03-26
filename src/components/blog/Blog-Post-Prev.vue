@@ -52,8 +52,8 @@ export default {
   transition: box-shadow $transition-speed-medium $transition-timing;
 
   @include respond(tablet) {
-    margin: 0 0 $spacing-md 0;
-    padding: 0 0 $spacing-xs 0;
+    margin: 0 0 $spacing-lg 0;
+    padding: 0 0 $spacing-md 0;
   }
 
   @include respond(phone) {
@@ -76,7 +76,7 @@ export default {
     }
 
     @include respond(tablet) {
-      padding-bottom: 51%; /* Angepasstes Verhältnis für Tablet */
+      padding-bottom: 45%; /* Angepasstes Verhältnis für Tablet */
     }
   }
 
@@ -121,7 +121,7 @@ export default {
     }
 
     @include respond(tablet) {
-      padding: $spacing-md $spacing-md 0 $spacing-md;
+      padding: $spacing-lg $spacing-md 0 $spacing-md;
       font-size: $font-size-h2-md;
       margin-top: 0; /* Keine zusätzliche Anpassung nötig bei 51% */
     }

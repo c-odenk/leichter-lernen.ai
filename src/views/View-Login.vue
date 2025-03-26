@@ -5,10 +5,13 @@
 
     <!-- Desktop/Tablet-Ansicht -->
     <div v-else class="desktop-view" :class="{ 'tablet-view': isTablet }">
-      <div class="left-panel" v-if="!isTablet">
+      <!-- Wallpaper-Komponente wird nun immer angezeigt, auch im Tablet-Modus -->
+      <div class="left-panel" :class="{ 'full-width': isTablet }">
         <LoginWallpaper />
       </div>
-      <div class="right-panel" :class="{ 'full-width': isTablet }">
+
+      <!-- Login-Panel mit zusätzlicher Klasse für Tablet-Modus -->
+      <div class="right-panel" :class="{ 'overlay-panel': isTablet }">
         <LoginUserLogin />
       </div>
     </div>
@@ -111,8 +114,8 @@ export default {
   height: 100%;
 
   &.tablet-view {
-    // Spezifische Anpassungen für Tablet-Ansicht
-    justify-content: center;
+    // Im Tablet-Modus nutzen wir eine andere Positionierungsstrategie
+    position: relative;
   }
 }
 
@@ -120,6 +123,14 @@ export default {
 .left-panel {
   width: 50%;
   height: 100vh;
+
+  &.full-width {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+  }
 }
 
 // Rechte Spalte (Login)
@@ -128,10 +139,17 @@ export default {
   height: 100vh;
   position: relative;
 
-  &.full-width {
+  &.overlay-panel {
+    position: absolute;
     width: 100%;
-    max-width: 700px;
-    margin: 0 auto;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
   }
 }
 
@@ -140,17 +158,8 @@ export default {
   display: none;
 }
 
-// Mediaqueries nutzen, um das Verhalten zusätzlich über CSS zu steuern
-// Dies ist eine alternative Methode zur Vue-basierten Anzeigenlogik
+// Mediaqueries für zusätzliche CSS-basierte Anpassungen
 @include respond(tablet-only) {
-  .left-panel {
-    display: none;
-  }
-
-  .right-panel {
-    width: 100%;
-    max-width: 700px;
-    margin: 0 auto;
-  }
+  // Anpassungen werden jetzt hauptsächlich über die Vue-Klassen gesteuert
 }
 </style>

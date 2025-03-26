@@ -1,5 +1,5 @@
 <template>
-  <div class="login-container">
+  <div class="login-container" :class="{ 'tablet-mode': isTablet }">
     <div class="form-container">
       <div class="tabs">
         <button
@@ -249,11 +249,30 @@
 </template>
 
 <script>
-import { ref, computed, reactive } from "vue";
+import { ref, computed, reactive, onMounted, onUnmounted } from "vue";
 
 export default {
   name: "LoginUserSection",
   setup() {
+    // Prüfen, ob Tablet-Ansicht (für angepasste Darstellung)
+    const isTablet = ref(false);
+
+    // Beim Mounten der Komponente prüfen, ob Tablet-Ansicht
+    const checkDevice = () => {
+      const width = window.innerWidth;
+      isTablet.value = width > 767 && width <= 1024; // Zwischen smartphone und laptop
+    };
+
+    // Initial und bei Resize prüfen
+    onMounted(() => {
+      checkDevice();
+      window.addEventListener("resize", checkDevice);
+    });
+
+    onUnmounted(() => {
+      window.removeEventListener("resize", checkDevice);
+    });
+
     // Lokaler Auth-Service (als Ersatz für den fehlenden externen Service)
     const authService = {
       // Diese Funktionen werden später mit der tatsächlichen API-Integration ersetzt
@@ -463,17 +482,8 @@ export default {
       // Hier würde normalerweise die Passwort-Zurücksetzen-Funktion implementiert werden
     };
 
-    const showTerms = () => {
-      console.log("Show terms");
-      // Hier würden die Nutzungsbedingungen angezeigt werden
-    };
-
-    const showPrivacy = () => {
-      console.log("Show privacy policy");
-      // Hier würde die Datenschutzrichtlinie angezeigt werden
-    };
-
     return {
+      isTablet,
       activeTab,
       isLoading,
       loginForm,
@@ -491,10 +501,9 @@ export default {
       login,
       register,
       loginWithGoogle,
-
       forgotPassword,
-      showTerms,
-      showPrivacy,
+      // showTerms,
+      // showPrivacy,
     };
   },
 };
@@ -513,9 +522,22 @@ export default {
   box-sizing: border-box;
   background-color: $color-body-background;
 
+  &.tablet-mode {
+    background-color: transparent;
+    align-items: flex-start;
+    padding-top: 17.5vh;
+
+    .form-container {
+      background-color: $color-text-white;
+      max-width: 450px;
+      border-radius: $border-radius-lg;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    }
+  }
+
   @include respond(tablet-only) {
     padding: $spacing-sm;
-    background-color: #fff;
+    background-color: transparent;
   }
 }
 
@@ -530,7 +552,7 @@ export default {
 
   @include respond(tablet-only) {
     max-width: 500px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     border-radius: $border-radius-md;
   }
 }
@@ -852,7 +874,9 @@ export default {
 
   span {
     position: relative;
-    background-color: white;
+    // Background-color an den Hintergrund des Form-Containers anpassen
+    // Damit wird verhindert, dass es anders aussieht als der Rest
+    background-color: $color-text-white;
     padding: 0 $spacing-xs;
     color: #777;
     font-size: 14px;

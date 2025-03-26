@@ -1,4 +1,3 @@
-<!-- Link-Button-Blue.vue -->
 <template>
   <router-link
     :to="disabled ? '#' : to"

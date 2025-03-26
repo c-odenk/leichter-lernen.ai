@@ -11,27 +11,6 @@ $width-modal-desktop: 38vw;
 $width-modal-laptop: 62vw;
 
 /* ==========================================================================
-  LAYOUT UTILITIES
-========================================================================== */
-
-@mixin content-container {
-  width: $width-desktop;
-  margin: 0 auto;
-
-  @include respond(laptop) {
-    width: $width-laptop;
-  }
-
-  @include respond(tablet) {
-    width: $width-tablet;
-  }
-
-  @include respond(phone) {
-    width: $width-phone;
-  }
-}
-
-/* ==========================================================================
   BREAKPOINTS VARIABLES
 ========================================================================== */
 
@@ -67,6 +46,27 @@ $breakpoint-laptop: 1550px;
     @media (max-width: $breakpoint-tablet) and (min-width: $breakpoint-smartphone + 1px) {
       @content;
     }
+  }
+}
+
+/* ==========================================================================
+  LAYOUT UTILITIES
+========================================================================== */
+
+@mixin content-container {
+  width: $width-desktop;
+  margin: 0 auto;
+
+  @include respond(laptop) {
+    width: $width-laptop;
+  }
+
+  @include respond(tablet) {
+    width: $width-tablet;
+  }
+
+  @include respond(phone) {
+    width: $width-phone;
   }
 }
 

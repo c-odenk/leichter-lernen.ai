@@ -47,7 +47,7 @@ export default {
     }
 
     @include respond(tablet) {
-      padding: $spacing-lg $spacing-md;
+      padding: calc($spacing-lg + 20px) $spacing-md;
       margin: $spacing-md auto;
     }
 

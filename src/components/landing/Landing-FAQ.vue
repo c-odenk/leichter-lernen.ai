@@ -169,7 +169,7 @@ export default {
 
       @include respond(tablet) {
         font-size: $font-size-h2-md;
-        text-align: center;
+        // text-align: center;
       }
 
       @include respond(phone) {
@@ -193,7 +193,7 @@ export default {
       @include respond(tablet) {
         width: 80%;
         font-size: $font-size-p-md;
-        text-align: center;
+        // text-align: center;
       }
 
       @include respond(phone) {
