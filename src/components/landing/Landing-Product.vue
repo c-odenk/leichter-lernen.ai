@@ -17,6 +17,10 @@ export default {
   width: 100%;
   margin: calc($spacing-lg + 50px) 0;
 
+  @include respond(laptop) {
+    margin: 10px 0 $spacing-md 0;
+  }
+
   @include respond(tablet) {
     margin: $spacing-md 0;
   }
@@ -32,7 +36,7 @@ export default {
     border-radius: 15px;
 
     @include respond(laptop) {
-      height: 400px;
+      height: 500px;
     }
 
     @include respond(tablet) {
