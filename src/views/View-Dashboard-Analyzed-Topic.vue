@@ -104,7 +104,7 @@ export default {
   position: relative;
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
+  /* Remove overflow: hidden to allow scrolling */
 
   &_row {
     display: flex;
@@ -114,10 +114,13 @@ export default {
 
     &_col-1 {
       background-color: $color-dark-blue;
+      /* No changes needed here because your sidebar already has position: sticky */
     }
 
     &_col-2 {
       flex: 1;
+      overflow-y: auto; /* Enable scrolling for content column */
+      height: 100vh; /* Ensure full height */
     }
   }
 }
