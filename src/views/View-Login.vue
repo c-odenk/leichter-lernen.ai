@@ -11,27 +11,32 @@
       </div>
 
       <!-- Login-Panel mit zusätzlicher Klasse für Tablet-Modus -->
-      <div class="right-panel" :class="{ 'overlay-panel': isTablet }">
+      <div
+        v-if="!showWaitlist"
+        class="right-panel"
+        :class="{ 'overlay-panel': isTablet }"
+      >
         <LoginUserLogin />
       </div>
-    </div>
 
-    <!-- 
-      Waitlist-Komponente - wird nur geladen, nicht angezeigt
-      Später mit v-if="showWaitlist" steuerbar machen
-    -->
-    <Suspense>
-      <template #default>
-        <component
-          :is="LoginWaitlist"
-          v-if="false"
-          class="waitlist-component"
-        />
-      </template>
-      <template #fallback>
-        <!-- Fallback während des Ladens, leer da nicht angezeigt -->
-      </template>
-    </Suspense>
+      <!-- Waitlist-Komponente - wird basierend auf showWaitlist angezeigt -->
+      <div
+        v-if="showWaitlist"
+        class="right-panel"
+        :class="{ 'overlay-panel': isTablet }"
+      >
+        <Suspense>
+          <template #default>
+            <component :is="LoginWaitlist" class="waitlist-component" />
+          </template>
+          <template #fallback>
+            <div class="loading-fallback">
+              <p>Wird geladen...</p>
+            </div>
+          </template>
+        </Suspense>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -57,6 +62,7 @@ export default {
     // Reaktive Zustände
     const isMobile = ref(false);
     const isTablet = ref(false);
+    const showWaitlist = ref(true); // Schalter zur Steuerung der Waitlist-Anzeige
 
     // Hilfsfunktionen
     const checkDevice = () => {
@@ -90,6 +96,7 @@ export default {
     return {
       isMobile,
       isTablet,
+      showWaitlist, // Schalter für Waitlist-Anzeige
       LoginWaitlist, // Komponente an das Template übergeben
     };
   },
@@ -133,7 +140,7 @@ export default {
   }
 }
 
-// Rechte Spalte (Login)
+// Rechte Spalte (Login oder Waitlist)
 .right-panel {
   width: 50%;
   height: 100vh;
@@ -153,9 +160,24 @@ export default {
   }
 }
 
-// Waitlist (initial versteckt)
+// Waitlist-Komponente
 .waitlist-component {
-  display: none;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// Fallback während des Ladens
+.loading-fallback {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: $font-size-p-xl;
+  color: $color-dark-blue;
 }
 
 // Mediaqueries für zusätzliche CSS-basierte Anpassungen

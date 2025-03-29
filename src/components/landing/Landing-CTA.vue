@@ -32,7 +32,7 @@ export default {
 
 .landing-cta {
   width: 100%;
-  margin: calc($spacing-lg + 0px) 0;
+  margin: calc($spacing-lg + 50px) 0;
 
   @include respond(laptop) {
     margin: calc($spacing-lg + 25px) 0;

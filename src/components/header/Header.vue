@@ -29,19 +29,21 @@
         <nav class="header_row_navigation desktop-nav">
           <ul>
             <li>
-              <router-link to="/"> Home</router-link>
+              <router-link to="/" class="nav-link"> Home</router-link>
             </li>
             <li>
               <router-link
                 to=""
                 @click="handleDisabledClick"
-                class="disabled-link"
+                class="disabled-link nav-link"
               >
                 ✨ Produkt</router-link
               >
             </li>
-            <li><router-link to="/pricing">Preise</router-link></li>
-            <li><router-link to="/blog">Blog</router-link></li>
+            <li>
+              <router-link to="/pricing" class="nav-link">Preise</router-link>
+            </li>
+            <li><router-link to="/blog" class="nav-link">Blog</router-link></li>
           </ul>
         </nav>
 
@@ -335,6 +337,15 @@ export default {
             &.disabled-link {
               cursor: not-allowed;
               opacity: 0.7;
+            }
+
+            // Neuer Hover-Effekt für die Navigationslinks (nur für Desktop und Laptop)
+            &.nav-link {
+              @media (min-width: 1025px) {
+                &:hover {
+                  color: $color-light-blue;
+                }
+              }
             }
           }
         }

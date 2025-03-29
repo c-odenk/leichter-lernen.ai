@@ -1,5 +1,5 @@
 <template>
-  <div class="login-waitlist">
+  <div class="login-waitlist" :class="{ 'tablet-mode': isTablet }">
     <div class="form-container">
       <div class="waitlist-header">
         <h2>Trage dich in unsere Warteliste ein</h2>
@@ -7,8 +7,8 @@
 
       <form @submit.prevent="submitWaitlist" class="form">
         <p class="waitlist-description">
-          Unsere KI-Modelle befinden sich derzeit in der Entwicklung. Trage
-          deine E-Mail ein, um benachrichtigt zu werden, sobald wir starten.
+          Unsere KI-Modelle befinden sich derzeit im Training. Trage deine
+          E-Mail ein, um benachrichtigt zu werden, sobald wir starten.
         </p>
 
         <div class="form-group">
@@ -67,8 +67,7 @@
 
         <div
           v-if="formStatus.message"
-          class="status-message"
-          :class="formStatus.type"
+          :class="['status-message', formStatus.type]"
           role="alert"
         >
           {{ formStatus.message }}
@@ -83,6 +82,12 @@ import { ref, computed, reactive } from "vue";
 
 export default {
   name: "LoginWaitlistSection",
+  props: {
+    isTablet: {
+      type: Boolean,
+      default: false,
+    },
+  },
   setup() {
     // Lokaler Waitlist-Service
     const waitlistService = {
@@ -162,17 +167,37 @@ export default {
 <style lang="scss">
 @use "../../variables/variables.scss" as *;
 
-// Basis-Styling
+// Basis-Styling, angepasst an Login-Komponente
 .login-waitlist {
   width: 100%;
   height: 100%;
-  @include flex-center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: $spacing-md;
   box-sizing: border-box;
   background-color: $color-body-background;
+
+  &.tablet-mode {
+    background-color: transparent;
+    align-items: flex-start;
+    padding-top: 17.5vh;
+
+    .form-container {
+      background-color: $color-text-white;
+      max-width: 450px;
+      border-radius: $border-radius-lg;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  @include respond(tablet-only) {
+    padding: $spacing-sm;
+    background-color: transparent;
+  }
 }
 
-// Formularbehälter
+// Formularbehälter - angepasst an den Login-Style
 .form-container {
   width: 100%;
   max-width: 500px;
@@ -181,53 +206,75 @@ export default {
   box-shadow: $shadow-lg;
   overflow: hidden;
   position: relative;
+
+  @include respond(tablet-only) {
+    max-width: 460px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border-radius: $border-radius-md;
+  }
 }
 
-// Waitlist Header
+// Waitlist Header - angepasst an das Styling des Login-Headers
 .waitlist-header {
-  padding: $spacing-lg $spacing-lg $spacing-sm $spacing-lg;
+  padding: $spacing-md $spacing-lg $spacing-sm $spacing-lg;
   text-align: center;
+  border-bottom: 1px solid #ddd;
 
   h2 {
     color: $color-dark-blue;
     font-size: $font-size-h2-lg;
     margin: 0;
-    font-weight: 600;
+    font-weight: 700;
     line-height: 1.3;
+
+    @include respond(phone) {
+      font-size: $font-size-h2-sm;
+    }
   }
 }
 
-// Beschreibungstext
+// Beschreibungstext - angepasst
 .waitlist-description {
   margin-bottom: $spacing-md;
   color: $color-text-dark;
   text-align: center;
   line-height: 1.5;
   font-size: calc($font-size-p-lg - 2px);
+
+  @include respond(phone) {
+    font-size: $font-size-p-sm;
+  }
 }
 
-// Form
+// Form - angepasst an den Login-Style
 .form {
   padding: $spacing-lg calc($spacing-lg - 10px);
+
+  @include respond(tablet-only) {
+    padding: $spacing-md $spacing-lg;
+  }
+
+  @include respond(phone) {
+    padding: $spacing-md;
+  }
 
   &-group {
     margin-bottom: $spacing-md;
 
     label {
       display: block;
-      margin-bottom: $spacing-xs;
+      margin-bottom: $spacing-xs / 2;
       font-weight: 500;
       color: $color-text-dark;
-      font-size: 16px;
     }
 
     input[type="email"] {
       width: 100%;
-      padding: 12px;
-      border: 1px solid rgba($color-dark-blue, 0.2);
+      padding: 10px;
+      border: 1px solid #ddd;
       border-radius: $border-radius-sm;
-      font-size: 16px;
-      transition: all $transition-speed-medium;
+      font-size: calc($font-size-p-lg - 3px);
+      transition: border-color $transition-speed-medium;
       box-sizing: border-box;
 
       &:focus {
@@ -239,7 +286,7 @@ export default {
   }
 }
 
-// Checkbox
+// Checkbox - angepasst
 .checkbox-wrapper {
   display: flex;
   align-items: flex-start;
@@ -262,17 +309,18 @@ export default {
   margin: $spacing-md 0 $spacing-lg;
 }
 
-// Links
+// Links - angepasst
 .link {
   color: $color-light-blue;
   text-decoration: none;
+  transition: color $transition-speed-fast;
   @include link-hover-effect;
   font-weight: 500;
 }
 
-// Zurück-Link
+// Zurück-Link - angepasst an den Login-Style
 .back-link-container {
-  margin-top: $spacing-md;
+  margin-top: calc($spacing-md - 5px);
   text-align: center;
 }
 
@@ -286,22 +334,23 @@ export default {
   transition: color $transition-speed-fast;
 
   &:hover {
-    color: $color-light-blue-darker;
+    color: darken($color-light-blue, 15%);
   }
 }
 
-// Buttons
+// Buttons - angepasst an den Login-Style
 .btn {
   width: 100%;
-  padding: $spacing-xs $spacing-md;
+  padding: $spacing-xs;
   border: none;
-  border-radius: $border-radius-md;
-  font-size: 16px;
+  border-radius: $border-radius-sm;
   font-weight: 600;
   cursor: pointer;
   transition: all $transition-speed-medium;
   position: relative;
-  @include flex-center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &:disabled {
     opacity: 0.6;
@@ -310,17 +359,22 @@ export default {
 
   &-primary {
     @include primary-button;
+    font-size: calc($font-size-p-lg - 2px);
+
+    @include respond(phone) {
+      font-size: $font-size-p-sm;
+    }
   }
 }
 
-// Loading-Spinner
+// Loading-Spinner - angepasst
 .loading-spinner {
   display: inline-block;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: $border-radius-round;
-  border-top-color: $color-text-white;
+  border-top-color: #fff;
   animation: spin 1s infinite linear;
   margin-right: $spacing-xs;
 }
@@ -334,10 +388,10 @@ export default {
   }
 }
 
-// Status-Nachricht
+// Status-Nachricht - angepasst an den Login-Style
 .status-message {
-  margin-top: $spacing-md;
-  padding: $spacing-sm;
+  margin-top: $spacing-sm;
+  padding: $spacing-xs;
   border-radius: $border-radius-sm;
   font-size: 14px;
   text-align: center;
@@ -350,29 +404,6 @@ export default {
   &.error {
     background-color: rgba($color-danger, 0.1);
     color: $color-danger;
-  }
-}
-
-// Responsive Design
-@include respond(phone) {
-  .form {
-    padding: $spacing-md;
-  }
-
-  .waitlist-header {
-    padding: $spacing-md $spacing-md $spacing-sm $spacing-md;
-
-    h2 {
-      font-size: $font-size-h2-sm;
-    }
-  }
-
-  .waitlist-description {
-    font-size: $font-size-p-sm;
-  }
-
-  .btn {
-    font-size: $font-size-p-sm;
   }
 }
 </style>
