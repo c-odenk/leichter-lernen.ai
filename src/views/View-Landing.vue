@@ -73,31 +73,37 @@ export default {
       isDesktop.value = window.innerWidth > 1440;
     };
 
-    // Prüft, ob die Product-Komponente animiert werden soll
-    const shouldAnimateProduct = () => {
-      return isTablet.value || isDesktop.value;
+    // Bestimmt, ob eine Komponente animiert werden soll
+    const shouldAnimateSection = (key) => {
+      // Auf Smartphones nur die Hero-Komponente animieren
+      if (isSmartphone.value) {
+        return key === "hero";
+      }
+
+      // Für andere Geräte: Hero und Product (wenn es nicht Smartphone und nicht Laptop ist)
+      if (key === "hero") {
+        return true;
+      }
+
+      if (key === "product") {
+        return isTablet.value || isDesktop.value;
+      }
+
+      return false;
     };
 
-    const getAnimationClass = (key, index) => {
-      // Wenn es die Product-Komponente ist und sie KEINE Animation haben soll (Smartphone oder Laptop)
-      if (key === "product" && !shouldAnimateProduct()) {
+    const getAnimationClass = (key) => {
+      // Entscheiden, ob diese Sektion animiert werden soll
+      if (!shouldAnimateSection(key)) {
         return "static-visible";
       }
 
-      // Für die ersten zwei Komponenten (Hero und Product) mit Animationen
-      if (index < 2) {
-        return {
-          "fade-in": visibleSections.value[key],
-          "slide-in-left": key === "hero" && visibleSections.value[key],
-          "slide-in-right delay":
-            key === "product" &&
-            shouldAnimateProduct() &&
-            visibleSections.value[key],
-        };
-      } else {
-        // Für alle anderen Komponenten
-        return "static-visible";
-      }
+      // Animations-Klassen für animierte Sektionen
+      return {
+        "fade-in": visibleSections.value[key],
+        "slide-in-left": key === "hero" && visibleSections.value[key],
+        "slide-in-right delay": key === "product" && visibleSections.value[key],
+      };
     };
 
     onMounted(() => {
@@ -110,33 +116,30 @@ export default {
       nextTick(() => {
         const observer = new IntersectionObserver(
           (entries) => {
-            entries.forEach((entry, index) => {
-              setTimeout(() => {
-                if (!entry.isIntersecting) return;
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
 
-                const key = entry.target.getAttribute("data-key");
+              const key = entry.target.getAttribute("data-key");
 
-                // Wenn es die Product-Komponente ist und sie KEINE Animation haben soll
-                if (key === "product" && !shouldAnimateProduct()) {
-                  entry.target.classList.add("static-visible");
-                } else if (index >= 2) {
-                  entry.target.classList.add("static-visible");
-                } else {
-                  visibleSections.value[key] = true;
-                }
-              }, index * 300 || 0);
+              // Wenn die Sektion nicht animiert werden soll, direkt als sichtbar markieren
+              if (!shouldAnimateSection(key)) {
+                entry.target.classList.add("static-visible");
+              } else {
+                // Sonst für Animation vorbereiten
+                visibleSections.value[key] = true;
+              }
             });
           },
           { threshold: 0.3 }
         );
 
-        Object.entries(sectionRefs.value).forEach(([key, el], index) => {
+        Object.entries(sectionRefs.value).forEach(([key, el]) => {
           if (el) {
             el.setAttribute("data-key", key);
             observer.observe(el);
 
-            // Product-Komponente sofort sichtbar machen, wenn sie keine Animation haben soll
-            if (index >= 2 || (key === "product" && !shouldAnimateProduct())) {
+            // Nicht-animierte Sektionen sofort sichtbar machen
+            if (!shouldAnimateSection(key)) {
               el.classList.add("static-visible");
             }
           }
