@@ -38,7 +38,7 @@ export default {
   margin: calc($spacing-lg + 75px) auto;
 
   @include respond(laptop) {
-    margin: calc($spacing-xl - 30px) 0;
+    margin: calc($spacing-xl - 30px) 0 $spacing-lg 0;
   }
 
   @include respond(tablet) {

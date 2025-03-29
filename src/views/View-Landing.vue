@@ -22,7 +22,7 @@ import { ref, onMounted, nextTick } from "vue";
 import Header from "@/components/header/Header.vue";
 import Footer from "@/components/footer/Footer.vue";
 import LandingHero from "@/components/landing/Landing-Hero.vue";
-import LandingProduct from "@/components/landing/Landing-Product.vue";
+// import LandingProduct from "@/components/landing/Landing-Product.vue";
 import LandingBenefits from "@/components/landing/Landing-Benefits.vue";
 import LandingTestimonials from "@/components/landing/Landing-Testimonials.vue";
 import LandingQA from "@/components/landing/Landing-FAQ.vue";
@@ -34,7 +34,7 @@ export default {
     Header,
     Footer,
     LandingHero,
-    LandingProduct,
+    // LandingProduct,
     LandingBenefits,
     LandingTestimonials,
     LandingQA,
@@ -43,7 +43,7 @@ export default {
   setup() {
     const sections = ref([
       { key: "hero", component: LandingHero },
-      { key: "product", component: LandingProduct },
+      // { key: "product", component: LandingProduct },
       { key: "benefits", component: LandingBenefits },
       { key: "testimonials", component: LandingTestimonials },
       { key: "cta", component: LandingCTA },

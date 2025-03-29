@@ -261,9 +261,16 @@ export default {
           height: 80px;
           width: auto;
           display: block;
+          margin: 0 0 0 -25px;
+
+          @include respond(laptop) {
+            height: 70px;
+            margin: 0 0 0 -15px;
+          }
 
           @include respond(tablet) {
             height: 60px;
+            margin: 0;
           }
 
           @include respond(phone) {
