@@ -5,11 +5,16 @@
       <p>{{ subheading }}</p>
     </div>
 
-    <div class="benefits__grid">
+    <div
+      class="benefits__grid"
+      :class="{ 'snap-scroll': isMobile }"
+      ref="benefitsGrid"
+    >
       <div
         v-for="(benefit, index) in benefits"
         :key="index"
         class="benefits__card"
+        :class="{ 'snap-item': isMobile }"
         :style="{ backgroundImage: `url(${benefit.image})` }"
       >
         <div class="benefits__content">
@@ -25,7 +30,8 @@
         v-for="(benefit, index) in benefits"
         :key="index"
         class="scroll-dot"
-        :class="{ active: index === 0 }"
+        :class="{ active: index === activeIndex }"
+        @click="scrollToBenefit(index)"
       ></div>
     </div>
   </section>
@@ -65,46 +71,114 @@ export default {
           image: require("@/assets/tutoring.jpg"),
         },
       ],
+      activeIndex: 0,
+      isMobile: false,
+      isTablet: false,
     };
   },
 
   mounted() {
+    // Viewport-Größe prüfen
+    this.checkViewport();
+
     // Nach dem Mounting der Komponente Scroll-Indikatoren initialisieren
     this.initScrollIndicators();
+
+    // Event-Listener für Resize-Events hinzufügen
+    window.addEventListener("resize", this.handleResize);
+  },
+
+  beforeUnmount() {
+    // Event-Listener beim Unmount entfernen
+    window.removeEventListener("resize", this.handleResize);
   },
 
   methods: {
-    initScrollIndicators() {
-      // Nur für Tablet- und Phone-Ansicht: Initialisiere Scroll-Indikatoren
-      const isTabletOrPhone = window.matchMedia("(max-width: 1024px)").matches;
+    // Prüft die Viewport-Größe und setzt entsprechende Flags
+    checkViewport() {
+      const width = window.innerWidth;
+      this.isMobile = width < 768;
+      this.isTablet = width >= 768 && width < 1024;
+    },
 
-      if (isTabletOrPhone) {
-        const container = this.$el.querySelector(".benefits__grid");
-        const dots = this.$el.querySelectorAll(".scroll-dot");
+    // Behandelt Resize-Events mit Debounce
+    handleResize() {
+      clearTimeout(this.resizeTimer);
+      this.resizeTimer = setTimeout(() => {
+        // Aktuelle Zustände speichern
+        const wasMobile = this.isMobile;
+        const wasTablet = this.isTablet;
 
-        if (container && dots.length) {
-          // Initial ersten Dot aktivieren
-          dots[0].classList.add("active");
+        // Viewport überprüfen
+        this.checkViewport();
 
-          container.addEventListener("scroll", () => {
-            // Berechne den Fortschritt des Scrollens
-            const scrollPosition = container.scrollLeft;
-            const totalWidth = container.scrollWidth;
-            const viewportWidth = container.clientWidth;
-
-            // Berechne, welche Karte gerade am sichtbarsten ist
-            const activeIndex = Math.round(
-              (scrollPosition / (totalWidth - viewportWidth)) *
-                (dots.length - 1)
-            );
-
-            // Setze die aktive Klasse auf den entsprechenden Indikator
-            dots.forEach((dot, index) => {
-              dot.classList.toggle("active", index === activeIndex);
-            });
-          });
+        // Prüfen, ob sich etwas geändert hat
+        if (wasMobile !== this.isMobile || wasTablet !== this.isTablet) {
+          this.initScrollIndicators();
         }
+      }, 200);
+    },
+
+    // Scrollt zu einem bestimmten Benefit
+    scrollToBenefit(index) {
+      const container = this.$el.querySelector(".benefits__grid");
+      const cards = this.$el.querySelectorAll(".benefits__card");
+
+      if (container && cards.length > index) {
+        const cardWidth = cards[0].offsetWidth;
+        const gapWidth = this.isMobile ? 16 : 24; // $spacing-sm oder $spacing-md je nach Viewport
+        const scrollPosition = index * (cardWidth + gapWidth);
+
+        container.scrollTo({
+          left: scrollPosition,
+          behavior: "smooth",
+        });
+
+        this.activeIndex = index;
       }
+    },
+
+    initScrollIndicators() {
+      // Nach dem DOM-Update warten
+      this.$nextTick(() => {
+        // Nur für Tablet- und Phone-Ansicht: Initialisiere Scroll-Indikatoren
+        if (this.isMobile || this.isTablet) {
+          const container = this.$el.querySelector(".benefits__grid");
+          const dots = this.$el.querySelectorAll(".scroll-dot");
+          const cards = this.$el.querySelectorAll(".benefits__card");
+
+          if (container && dots.length && cards.length) {
+            // Initial ersten Dot aktivieren
+            this.activeIndex = 0;
+
+            container.addEventListener("scroll", () => {
+              // Berechne den Fortschritt des Scrollens
+              const scrollPosition = container.scrollLeft;
+
+              if (this.isMobile) {
+                // Für Mobile: Berechne, welche Karte am sichtbarsten ist basierend auf Kartenposition
+                const cardWidth = cards[0].offsetWidth + 16; // Kartenbreite + gap
+                const currentCardIndex = Math.round(scrollPosition / cardWidth);
+                this.activeIndex = Math.min(currentCardIndex, cards.length - 1);
+              } else {
+                // Für Tablet: Bisherige Logik beibehalten
+                const totalWidth = container.scrollWidth;
+                const viewportWidth = container.clientWidth;
+                const activeIndex = Math.round(
+                  (scrollPosition / (totalWidth - viewportWidth)) *
+                    (dots.length - 1)
+                );
+                this.activeIndex = activeIndex;
+              }
+
+              // Setze die aktive Klasse auf den entsprechenden Indikator
+              dots.forEach((dot, index) => {
+                dot.classList.toggle("active", index === this.activeIndex);
+              });
+            });
+          }
+        }
+      });
     },
   },
 };
@@ -223,6 +297,12 @@ export default {
       &::-webkit-scrollbar {
         display: none;
       }
+
+      /* Snap-Scrolling nur für Mobile */
+      &.snap-scroll {
+        scroll-snap-type: x mandatory;
+        scroll-padding: 0 16px;
+      }
     }
   }
 
@@ -242,6 +322,11 @@ export default {
     box-shadow: $shadow-md;
     transition: $transition-speed-medium $transition-timing;
     overflow: hidden;
+
+    /* Snap-Item für Mobile View */
+    &.snap-item {
+      scroll-snap-align: center;
+    }
 
     @include respond(laptop) {
       height: 400px;
@@ -371,6 +456,7 @@ export default {
       margin: 0 5px;
       background-color: rgba(0, 0, 0, 0.2);
       transition: background-color 0.3s ease, transform 0.2s ease;
+      cursor: pointer; /* Zeigt an, dass die Punkte klickbar sind */
 
       &.active {
         background-color: $color-light-blue;
