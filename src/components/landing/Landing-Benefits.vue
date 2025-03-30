@@ -329,7 +329,7 @@ export default {
     }
 
     @include respond(laptop) {
-      height: 350px;
+      height: 340px;
       padding: calc($spacing-md - 10px);
     }
 

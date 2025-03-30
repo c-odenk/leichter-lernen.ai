@@ -213,7 +213,7 @@ export default {
 
   &:hover:not(.not-available) {
     border-color: lighten($color-light-blue, 15%);
-    transform: translateY(-2px);
+    // transform: translateY(-2px);
     box-shadow: $shadow-sm;
   }
 

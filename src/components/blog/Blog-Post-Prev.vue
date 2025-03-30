@@ -12,9 +12,9 @@
     </div>
     <h2>💬 {{ post.title }}</h2>
     <p>{{ post.introduction }}</p>
-    <router-link :to="'blog/blogpost/#' + post.articleId" class="read-more">
+    <a href="#" class="read-more" @click.prevent="showAlertMessage">
       <i class="fa-solid fa-chevron-right"></i>Weiterlesen
-    </router-link>
+    </a>
   </article>
 </template>
 
@@ -35,6 +35,9 @@ export default {
   methods: {
     getImageUrl(image) {
       return require(`@/assets/${image}`);
+    },
+    showAlertMessage() {
+      alert("Die vollständigen Blogposts werden in kürze bereitgestellt.");
     },
   },
 };
@@ -65,18 +68,18 @@ export default {
     position: relative;
     width: 100%;
     height: 0;
-    padding-bottom: 56.25%; /* 16:9 Aspect Ratio für Desktop */
+    padding-bottom: 50%;
     overflow: hidden;
     background-color: #f0f0f0; /* Leichte Hintergrundfarbe für den Placeholder */
     border-top-left-radius: $border-radius-md;
     border-top-right-radius: $border-radius-md;
 
     @include respond(laptop) {
-      padding-bottom: 50%; /* Etwas niedrigeres Verhältnis für Laptop */
+      padding-bottom: 48%;
     }
 
     @include respond(tablet) {
-      padding-bottom: 45%; /* Angepasstes Verhältnis für Tablet */
+      padding-bottom: 45%;
     }
   }
 
@@ -169,8 +172,11 @@ export default {
     letter-spacing: $letter-spacing;
     font-weight: 500;
     @include themed(color, accent);
+    transition: color $transition-speed-medium $transition-timing;
 
-    @include link-hover-effect;
+    &:hover {
+      opacity: 0.8;
+    }
 
     @include respond(laptop) {
       padding: 0 $spacing-lg 0 $spacing-lg;
