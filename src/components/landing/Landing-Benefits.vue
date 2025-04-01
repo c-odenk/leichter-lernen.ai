@@ -18,8 +18,10 @@
         :style="{ backgroundImage: `url(${benefit.image})` }"
       >
         <div class="benefits__content">
-          <h3 class="benefits__card-title">{{ benefit.title }}</h3>
-          <p class="benefits__card-text">{{ benefit.description }}</p>
+          <div class="benefits__content-inner">
+            <h3 class="benefits__card-title">{{ benefit.title }}</h3>
+            <p class="benefits__card-text">{{ benefit.description }}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -186,6 +188,13 @@ export default {
 
 <style lang="scss" scoped>
 @use "../../variables/variables.scss" as *;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 .benefits {
   width: 100%;
   margin: calc($spacing-lg + 50px) 0;
@@ -195,7 +204,6 @@ export default {
   }
 
   @include respond(tablet) {
-    // margin: $spacing-lg 0;
     margin: calc($spacing-lg + 25px) 0;
   }
 
@@ -270,7 +278,6 @@ export default {
       justify-content: flex-start;
       gap: $spacing-md;
       padding: 10px 0 20px;
-      // margin-bottom: 5px;
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
@@ -308,8 +315,8 @@ export default {
 
   &__card {
     width: 32%;
-    height: 500px;
-    padding: $spacing-md;
+    height: 440px;
+    padding: $spacing-sm;
     border-radius: $border-radius-lg;
     box-sizing: border-box;
     position: relative;
@@ -348,10 +355,9 @@ export default {
       height: 300px;
       flex: 0 0 auto;
       margin-bottom: 0;
-      padding: calc($spacing-sm - 7.5px);
+      padding: calc($spacing-sm - 4.5px);
     }
 
-    /* Subtle overlay for better text readability */
     &::before {
       content: "";
       position: absolute;
@@ -370,13 +376,36 @@ export default {
   }
 
   &__content {
-    background: rgba(0, 0, 0, 0.7);
-    padding: $spacing-md $spacing-sm;
-    border-radius: $border-radius-md;
     width: 100%;
     text-align: left;
     position: relative;
     z-index: 2;
+    border-radius: $border-radius-md;
+    overflow: hidden;
+    box-shadow: $shadow-md;
+    background-color: $color-dark-blue;
+  }
+
+  &__content-inner {
+    padding: $spacing-md $spacing-md;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 600'%3E%3Crect width='500' height='600' fill='%23172b4d' /%3E%3Cg opacity='0.25'%3E%3Cpath d='M0 50 Q125 100, 250 75 T 500 100' fill='none' stroke='%233083e9' stroke-width='0.9' /%3E%3Cpath d='M0 75 Q125 125, 250 100 T 500 125' fill='none' stroke='%233083e9' stroke-width='0.9' /%3E%3C/g%3E%3Cg opacity='0.18'%3E%3Cpath d='M0 150 Q200 100, 350 175 T 500 200' fill='none' stroke='%23ffffff' stroke-width='0.6' /%3E%3Cpath d='M0 175 Q200 125, 350 200 T 500 225' fill='none' stroke='%23ffffff' stroke-width='0.6' /%3E%3C/g%3E%3Cg opacity='0.25'%3E%3Cpath d='M500 400 Q375 450, 250 425 T 0 450' fill='none' stroke='%233083e9' stroke-width='0.9' /%3E%3Cpath d='M500 425 Q375 475, 250 450 T 0 475' fill='none' stroke='%233083e9' stroke-width='0.9' /%3E%3C/g%3E%3Cg opacity='0.18'%3E%3Cpath d='M500 500 Q300 525, 150 500 T 0 525' fill='none' stroke='%23ffffff' stroke-width='0.6' /%3E%3Cpath d='M500 525 Q300 550, 150 525 T 0 550' fill='none' stroke='%23ffffff' stroke-width='0.6' /%3E%3C/g%3E%3C/svg%3E");
+    background-size: cover;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(
+        circle at center,
+        rgba(48, 131, 233, 0.015) 0%,
+        rgba(23, 43, 77, 0.12) 100%
+      );
+      z-index: 0;
+    }
 
     @include respond(laptop) {
       padding: $spacing-sm;
@@ -387,8 +416,7 @@ export default {
     }
 
     @include respond(phone) {
-      padding: $spacing-xs;
-      text-align: center;
+      padding: $spacing-sm;
     }
   }
 
@@ -396,6 +424,8 @@ export default {
     margin: 0;
     padding: 0;
     font-size: $font-size-h3-lg;
+    position: relative;
+    z-index: 1;
 
     @include respond(laptop) {
       font-size: $font-size-h3-md;
@@ -417,6 +447,8 @@ export default {
     line-height: $line-height;
     letter-spacing: $letter-spacing;
     font-size: $font-size-p-lg;
+    position: relative;
+    z-index: 1;
 
     @include respond(laptop) {
       font-size: calc($font-size-p-md + 1px);
