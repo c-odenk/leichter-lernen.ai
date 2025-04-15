@@ -1,7 +1,5 @@
 # 📚 leichter-lernen.ai – Deine KI-gestützte Lernplattform
 
-<br>
-
 leichter-lernen.ai ist eine webbasierte Lernplattform, die moderne KI-Technologien nutzt, um Studierende, Schüler und andere Lernende beim effizienten Lernen zu unterstützen. Durch die Analyse eigener Dokumente erstellt die Plattform Zusammenfassungen, Lernkarten und bietet einen persönlichen KI-Tutor zur Vertiefung des Verständnisses.
 <br>
 <br>
