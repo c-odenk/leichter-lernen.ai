@@ -316,7 +316,7 @@ export default {
   &__card {
     width: 32%;
     height: 440px;
-    padding: $spacing-sm;
+    // padding: $spacing-sm;
     border-radius: $border-radius-lg;
     box-sizing: border-box;
     position: relative;
@@ -368,8 +368,8 @@ export default {
       background: linear-gradient(
         to bottom,
         rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 0.3) 50%,
-        rgba(0, 0, 0, 0.6) 100%
+        rgba(0, 0, 0, 0.2) 50%,
+        rgba(0, 0, 0, 0.4) 100%
       );
       z-index: 1;
     }

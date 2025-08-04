@@ -110,12 +110,14 @@ export default {
 
     &:hover {
       color: $color-light-blue-lighter;
-
+      /*
       &::after {
         width: 100%;
       }
+      */
     }
 
+    /*
     &::after {
       content: "";
       position: absolute;
@@ -126,6 +128,7 @@ export default {
       background-color: $color-light-blue-lighter;
       transition: width $transition-speed-medium $transition-timing;
     }
+    */
 
     @include respond(phone) {
       font-size: $font-size-p-sm;

@@ -16,18 +16,15 @@
             <h3 class="faq-item__title">
               {{ faq.question }}
             </h3>
-            <div class="faq-item__icon-wrapper">
-              <i
-                :class="[
-                  'fa-solid',
-                  'fa-chevron-down',
-                  'faq-item__icon',
-                  { 'faq-item__icon--rotated': activeIndex === index },
-                ]"
-              ></i>
-            </div>
+            <i
+              :class="[
+                'fa-solid',
+                activeIndex === index ? 'fa-minus' : 'fa-plus',
+                'faq-item__icon',
+              ]"
+            ></i>
           </div>
-          <div class="faq-item__answer" v-show="activeIndex === index">
+          <div class="faq-item__answer" v-if="activeIndex === index">
             <p class="faq-item__text">{{ faq.answer }}</p>
           </div>
         </div>
@@ -39,12 +36,31 @@
 <script>
 export default {
   name: "FAQSection",
+
+  // Reaktive Daten der Komponente
   data() {
     return {
+      /**
+       * Hauptüberschrift der FAQ-Sektion
+       */
       heading: "Hast du Fragen? Unsere FAQs helfen dir weiter!",
+
+      /**
+       * Unterüberschrift/Beschreibung der FAQ-Sektion
+       */
       subheading:
         "Hier findest du Antworten auf die häufigsten Fragen rund um unser Angebot.",
+
+      /**
+       * Speichert den Index des aktuell geöffneten FAQ-Elements
+       * null bedeutet, dass kein Element geöffnet ist
+       */
       activeIndex: null,
+
+      /**
+       * Array mit den FAQ-Daten
+       * Jedes Objekt enthält eine Frage (question) und die zugehörige Antwort (answer)
+       */
       faqs: [
         {
           question: "Wie hilft mir die KI beim Lernen?",
@@ -80,7 +96,16 @@ export default {
       ],
     };
   },
+
+  // Methoden zur Interaktion mit der Komponente
   methods: {
+    /**
+     * Öffnet oder schließt ein FAQ-Element
+     * Wenn das Element bereits geöffnet ist, wird es geschlossen (activeIndex = null)
+     * Wenn das Element geschlossen ist, wird es geöffnet (activeIndex = index)
+     *
+     * @param {number} index - Der Index des zu öffnenden/schließenden FAQ-Elements
+     */
     toggleFAQ(index) {
       this.activeIndex = this.activeIndex === index ? null : index;
     },
@@ -143,8 +168,8 @@ export default {
       font-size: $font-size-h2-lg;
 
       @include respond(tablet) {
-        text-align: center;
         font-size: $font-size-h2-md;
+        // text-align: center;
       }
 
       @include respond(phone) {
@@ -166,13 +191,13 @@ export default {
       }
 
       @include respond(tablet) {
-        width: 100%;
-        text-align: center;
+        width: 80%;
         font-size: $font-size-p-md;
+        // text-align: center;
       }
 
       @include respond(phone) {
-        // width: 95%;
+        width: 95%;
         font-size: $font-size-p-sm;
       }
     }
@@ -182,7 +207,6 @@ export default {
     width: 40%;
     display: flex;
     flex-direction: column;
-    gap: $spacing-xs;
 
     @include respond(tablet) {
       width: 100%;
@@ -195,93 +219,53 @@ export default {
 }
 
 .faq-item {
-  background-color: #ffffff;
-  border: 2px solid transparent;
-  border-radius: 12px;
-  padding: $spacing-md;
+  padding: $spacing-sm;
+  border-bottom: 1px solid $color-dark-blue-lighter;
   box-sizing: border-box;
-  transition: all $transition-speed-medium $transition-timing;
+  transition: background-color $transition-speed-medium $transition-timing,
+    color $transition-speed-medium $transition-timing;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-
-  &:hover {
-    border-color: #3b82f6;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
-  }
 
   &--active {
-    border-color: #3b82f6;
-    background-color: #ffffff;
-    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.2);
-
-    .faq-item__icon-wrapper {
-      background-color: #3b82f6;
-
-      .faq-item__icon {
-        color: white;
-      }
-    }
+    background-color: $color-dark-blue;
+    color: $color-text-white;
+    box-shadow: $shadow-sm;
   }
 
   &__question {
     @include flex-between;
-    align-items: flex-start;
-    gap: $spacing-sm;
   }
 
   &__title {
     margin: 0;
     padding: 0;
     font-size: calc($font-size-h3-lg - 1px);
-    font-weight: 600;
-    color: #1f2937;
-    line-height: 1.4;
-    flex: 1;
 
     @include respond(laptop) {
       font-size: calc($font-size-h3-lg - 1px);
     }
 
     @include respond(tablet) {
+      width: 100%;
       font-size: $font-size-h3-md;
     }
 
     @include respond(phone) {
+      width: 90%;
       font-size: $font-size-h3-sm;
     }
   }
 
-  &__icon-wrapper {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background-color: #f3f4f6;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all $transition-speed-medium $transition-timing;
-    flex-shrink: 0;
-  }
-
   &__icon {
-    font-size: 14px;
-    color: #6b7280;
-    transition: all $transition-speed-medium $transition-timing;
-    transform: rotate(0deg);
-
-    &--rotated {
-      transform: rotate(180deg); // Jetzt dreht der Pfeil korrekt
-    }
+    transition: transform $transition-speed-medium $transition-timing;
   }
 
   &__answer {
-    margin-top: $spacing-md;
-    padding-top: $spacing-md;
-    border-top: 1px solid #f3f4f6;
+    margin-top: $spacing-sm;
   }
 
   &__text {
-    margin: 0;
+    margin: $spacing-sm 0 $spacing-md 0;
     padding: 0;
     font-size: $font-size-p-lg;
     line-height: $line-height;
@@ -291,20 +275,9 @@ export default {
       font-size: $font-size-p-md;
     }
 
-    @include respond(phone) {
-      font-size: $font-size-p-sm;
+    @include respond(tablet) {
+      // @include text-content-responsive;
     }
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }
 </style>

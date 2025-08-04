@@ -1,35 +1,38 @@
 <template>
   <div class="landing-testimonials">
     <div class="landing-testimonials_row">
-      <h2>{{ heading }}</h2>
+      <h2>💬 {{ heading }}</h2>
       <p>{{ paragraph }}</p>
 
-      <!-- Desktop/Laptop: Drei Spalten nebeneinander -->
-      <div v-if="!isMobile && !isTablet" class="testimonials-desktop-grid">
+      <!-- Desktop/Laptop: Masonry Layout mit neuem Design -->
+      <div
+        v-if="!isMobile && !isTablet"
+        class="masonry-container"
+        ref="masonryContainer"
+      >
         <div
           v-for="(testimonial, index) in testimonials"
           :key="`desktop-${index}`"
-          class="testimonial-card"
+          class="masonry-item"
+          ref="masonryItems"
         >
-          <div class="testimonial-stars">
-            <i v-for="star in 5" :key="star" class="fa-solid fa-star"></i>
-          </div>
-          <div class="testimonial-content">
-            <p class="testimonial-quote">"{{ testimonial.testimonial }}"</p>
-          </div>
-          <div class="testimonial-author">
-            <div class="author-avatar">
-              {{ testimonial.initials }}
+          <div class="testimonial-card">
+            <div class="testimonial-content">
+              <p class="testimonial-quote">"{{ testimonial.testimonial }}"</p>
+              <div class="testimonial-headline">{{ testimonial.headline }}</div>
             </div>
-            <div class="author-info">
-              <span class="author-name">{{ testimonial.name }}</span>
-              <span class="author-headline">{{ testimonial.headline }}</span>
+            <div class="testimonial-author">
+              <img
+                :src="require(`@/assets/${testimonial.image}`)"
+                alt="User Image"
+              />
+              <span>{{ testimonial.name }}</span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Smartphone & Tablet: Horizontaler Scroll -->
+      <!-- Smartphone & Tablet: Horizontales Scroll Layout mit neuem Design -->
       <div
         v-if="isMobile || isTablet"
         class="testimonials-grid"
@@ -42,20 +45,16 @@
           class="testimonial-card"
           :class="{ 'snap-item': isMobile }"
         >
-          <div class="testimonial-stars">
-            <i v-for="star in 5" :key="star" class="fa-solid fa-star"></i>
-          </div>
           <div class="testimonial-content">
             <p class="testimonial-quote">"{{ testimonial.testimonial }}"</p>
+            <div class="testimonial-headline">{{ testimonial.headline }}</div>
           </div>
           <div class="testimonial-author">
-            <div class="author-avatar">
-              {{ testimonial.initials }}
-            </div>
-            <div class="author-info">
-              <span class="author-name">{{ testimonial.name }}</span>
-              <span class="author-headline">{{ testimonial.headline }}</span>
-            </div>
+            <img
+              :src="require(`@/assets/${testimonial.image}`)"
+              alt="User Image"
+            />
+            <span>{{ testimonial.name }}</span>
           </div>
         </div>
       </div>
@@ -86,24 +85,45 @@ export default {
       testimonials: [
         {
           name: "Anna Müller",
-          initials: "AM",
           headline: "Skripte schneller verstehen",
           testimonial:
             "Die KI-gestützte Zusammenfassung hilft mir, Skripte schnell zu erfassen. Besonders die Lernkarten sind ideal für langfristiges Lernen!",
+          image: "anonymous-user.png",
         },
         {
           name: "Thomas Schmidt",
-          initials: "TS",
           headline: "Gezielte Prüfungsvorbereitung",
           testimonial:
             "Die KI extrahiert die Kernthemen aus meinen Unterlagen. So finde ich schnell die wichtigen Punkte und kann mich gezielt vorbereiten. Die automatischen Prüfungsfragen mit direktem Feedback sind ein echter Gamechanger!",
+          image: "anonymous-user.png",
         },
         {
           name: "Laura Meier",
-          initials: "LM",
           headline: "Schnelle Antworten auf alle Fragen",
           testimonial:
             "Der KI-Tutor ist eine riesige Hilfe! Ich kann jederzeit Fragen stellen und bekomme sofort präzise Antworten. So erkenne ich schnell meine Wissenslücken.",
+          image: "anonymous-user.png",
+        },
+        {
+          name: "Felix Weber",
+          headline: "Sofortige Testergebnisse",
+          testimonial:
+            "Ich liebe es, dass ich meine Tests direkt ausgewertet bekomme. Das Feedback zeigt mir sofort, wo ich noch nachbessern muss – perfekt für die Prüfungsvorbereitung!",
+          image: "anonymous-user.png",
+        },
+        {
+          name: "Julia Braun",
+          headline: "Alles in einem Paket",
+          testimonial:
+            "Das Semester-Paket ist eine echte Erleichterung! Alle Tools, die ich brauche, sind vereint – besonders die automatischen Prüfungsfragen helfen mir enorm beim Lernen.",
+          image: "anonymous-user.png",
+        },
+        {
+          name: "Lukas Fischer",
+          headline: "Struktur und Zeitersparnis",
+          testimonial:
+            "Ich lade meine Skripte hoch und erhalte sofort eine klare Struktur und Zusammenfassung. Das spart mir viel Zeit und lässt mich effizienter lernen. Top!",
+          image: "anonymous-user.png",
         },
       ],
       isMobile: false,
@@ -115,7 +135,9 @@ export default {
 
   mounted() {
     this.checkViewport();
+    this.initLayout();
     window.addEventListener("resize", this.handleResize);
+    window.addEventListener("load", this.initLayout);
 
     // Für Tablet und Mobile Scroll-Indikatoren initialisieren
     if (this.isMobile || this.isTablet) {
@@ -125,6 +147,7 @@ export default {
 
   beforeUnmount() {
     window.removeEventListener("resize", this.handleResize);
+    window.removeEventListener("load", this.initLayout);
   },
 
   methods: {
@@ -137,39 +160,56 @@ export default {
     handleResize() {
       clearTimeout(this.resizeTimer);
       this.resizeTimer = setTimeout(() => {
+        // Aktuelle Zustände speichern
         const wasMobile = this.isMobile;
         const wasTablet = this.isTablet;
+
+        // Viewport überprüfen
         this.checkViewport();
+
+        // Prüfen, ob sich etwas geändert hat
         const mobileChanged = wasMobile !== this.isMobile;
         const tabletChanged = wasTablet !== this.isTablet;
 
+        // Layout neu initialisieren wenn sich etwas geändert hat
         if (mobileChanged || tabletChanged) {
-          if (this.isMobile || this.isTablet) {
-            this.initScrollIndicators();
-          }
+          this.initLayout();
         }
       }, 200);
     },
 
+    initLayout() {
+      if (this.isMobile || this.isTablet) {
+        this.initScrollIndicators();
+      } else {
+        this.initMasonry();
+      }
+    },
+
     initScrollIndicators() {
+      // Nach dem DOM-Update warten
       this.$nextTick(() => {
         const container = this.$el.querySelector(".testimonials-grid");
         const dots = this.$el.querySelectorAll(".scroll-dot");
         const cards = this.$el.querySelectorAll(".testimonial-card");
 
         if (container && dots.length) {
+          // Initial ersten Dot aktivieren
           this.activeIndex = 0;
 
           container.addEventListener("scroll", () => {
+            // Berechne den Fortschritt des Scrollens
             const scrollPosition = container.scrollLeft;
             const totalWidth = container.scrollWidth;
             const viewportWidth = container.clientWidth;
 
             if (this.isMobile) {
-              const cardWidth = cards[0].offsetWidth + 16;
+              // Für Mobile: Berechne, welche Karte am sichtbarsten ist basierend auf Kartenposition
+              const cardWidth = cards[0].offsetWidth + 16; // Kartenbreite + gap
               const currentCardIndex = Math.round(scrollPosition / cardWidth);
               this.activeIndex = Math.min(currentCardIndex, cards.length - 1);
             } else {
+              // Für Tablet: Bisherige Logik beibehalten
               const activeIndex = Math.round(
                 (scrollPosition / (totalWidth - viewportWidth)) *
                   (dots.length - 1)
@@ -187,7 +227,7 @@ export default {
 
       if (container && cards.length > index) {
         const cardWidth = cards[0].offsetWidth;
-        const gapWidth = 16;
+        const gapWidth = 16; // $spacing-sm oder $spacing-md je nach Viewport
         const scrollPosition = index * (cardWidth + gapWidth);
 
         container.scrollTo({
@@ -197,6 +237,61 @@ export default {
 
         this.activeIndex = index;
       }
+    },
+
+    initMasonry() {
+      this.$nextTick(() => {
+        const container = this.$refs.masonryContainer;
+        const items = this.$refs.masonryItems || [];
+
+        if (!container || items.length === 0) return;
+
+        // Padding des Containers berücksichtigen
+        const style = window.getComputedStyle(container);
+        const paddingLeft = parseInt(style.paddingLeft) || 0;
+        const paddingRight = parseInt(style.paddingRight) || 0;
+
+        // Berechne die tatsächlich verfügbare Breite
+        const containerWidth =
+          container.clientWidth - paddingLeft - paddingRight;
+
+        // Spaltenanzahl
+        const columnCount = 3;
+
+        // Berechne Spaltenbreite und Abstand
+        const gap = 16; // $spacing-xs
+        const columnWidth =
+          (containerWidth - gap * (columnCount - 1)) / columnCount;
+
+        // Höhen der Spalten zurücksetzen
+        const columnHeights = Array(columnCount).fill(0);
+
+        // Elemente positionieren
+        items.forEach((item) => {
+          // Zurücksetzen für saubere Neuberechnung
+          item.style.width = `${columnWidth}px`;
+
+          // Finde die kürzeste Spalte
+          const minColumnIndex = columnHeights.indexOf(
+            Math.min(...columnHeights)
+          );
+
+          // Berechne Position
+          const xPos = minColumnIndex * (columnWidth + gap) + paddingLeft;
+          const yPos = columnHeights[minColumnIndex];
+
+          // Element positionieren
+          item.style.position = "absolute";
+          item.style.left = `${xPos}px`;
+          item.style.top = `${yPos}px`;
+
+          // Aktualisiere Spaltenhöhe
+          columnHeights[minColumnIndex] += item.offsetHeight + gap;
+        });
+
+        // Container-Höhe anpassen
+        container.style.height = `${Math.max(...columnHeights)}px`;
+      });
     },
   },
 };
@@ -246,13 +341,13 @@ export default {
     }
 
     & p {
-      width: 100%;
+      width: 60%;
       margin: 0 auto;
       padding: 0;
       font-size: $font-size-p-xl;
       line-height: $line-height;
       letter-spacing: $letter-spacing;
-      text-align: center;
+      text-align: center; /* Immer zentriert */
 
       @include respond(laptop) {
         width: 70%;
@@ -273,104 +368,87 @@ export default {
   }
 }
 
-/* Desktop Grid: 3 Spalten nebeneinander */
-.testimonials-desktop-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: $spacing-md;
-  margin-top: $spacing-lg;
-
-  @include respond(laptop) {
-    gap: $spacing-md;
-  }
-}
-
-/* Basis-Stile für alle Testimonial-Karten */
+/* Gemeinsame Basis-Stile für alle Testimonial-Karten */
 .testimonial-card {
-  background: white;
-  border-radius: 12px;
+  background: $color-dark-blue;
+  border-radius: $border-radius-md;
   padding: $spacing-md;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  transition: all 0.3s ease;
+  color: white;
+  box-shadow: $shadow-md;
+  min-height: 250px;
   display: flex;
   flex-direction: column;
-  height: auto;
-
-  &:hover {
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-    transform: translateY(-2px);
-  }
-
-  .testimonial-stars {
-    display: flex;
-    gap: 2px;
-    margin-bottom: $spacing-md;
-
-    .fa-star {
-      color: #fbbf24;
-      font-size: 16px;
-    }
-  }
+  position: relative;
+  transition: all 0.3s ease;
 
   .testimonial-content {
     flex: 1;
-    margin-bottom: $spacing-md;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: $spacing-xs $spacing-xs $spacing-sm $spacing-xs;
+    z-index: 1;
   }
 
   .testimonial-quote {
-    width: 100%;
-    margin: 0;
+    margin: 0 auto $spacing-sm auto;
     font-size: $font-size-p-md;
-    line-height: 1.5;
-    color: #374151;
-    font-style: normal;
+    line-height: 1.4;
+    text-align: center; /* Immer zentriert */
+    // font-style: italic;
+    color: white;
+  }
+
+  .testimonial-headline {
+    font-size: $font-size-p-sm;
+    font-weight: 600;
+    text-align: center; /* Immer zentriert */
+    margin-bottom: $spacing-sm;
+    color: rgba(255, 255, 255, 0.9);
   }
 
   .testimonial-author {
     display: flex;
     align-items: center;
-    gap: $spacing-sm;
+    justify-content: center;
     margin-top: auto;
     padding-top: $spacing-sm;
-    border-top: 1px solid #f3f4f6;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
 
-    .author-avatar {
+    img {
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background-color: $color-dark-blue-lighter;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-      font-size: 14px;
-      color: white;
-      flex-shrink: 0;
+      border: 2px solid white;
+      margin-right: $spacing-xs;
+      object-fit: cover;
     }
 
-    .author-info {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-
-      .author-name {
-        font-size: $font-size-p-sm;
-        font-weight: 600;
-        color: #111827;
-        line-height: 1.2;
-      }
-
-      .author-headline {
-        font-size: calc(#{$font-size-p-sm} - 2px);
-        color: #6b7280;
-        line-height: 1.2;
-      }
+    span {
+      font-size: $font-size-p-sm;
+      font-weight: 600;
+      color: white;
     }
   }
 }
 
-/* Mobile & Tablet Grid mit horizontalem Scroll */
+/* Desktop/Laptop: Masonry Layout */
+.masonry-container {
+  width: 100%;
+  margin: $spacing-lg auto 0 auto;
+  position: relative;
+  padding: $spacing-md 0;
+  min-height: 600px; // Mindesthöhe, wird dynamisch angepasst
+}
+
+.masonry-item {
+  position: absolute; // Wird durch JavaScript positioniert
+  width: 32%; // Standardbreite, wird durch JavaScript angepasst
+  margin-bottom: $spacing-md;
+  transition: all 0.3s ease;
+}
+
+/* Mobile & Tablet Grid mit horizontalem Scroll wie bei Benefits */
 .testimonials-grid {
   @include content-container;
   display: flex;
@@ -383,18 +461,20 @@ export default {
   margin-top: $spacing-md;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
 
   &::-webkit-scrollbar {
-    display: none;
+    display: none; /* Chrome/Safari/Opera */
   }
 
+  /* Snap-Scrolling nur für Mobile */
   &.snap-scroll {
     scroll-snap-type: x mandatory;
     scroll-padding: 0 16px;
   }
 
+  /* Snap-Items für Mobile View */
   .snap-item {
     scroll-snap-align: center;
   }
@@ -403,7 +483,7 @@ export default {
     gap: $spacing-md;
 
     .testimonial-card {
-      min-width: 320px;
+      min-width: 280px;
       width: 70%;
       flex: 0 0 auto;
       margin: 0;
@@ -415,11 +495,10 @@ export default {
     padding: 5px 0 15px;
 
     .testimonial-card {
-      min-width: 280px;
+      min-width: 260px;
       width: 100%;
       flex: 0 0 auto;
       margin: 0;
-      padding: $spacing-md;
     }
   }
 }
@@ -438,10 +517,10 @@ export default {
     margin: 0 5px;
     background-color: rgba(0, 0, 0, 0.2);
     transition: background-color 0.3s ease, transform 0.2s ease;
-    cursor: pointer;
+    cursor: pointer; /* Zeigt an, dass die Punkte klickbar sind */
 
     &.active {
-      background-color: #3b82f6;
+      background-color: $color-light-blue;
       transform: scale(1.3);
     }
   }
