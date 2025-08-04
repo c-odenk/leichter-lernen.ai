@@ -333,7 +333,7 @@ export default {
     gap: $spacing-sm;
     margin-top: auto;
     padding-top: $spacing-sm;
-    border-top: 1px solid #f3f4f6;
+    border-top: 1px solid $color-dark-blue-lighter;
 
     .author-avatar {
       width: 40px;
