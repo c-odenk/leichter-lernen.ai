@@ -1,113 +1,146 @@
 <template>
   <div class="dashboard-analyzed-topic" v-if="topic">
-    <div class="dashboard-analyzed-topic_row">
-      <div class="dashboard-analyzed-topic_row_col-1">
-        <h3>📚 Thema</h3>
-        <p>Dein analysiertes Thema</p>
+    <!-- Header mit Breadcrumb und Titel -->
+    <div class="dashboard-header">
+      <div class="breadcrumb">
+        <span class="breadcrumb-icon">📄</span>
+        <span class="breadcrumb-text">Dein aktuelles Thema</span>
       </div>
-      <div class="dashboard-analyzed-topic_row_col-2">
-        <b>{{ topic?.topicTitle || "Kein Titel verfügbar" }}</b>
+      <h1 class="main-title">
+        {{ topic?.topicTitle || "Kein Titel verfügbar" }}
+      </h1>
+
+      <!-- Tags/Overview -->
+      <div class="topic-tags" v-if="topic?.topicOverview?.length">
+        <span
+          v-for="(overview, index) in topic.topicOverview"
+          :key="index"
+          class="topic-tag"
+        >
+          {{ overview }}
+        </span>
       </div>
     </div>
 
-    <div class="dashboard-analyzed-topic_row">
-      <div class="dashboard-analyzed-topic_row_col-1">
-        <h3>📖 Themenübersicht</h3>
-        <p>Alle Unterthemen auf einen Blick</p>
-      </div>
-      <div class="dashboard-analyzed-topic_row_col-2">
-        <ul>
-          <li
-            v-for="(overview, index) in topic?.topicOverview || []"
-            :key="index"
-          >
-            {{ overview }}
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="dashboard-analyzed-topic_row">
-      <div class="dashboard-analyzed-topic_row_col-1">
-        <h3>📝 Zusammenfassung</h3>
-        <p>Verstehe & vertiefe dein Wissen</p>
-      </div>
-
-      <div class="dashboard-analyzed-topic_row_col-2">
-        <div v-if="!isExpanded">
-          <h2 v-if="topic?.topicSummary && topic.topicSummary.length > 0">
-            {{ topic.topicSummary[0].subtitle }}
-          </h2>
-          <p>{{ previewText }}...</p>
-        </div>
-
-        <div v-else class="expanded-content">
-          <div
-            class="paragraph"
-            v-for="(summary, index) in topic?.topicSummary || []"
-            :key="index"
-          >
-            <h2>{{ summary.subtitle }}</h2>
-            <p>{{ summary.content }}</p>
+    <!-- Content Section -->
+    <div class="content-section">
+      <!-- Zusammenfassung Card -->
+      <div class="summary-card">
+        <div class="card-header">
+          <div class="card-icon">📄</div>
+          <div class="card-title-section">
+            <h2>Titel 1</h2>
+            <p class="card-subtitle">
+              {{
+                topic?.topicSummary && topic.topicSummary.length > 0
+                  ? topic.topicSummary[0].subtitle
+                  : ""
+              }}
+            </p>
           </div>
         </div>
 
-        <ButtonDropdown
-          v-if="hasLongText"
-          :is-expanded="isExpanded"
-          @toggle="toggleExpand"
-        />
-      </div>
-    </div>
+        <div class="card-content">
+          <div v-if="!isExpanded">
+            <p class="summary-text">{{ previewText }}...</p>
+          </div>
 
-    <div class="dashboard-analyzed-topic_row">
-      <div class="dashboard-analyzed-topic_row_col-1">
-        <h3>🏆 Multiple-Choice-Quiz</h3>
-        <p>Sichere dein Verständnis durch Übungsfragen</p>
-      </div>
-      <div class="dashboard-analyzed-topic_row_col-2">
-        <button-blue variant="primary" text="Quiz starten" @click="startQuiz" />
-      </div>
-    </div>
+          <div v-else class="expanded-content">
+            <div
+              class="summary-paragraph"
+              v-for="(summary, index) in topic?.topicSummary || []"
+              :key="index"
+            >
+              <h3>{{ summary.subtitle }}</h3>
+              <p class="summary-text">{{ summary.content }}</p>
+            </div>
+          </div>
 
-    <div class="dashboard-analyzed-topic_row">
-      <div class="dashboard-analyzed-topic_row_col-1">
-        <h3>✍️ Probeklausur</h3>
-        <p>Teste dein Wissen umfassend</p>
-      </div>
-      <div class="dashboard-analyzed-topic_row_col-2">
-        <div class="button-container">
-          <button-blue
-            variant="primary"
-            text="Probeklausur starten"
-            :disabled="true"
-          />
-          <button-blue
-            variant="primary"
-            text="Paket upgraden"
-            @click="upgradePaket"
-          />
+          <button
+            v-if="hasLongText"
+            class="expand-button"
+            @click="toggleExpand"
+          >
+            {{ isExpanded ? "Weniger anzeigen" : "Mehr anzeigen" }}
+          </button>
         </div>
       </div>
-    </div>
 
-    <div class="dashboard-analyzed-topic_row">
-      <div class="dashboard-analyzed-topic_row_col-1">
-        <h3>🎓 KI Tutor</h3>
-        <p>Erhalte präzise Antworten auf deine Fragen</p>
-      </div>
-      <div class="dashboard-analyzed-topic_row_col-2">
-        <div class="button-container">
+      <!-- Action Cards Grid -->
+      <div class="action-cards-grid">
+        <!-- Zusammenfassung Card -->
+        <div class="action-card blue">
+          <div class="card-header">
+            <div class="action-card-icon">📄</div>
+            <div class="card-title-group">
+              <h3 class="action-card-title">Zusammenfassung</h3>
+              <p class="action-card-subtitle">Verstehe & erfasse dein Wissen</p>
+            </div>
+          </div>
           <button-blue
             variant="primary"
-            text="KI Tutor starten"
-            :disabled="true"
+            text="Mehr anzeigen"
+            class="action-button full-width"
           />
+        </div>
+
+        <!-- Quiz Card -->
+        <div class="action-card green">
+          <div class="card-header">
+            <div class="action-card-icon">🏆</div>
+            <div class="card-title-group">
+              <h3 class="action-card-title">Multiple-Choice-Quiz</h3>
+              <p class="action-card-subtitle">
+                Sichere dein Verständnis durch Übungsfragen
+              </p>
+            </div>
+          </div>
           <button-blue
             variant="primary"
-            text="Paket upgraden"
-            @click="upgradePaket"
+            text="Quiz starten"
+            @click="startQuiz"
+            class="action-button full-width"
           />
+        </div>
+
+        <!-- Probeklausur Card -->
+        <div class="action-card purple">
+          <div class="card-header">
+            <div class="action-card-icon">✍️</div>
+            <div class="card-title-group">
+              <h3 class="action-card-title">Probeklausur</h3>
+              <p class="action-card-subtitle">Teste dein Wissen umfassend</p>
+            </div>
+          </div>
+          <div class="button-group">
+            <button-blue
+              variant="secondary"
+              text="Probeklausur starten"
+              :disabled="true"
+              class="action-button"
+            />
+          </div>
+        </div>
+
+        <!-- KI Tutor Card -->
+        <div class="action-card orange">
+          <div class="card-header">
+            <div class="action-card-icon">🎓</div>
+            <div class="card-title-group">
+              <h3 class="action-card-title">KI Tutor</h3>
+              <p class="action-card-subtitle">
+                Erhalte präzise Antworten auf deine Fragen
+              </p>
+            </div>
+          </div>
+          <div class="button-group">
+            <button-blue
+              variant="secondary"
+              text="KI Tutor starten"
+              :disabled="true"
+              class="action-button"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -118,10 +151,7 @@
 export default {
   name: "DashboardAnalyzedTopicSection",
 
-  // Props: Eigenschaften, die von der übergeordneten Komponente übergeben werden
   props: {
-    // Das topic Objekt enthält alle Informationen zum ausgewählten Thema
-    // inklusive Titel, Übersicht, Zusammenfassung usw.
     topic: {
       type: Object,
       required: true,
@@ -133,77 +163,45 @@ export default {
     },
   },
 
-  // Reaktive Daten der Komponente
   data() {
     return {
-      // Steuert, ob die Zusammenfassung vollständig angezeigt wird oder nicht
       isExpanded: false,
     };
   },
 
-  // Berechnete Eigenschaften für die dynamische Darstellung der Zusammenfassung
   computed: {
-    /**
-     * Generiert den vollständigen Text der Zusammenfassung, indem alle
-     * Inhalte der einzelnen Abschnitte zu einem String zusammengefügt werden
-     * @returns {string} Der vollständige Text der Zusammenfassung
-     */
     fullText() {
       if (!this.topic?.topicSummary?.length) return "";
-
       return this.topic.topicSummary
         .map((summary) => summary.content)
         .join(" ");
     },
 
-    /**
-     * Erstellt einen gekürzten Vorschautext für die zusammengeklappte Ansicht
-     * @returns {string} Gekürzte Version des Textes (max. 350 Zeichen)
-     */
     previewText() {
       return this.fullText.length > 550
         ? this.fullText.slice(0, 550)
         : this.fullText;
     },
 
-    /**
-     * Prüft, ob der Text lang genug ist, um die "Mehr anzeigen" Funktion anzuzeigen
-     * @returns {boolean} True wenn Text länger als 350 Zeichen ist
-     */
     hasLongText() {
       return this.fullText.length > 550;
     },
   },
 
-  // Methoden für Benutzerinteraktionen
   methods: {
-    /**
-     * Toggle-Methode zum Ein- und Ausklappen der Zusammenfassung
-     */
     toggleExpand() {
-      console.log("Toggle wurde geklickt, alter Status:", this.isExpanded);
       this.isExpanded = !this.isExpanded;
-      console.log("Neuer Status:", this.isExpanded);
     },
 
-    /**
-     * Startet das Quiz für das ausgewählte Thema
-     * Sendet ein Event an die Elternkomponente mit dem aktuellen Thema als Payload
-     */
     startQuiz() {
       this.$emit("start-quiz", this.topic);
     },
 
-    /**
-     * Leitet den Benutzer zum Paket-Upgrade weiter
-     * Sendet ein Event an die Elternkomponente, die dann den Upgrade-Prozess handhabt
-     */
     upgradePaket() {
       this.$emit("upgrade-paket");
     },
   },
 
-  // Stellt sicher, dass topic im Provide/Inject-System verfügbar ist
   provide() {
     return {
       topic: this.topic,
@@ -222,152 +220,253 @@ export default {
 }
 
 .dashboard-analyzed-topic {
-  margin: 0;
-  padding: $spacing-lg $spacing-lg $spacing-lg $spacing-lg;
+  width: 100%;
+  padding: $spacing-lg 17.5vw;
+  background-color: #f8f9fa;
+  min-height: 100vh;
 
   @include respond(laptop) {
-    padding: calc($spacing-md + 5px) calc($spacing-md + 0px) $spacing-md
-      calc($spacing-md - 5px);
+    padding: $spacing-md;
   }
 
-  &_row {
+  @include respond(tablet) {
+    padding: $spacing-sm;
+  }
+}
+
+// Header Section
+.dashboard-header {
+  margin-bottom: $spacing-lg;
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    // margin-bottom: $spacing-sm;
+    color: #6b7280;
+    font-size: $font-size-p-md;
+
+    .breadcrumb-icon {
+      font-size: 16px;
+    }
+  }
+
+  .main-title {
+    font-size: $font-size-h1-lg;
+    font-weight: 600;
+    color: $color-dark-blue;
+    margin: 0 0 $spacing-md 0;
+
+    @include respond(laptop) {
+      font-size: $font-size-h1-md;
+    }
+
+    @include respond(tablet) {
+      font-size: $font-size-h1-sm;
+    }
+  }
+
+  .topic-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-xs;
+
+    .topic-tag {
+      padding: $spacing-xs $spacing-sm;
+      font-size: calc($font-size-p-lg - 2px);
+      background-color: rgba($color-light-blue, 0.1);
+      border-radius: $border-radius-md;
+      color: $color-dark-blue;
+    }
+  }
+}
+
+// Content Section
+.content-section {
+  display: grid;
+  gap: $spacing-lg;
+}
+
+// Summary Card (großer Bereich oben)
+.summary-card {
+  background: white;
+  border-radius: $border-radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-sm;
+  border: 1px solid rgba($color-dark-blue, 0.08);
+
+  .card-header {
     display: flex;
     align-items: flex-start;
-    margin: 0 0 calc($spacing-lg - 20px) 0;
+    gap: $spacing-md;
+    margin-bottom: $spacing-md;
 
-    &_col-1 {
-      width: 18vw;
-      max-width: 500px;
-      margin-right: $spacing-md;
-
-      @include respond(laptop) {
-        width: 16vw;
-        margin-right: calc($spacing-md - 5px);
-        // display: none;
-      }
-
-      @include respond(tablet) {
-        display: none;
-      }
-
-      h3 {
-        margin: 0 0 0px 0;
-        padding: 0;
-        font-size: $font-size-h3-lg;
-        color: $color-dark-blue;
-        font-weight: 600;
-
-        @include respond(laptop) {
-          font-size: $font-size-h3-md;
-          margin: 0 0 1.5px 0;
-        }
-      }
-
-      p {
-        margin: 0;
-        padding: 0;
-        font-size: calc($font-size-p-lg - 3px);
-        font-weight: 500;
-        color: #707070;
-
-        @include respond(laptop) {
-          font-size: calc($font-size-p-md - 1px);
-          display: none;
-        }
-      }
+    .card-icon {
+      font-size: 24px;
+      padding: $spacing-sm;
+      background-color: rgba($color-light-blue, 0.1);
+      border-radius: $border-radius-md;
     }
 
-    &_col-2 {
-      flex: 1;
-      display: flex;
-      align-items: flex-start;
-      flex-direction: column;
-      border: 1px solid rgba($color-dark-blue, 0.08);
-      border-radius: $border-radius-md;
-      padding: $spacing-md;
-      background-color: $color-text-white;
-      box-shadow: $shadow-sm;
-      transition: box-shadow $transition-speed-medium $transition-timing;
-
-      &:hover {
-        box-shadow: $shadow-md;
-      }
-
+    .card-title-section {
       h2 {
+        font-size: $font-size-h2-md;
+        font-weight: 600;
+        color: $color-dark-blue;
         margin: 0 0 $spacing-xs 0;
-        padding: 0;
-        font-size: $font-size-p-lg;
-        font-weight: 500;
-
-        @include respond(tablet) {
-          font-size: $font-size-p-md;
-        }
       }
 
-      p {
-        width: 95%;
-        margin: 0 auto 0 0;
-        padding: 0;
-        font-size: calc($font-size-p-lg - 1px);
-        line-height: 1.5;
-        word-wrap: break-word;
-
-        @include respond(laptop) {
-          width: 100%;
-          margin: 0;
-          font-size: $font-size-p-md;
-        }
-      }
-
-      b {
-        font-size: calc($font-size-p-lg - 2px);
-        font-weight: 500;
-      }
-
-      ul {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: $spacing-xs;
+      .card-subtitle {
+        font-size: $font-size-p-md;
+        color: #6b7280;
         margin: 0;
-        padding: 0;
-        list-style: none;
-
-        li {
-          margin: 0;
-          padding: $spacing-xs $spacing-sm;
-          font-size: calc($font-size-p-lg - 2px);
-          background-color: rgba($color-light-blue, 0.1);
-          border-radius: $border-radius-md;
-          color: $color-dark-blue;
-
-          @include respond(laptop) {
-            font-size: $font-size-p-md;
-          }
-        }
       }
+    }
+  }
 
-      .expanded-content {
-        width: 100%;
-      }
+  .card-content {
+    .summary-text {
+      font-size: $font-size-p-md;
+      line-height: 1.6;
+      color: #374151;
+      margin-bottom: $spacing-md;
+    }
 
-      .paragraph {
-        width: 100%;
+    .expanded-content {
+      .summary-paragraph {
         margin-bottom: $spacing-md;
 
-        &:last-child {
-          margin-bottom: 0;
+        h3 {
+          font-size: $font-size-h3-md;
+          font-weight: 600;
+          color: $color-dark-blue;
+          margin: 0 0 $spacing-xs 0;
         }
       }
+    }
 
-      .button-container {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+    .expand-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      padding: 10px 1.5rem;
+      border-radius: 5px;
+      text-align: center;
+      font-size: 15px;
+      background-color: transparent;
+      color: $color-light-blue;
+      border: 1px solid rgba(22, 105, 208, 0.2);
+      margin: 1.5rem 0 0 0;
+      border-radius: 10px;
+
+      &:hover {
+        color: $color-dark-blue;
       }
     }
+  }
+}
+
+// Action Cards Grid - 2x2 Layout
+.action-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: $spacing-md;
+
+  @include respond(tablet) {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  @include respond(phone) {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+}
+
+.action-card {
+  background: white;
+  border-radius: $border-radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-sm;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: $shadow-md;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-md;
+  }
+
+  .action-card-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    border-radius: $border-radius-md;
+    flex-shrink: 0;
+  }
+
+  &.blue .action-card-icon {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+  }
+
+  &.green .action-card-icon {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: white;
+  }
+
+  &.purple .action-card-icon {
+    background: linear-gradient(135deg, #a855f7, #9333ea);
+    color: white;
+  }
+
+  &.orange .action-card-icon {
+    background: linear-gradient(135deg, #f97316, #ea580c);
+    color: white;
+  }
+
+  .card-title-group {
+    flex: 1;
+  }
+
+  .action-card-title {
+    font-size: $font-size-h3-md;
+    font-weight: 600;
+    color: $color-dark-blue;
+    margin: 0 0 0 0;
+  }
+
+  .action-card-subtitle {
+    font-size: $font-size-p-md;
+    color: #6b7280;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .action-button {
+    margin-top: auto;
+
+    &.full-width {
+      width: 100%;
+    }
+  }
+
+  .button-group {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
   }
 }
 </style>
