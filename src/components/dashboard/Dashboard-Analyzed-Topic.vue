@@ -369,18 +369,14 @@ export default {
   }
 }
 
-// Action Cards Grid - 2x2 Layout
+// Action Cards Grid - 2x2 Layout für Desktop und Tablet, 1x4 nur für Phone
 .action-cards-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
   gap: $spacing-md;
 
-  @include respond(tablet) {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-  }
-
+  // Nur bei Phone-Größe auf 1 Spalte wechseln
   @include respond(phone) {
     grid-template-columns: 1fr;
     grid-template-rows: auto;

@@ -45,7 +45,7 @@ export default {
 
   data() {
     return {
-      heading: "Lerne effizienter mit KI-Unterstützung",
+      heading: "Mit KI-Unterstützung zu Bestnoten!",
       subheading:
         "Wir helfen dir, schneller zu verstehen, gezielt zu wiederholen und dein Wissen aktiv zu festigen. So lernst du nicht nur effektiver, sondern auch zeitsparender.",
 
