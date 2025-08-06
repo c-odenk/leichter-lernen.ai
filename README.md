@@ -39,15 +39,18 @@ Die Anwendung wurde mit modernen Webtechnologien entwickelt, um eine skalierbare
 
 
 ### Screenshot 1 - 🏠 Landingpage
-<br>
 Die Landingpage vermittelt das Wertversprechen der Plattform und führt Besucher:innen durch die wichtigsten Features. Klare Call-to-Action-Buttons leiten direkt zur Registrierung und zum Einstieg in die Lernplattform.
+<br>
+<br>
+<img width="1923" height="3976" alt="Bildschirmfoto 2025-08-05 um 21 19 22 (2)" src="https://github.com/user-attachments/assets/d63b5140-1422-4fa8-bb73-99bc31174497" />
+<br>
 <br>
 
 ### Screenshot 2 - 📊 User Dashboard
-<br>
 Das übersichtliche Dashboard bietet Zugriff auf alle wichtigen Funktionen: Dokumenten-Upload, generierte Lernmaterialien, Quiz-Ergebnisse und den persönlichen KI-Tutor. Die intuitive Benutzeroberfläche ermöglicht eine effiziente Navigation zwischen den verschiedenen Lernmodi.
 <br>
-
-
+<br>
+<img width="2559" height="1371" alt="Bildschirmfoto 2025-08-06 um 14 33 21 (2)" src="https://github.com/user-attachments/assets/3e1044e7-ea5c-44c6-9902-a0308469da58" />
+<br>
 <br>
 ** ⚠️ Hinweis: Dieses Projekt befindet sich in aktiver Entwicklung. Neue Features und Verbesserungen werden kontinuierlich implementiert, um die Lernerfahrung stetig zu optimieren.
