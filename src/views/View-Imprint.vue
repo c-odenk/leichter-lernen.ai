@@ -8,7 +8,7 @@
 
 <script>
 import Header from "@/components/header/Header.vue";
-import Impressum from "@/components/impressum/Imprint.vue";
+import Impressum from "@/components/imprint/Imprint.vue";
 import Footer from "@/components/footer/Footer.vue";
 
 export default {

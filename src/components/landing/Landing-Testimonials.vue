@@ -1,11 +1,11 @@
 <template>
   <div class="landing-testimonials">
     <div class="landing-testimonials_row">
-      <h2>{{ heading }}</h2>
-      <p>{{ paragraph }}</p>
+      <!-- Wiederverwendbare Heading-Komponente (korrekt importiert als SectionHeading) -->
+      <SectionHeading :heading="heading" :subheading="paragraph" />
 
-      <!-- Desktop/Laptop: Drei Spalten nebeneinander -->
-      <div v-if="!isMobile && !isTablet" class="testimonials-desktop-grid">
+      <!-- Desktop: Vier Spalten nebeneinander -->
+      <div v-if="!isLaptopDown" class="testimonials-desktop-grid">
         <div
           v-for="(testimonial, index) in testimonials"
           :key="`desktop-${index}`"
@@ -29,9 +29,9 @@
         </div>
       </div>
 
-      <!-- Smartphone & Tablet: Horizontaler Scroll -->
+      <!-- Laptop-down: Horizontaler Scroll -->
       <div
-        v-if="isMobile || isTablet"
+        v-if="isLaptopDown"
         class="testimonials-grid"
         :class="{ 'snap-scroll': isMobile }"
         ref="mobileTestimonialCards"
@@ -60,8 +60,8 @@
         </div>
       </div>
 
-      <!-- Scroll-Indikatoren für Smartphone & Tablet -->
-      <div v-if="isMobile || isTablet" class="testimonials-scroll-indicators">
+      <!-- Scroll-Indikatoren für Laptop-down -->
+      <div v-if="isLaptopDown" class="testimonials-scroll-indicators">
         <div
           v-for="(testimonial, index) in testimonials"
           :key="`dot-${index}`"
@@ -75,12 +75,15 @@
 </template>
 
 <script>
+import SectionHeading from "@/components/headings/Section-Heading.vue";
+
 export default {
   name: "TestimonialsSection",
+  components: { SectionHeading },
 
   data() {
     return {
-      heading: "Was unsere Nutzer sagen",
+      heading: "💬 Was unsere Nutzer sagen",
       paragraph:
         "Mehr Verständnis, bessere Prüfungsvorbereitung und effektiveres Lernen – mit KI-gestützten Tools zum Erfolg.",
       testimonials: [
@@ -89,25 +92,32 @@ export default {
           initials: "AM",
           headline: "Skripte schneller verstehen",
           testimonial:
-            "Die KI-gestützte Zusammenfassung hilft mir, Skripte schnell zu erfassen. Besonders die Lernkarten sind ideal für langfristiges Lernen!",
+            "Die KI-gestützte Zusammenfassung hilft mir, Skripte schnell zu erfassen. Besonders die Lernkarten sind ideal, um Wissen langfristig zu behalten und gezielt zu wiederholen.",
         },
         {
           name: "Thomas Schmidt",
           initials: "TS",
           headline: "Gezielte Prüfungsvorbereitung",
           testimonial:
-            "Die KI extrahiert die Kernthemen aus meinen Unterlagen. So finde ich schnell die wichtigen Punkte und kann mich gezielt vorbereiten. Die automatischen Prüfungsfragen mit direktem Feedback sind ein echter Gamechanger!",
+            "Die KI extrahiert die wichtigsten Themen aus meinen Unterlagen, wodurch ich mich perfekt auf Prüfungen konzentrieren kann. Die Übungsfragen mit Feedback sind dabei besonders hilfreich.",
         },
         {
           name: "Laura Meier",
           initials: "LM",
           headline: "Schnelle Antworten auf alle Fragen",
           testimonial:
-            "Der KI-Tutor ist eine riesige Hilfe! Ich kann jederzeit Fragen stellen und bekomme sofort präzise Antworten. So erkenne ich schnell meine Wissenslücken.",
+            "Der KI-Tutor ist eine riesige Hilfe! Ich kann jederzeit Fragen stellen und bekomme sofort präzise Antworten. So erkenne ich meine Wissenslücken schneller und gezielter.",
+        },
+        {
+          name: "David Weber",
+          initials: "DW",
+          headline: "Effizient und motivierend",
+          testimonial:
+            "Seit ich die Plattform nutze, lerne ich viel strukturierter. Die klaren Zusammenfassungen und interaktiven Aufgaben motivieren mich und geben mir Sicherheit für jede Prüfung.",
         },
       ],
       isMobile: false,
-      isTablet: false,
+      isLaptopDown: false,
       resizeTimer: null,
       activeIndex: 0,
     };
@@ -117,8 +127,7 @@ export default {
     this.checkViewport();
     window.addEventListener("resize", this.handleResize);
 
-    // Für Tablet und Mobile Scroll-Indikatoren initialisieren
-    if (this.isMobile || this.isTablet) {
+    if (this.isLaptopDown) {
       this.initScrollIndicators();
     }
   },
@@ -130,21 +139,22 @@ export default {
   methods: {
     checkViewport() {
       const width = window.innerWidth;
-      this.isMobile = width < 768;
-      this.isTablet = width >= 768 && width < 1024;
+      this.isMobile = width <= 480;
+      this.isLaptopDown = width <= 1280;
     },
 
     handleResize() {
       clearTimeout(this.resizeTimer);
       this.resizeTimer = setTimeout(() => {
         const wasMobile = this.isMobile;
-        const wasTablet = this.isTablet;
+        const wasLaptopDown = this.isLaptopDown;
         this.checkViewport();
-        const mobileChanged = wasMobile !== this.isMobile;
-        const tabletChanged = wasTablet !== this.isTablet;
 
-        if (mobileChanged || tabletChanged) {
-          if (this.isMobile || this.isTablet) {
+        if (
+          wasMobile !== this.isMobile ||
+          wasLaptopDown !== this.isLaptopDown
+        ) {
+          if (this.isLaptopDown) {
             this.initScrollIndicators();
           }
         }
@@ -187,7 +197,7 @@ export default {
 
       if (container && cards.length > index) {
         const cardWidth = cards[0].offsetWidth;
-        const gapWidth = 16;
+        const gapWidth = this.isMobile ? 16 : 24;
         const scrollPosition = index * (cardWidth + gapWidth);
 
         container.scrollTo({
@@ -213,28 +223,34 @@ export default {
 
 .landing-testimonials {
   width: 100%;
-  margin: calc($spacing-lg + 80px) 0 calc($spacing-lg + 50px) 0;
+  margin: calc($spacing-lg + 100px) 0 calc($spacing-lg + 100px) 0;
 
   @include respond(laptop) {
     margin: calc($spacing-lg + 25px) 0;
   }
 
   @include respond(tablet) {
-    margin: $spacing-md 0;
+    margin: $spacing-lg 0;
   }
 
   @include respond(phone) {
-    margin: $spacing-md 0 $spacing-md 0;
+    margin: $spacing-md 0;
   }
 
   &_row {
     @include content-container;
 
+    /* Alte direkte h2/p Regeln bleiben erhalten, sie treffen weiterhin auf die
+       h2/p innerhalb der ausgelagerten SectionHeading-Komponente zu. */
     & h2 {
       margin: 0 0 $spacing-xs 0;
       padding: 0;
       text-align: center;
       font-size: $font-size-h2-lg;
+
+      @include respond(laptop) {
+        font-size: calc($font-size-h2-lg - 0.1rem);
+      }
 
       @include respond(tablet) {
         font-size: $font-size-h2-md;
@@ -259,8 +275,11 @@ export default {
         font-size: $font-size-p-lg;
       }
 
+      @include respond(tablet-down) {
+        width: 85%;
+      }
+
       @include respond(tablet) {
-        width: 80%;
         font-size: $font-size-p-md;
       }
 
@@ -273,16 +292,12 @@ export default {
   }
 }
 
-/* Desktop Grid: 3 Spalten nebeneinander */
+/* Desktop Grid: 4 Spalten nebeneinander */
 .testimonials-desktop-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: $spacing-md;
   margin-top: $spacing-lg;
-
-  @include respond(laptop) {
-    gap: $spacing-md;
-  }
 }
 
 /* Basis-Stile für alle Testimonial-Karten */
@@ -302,29 +317,64 @@ export default {
     transform: translateY(-2px);
   }
 
+  @include respond(phone) {
+    padding: $spacing-md;
+  }
+
   .testimonial-stars {
     display: flex;
     gap: 2px;
     margin-bottom: $spacing-md;
 
+    @include respond(phone) {
+      margin-bottom: $spacing-sm;
+    }
+
     .fa-star {
       color: #fbbf24;
       font-size: 16px;
+
+      @include respond(phone) {
+        font-size: 14px;
+      }
     }
   }
 
   .testimonial-content {
     flex: 1;
     margin-bottom: $spacing-md;
+
+    @include respond(phone) {
+      margin-bottom: $spacing-sm;
+    }
   }
 
   .testimonial-quote {
     width: 100%;
     margin: 0;
-    font-size: $font-size-p-md;
-    line-height: 1.5;
-    color: #374151;
+    font-size: $font-size-p-desktop;
+    letter-spacing: $letter-spacing-p-desktop;
+    line-height: $line-height-p-desktop;
+    color: $color-text-dark;
     font-style: normal;
+
+    @include respond(laptop) {
+      font-size: $font-size-p-laptop;
+      letter-spacing: $letter-spacing-p-laptop;
+      line-height: $line-height-p-laptop;
+    }
+
+    @include respond(tablet) {
+      font-size: $font-size-p-tablet;
+      letter-spacing: $letter-spacing-p-tablet;
+      line-height: $line-height-p-tablet;
+    }
+
+    @include respond(phone) {
+      font-size: $font-size-p-phone;
+      letter-spacing: $letter-spacing-p-phone;
+      line-height: $line-height-p-phone;
+    }
   }
 
   .testimonial-author {
@@ -333,13 +383,17 @@ export default {
     gap: $spacing-sm;
     margin-top: auto;
     padding-top: $spacing-sm;
-    border-top: 1px solid $color-dark-blue-lighter;
+    border-top: 1px solid #e5e7eb;
+
+    @include respond(phone) {
+      padding-top: calc($spacing-sm - 2px);
+    }
 
     .author-avatar {
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background-color: $color-dark-blue-lighter;
+      background-color: $color-light-blue;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -347,6 +401,12 @@ export default {
       font-size: 14px;
       color: white;
       flex-shrink: 0;
+
+      @include respond(phone) {
+        width: 36px;
+        height: 36px;
+        font-size: 13px;
+      }
     }
 
     .author-info {
@@ -359,18 +419,26 @@ export default {
         font-weight: 600;
         color: #111827;
         line-height: 1.2;
+
+        @include respond(phone) {
+          font-size: calc(#{$font-size-p-sm} - 1px);
+        }
       }
 
       .author-headline {
         font-size: calc(#{$font-size-p-sm} - 2px);
         color: #6b7280;
         line-height: 1.2;
+
+        @include respond(phone) {
+          font-size: calc(#{$font-size-p-sm} - 3px);
+        }
       }
     }
   }
 }
 
-/* Mobile & Tablet Grid mit horizontalem Scroll */
+/* Laptop-down Grid mit horizontalem Scroll */
 .testimonials-grid {
   @include content-container;
   display: flex;
@@ -379,7 +447,7 @@ export default {
   overflow-y: hidden;
   justify-content: flex-start;
   gap: $spacing-md;
-  padding: 10px 0 20px;
+  padding: 0px 0 20px;
   margin-top: $spacing-md;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
@@ -399,9 +467,16 @@ export default {
     scroll-snap-align: center;
   }
 
-  @include respond(tablet) {
-    gap: $spacing-md;
+  @include respond(laptop) {
+    .testimonial-card {
+      min-width: 340px;
+      width: 80%;
+      flex: 0 0 auto;
+      margin: 0;
+    }
+  }
 
+  @include respond(tablet) {
     .testimonial-card {
       min-width: 320px;
       width: 70%;
@@ -415,16 +490,21 @@ export default {
     padding: 5px 0 15px;
 
     .testimonial-card {
-      min-width: 280px;
+      min-width: 100%;
       width: 100%;
       flex: 0 0 auto;
       margin: 0;
-      padding: $spacing-md;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+
+      &:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        transform: none;
+      }
     }
   }
 }
 
-/* Scroll-Indikatoren für Tablet und Mobile */
+/* Scroll-Indikatoren für Laptop-down */
 .testimonials-scroll-indicators {
   display: flex;
   justify-content: center;
@@ -441,8 +521,12 @@ export default {
     cursor: pointer;
 
     &.active {
-      background-color: #3b82f6;
+      background-color: $color-light-blue;
       transform: scale(1.3);
+    }
+
+    &:hover {
+      background-color: rgba($color-light-blue, 0.5);
     }
   }
 }

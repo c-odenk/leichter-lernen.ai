@@ -23,5 +23,7 @@ export default {
 @use "../variables/variables.scss" as *;
 
 .view-product {
+  width: 100%;
+  overflow: hidden;
 }
 </style>

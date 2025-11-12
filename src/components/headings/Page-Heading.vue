@@ -1,6 +1,6 @@
 <template>
-  <div class="hero-section">
-    <div class="hero-section_row">
+  <div class="heading-section">
+    <div class="heading-section_row">
       <h2>{{ heading }}</h2>
       <p>{{ subheading }}</p>
     </div>
@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  name: "HeroSection",
+  name: "PageHeading",
   props: {
     heading: {
       type: String,
@@ -26,7 +26,7 @@ export default {
 <style lang="scss" scoped>
 @use "../../variables/variables.scss" as *;
 
-.hero-section {
+.heading-section {
   width: 100%;
 
   &_row {
@@ -73,23 +73,29 @@ export default {
       min-height: 60px;
       margin: 0 auto;
       padding: 0;
-      font-size: $font-size-p-xl;
-      line-height: $line-height;
-      letter-spacing: $letter-spacing;
-      color: $color-text-dark;
+      font-size: $font-size-p-desktop;
+      letter-spacing: $letter-spacing-p-desktop;
+      line-height: $line-height-p-desktop;
 
       @include respond(laptop) {
         height: auto;
+        font-size: $font-size-p-laptop;
+        letter-spacing: $letter-spacing-p-laptop;
+        line-height: $line-height-p-laptop;
       }
 
       @include respond(tablet) {
         width: 80%;
-        font-size: $font-size-p-md;
+        font-size: $font-size-p-tablet;
+        letter-spacing: $letter-spacing-p-tablet;
+        line-height: $line-height-p-tablet;
       }
 
       @include respond(phone) {
         width: 95%;
-        font-size: $font-size-p-sm;
+        font-size: $font-size-p-phone;
+        letter-spacing: $letter-spacing-p-phone;
+        line-height: $line-height-p-phone;
       }
     }
   }

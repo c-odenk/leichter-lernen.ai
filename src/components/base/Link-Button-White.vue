@@ -1,10 +1,10 @@
 <template>
   <router-link
     :to="disabled ? '#' : to"
-    class="link-button-blue"
+    class="button-white"
     :class="{
-      'link-button-blue--disabled': disabled,
-      'link-button-blue--block': block,
+      'button-white--disabled': disabled,
+      'button-white--block': block,
     }"
     @click="disabled && $event.preventDefault()"
   >
@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name: "LinkButtonBlue",
+  name: "ButtonWhite",
   props: {
     // Anzuzeigender Text
     text: {
@@ -52,54 +52,38 @@ export default {
 <style lang="scss" scoped>
 @use "../../variables/variables.scss" as *;
 
-.link-button-blue {
+.button-white {
+  // Basisstil aus dem ursprünglichen primary-button mixin
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  gap: 8px;
   padding: 14px 40px;
-  font-size: $font-size-p-desktop;
-  letter-spacing: $letter-spacing-p-desktop;
-  line-height: $line-height-p-desktop;
+  font-size: $font-size-p-lg;
   font-weight: 500;
+  line-height: $line-height;
+  letter-spacing: 1px;
   text-align: center;
   text-decoration: none;
-  color: $color-text-white;
-  background-color: $color-light-blue;
+  color: $color-text-dark;
+  background-color: #ffffff;
   border-radius: 10px;
-  transition: background-color $transition-speed-medium $transition-timing;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.06);
+  transition: all $transition-speed-medium $transition-timing;
   cursor: pointer;
   position: relative;
   z-index: 5;
 
-  @include respond(laptop) {
-    padding: 12px 35px;
-    font-size: $font-size-p-laptop;
-    letter-spacing: $letter-spacing-p-laptop;
-    line-height: $line-height-p-laptop;
-  }
-
-  @include respond(tablet) {
-    padding: 10px 30px;
-    font-size: $font-size-p-tablet;
-    letter-spacing: $letter-spacing-p-tablet;
-    line-height: $line-height-p-tablet;
-  }
-
-  @include respond(phone) {
-    padding: 8px 25px;
-    font-size: $font-size-p-phone;
-    letter-spacing: $letter-spacing-p-phone;
-    line-height: $line-height-p-phone;
-  }
-
   &:deep(i) {
-    margin: 0 0 0 16px;
+    margin: 2px 0 0 5px;
     font-size: 15px;
   }
 
   // Hover-Effekt
-  &:hover:not(.link-button-blue--disabled) {
-    background-color: $color-light-blue-darker;
+  &:hover:not(.button-white--disabled) {
+    border-color: $color-light-blue;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16), 0 4px 12px rgba(0, 0, 0, 0.12),
+      0 2px 6px rgba(0, 0, 0, 0.08);
   }
 
   // Block-Styling (volle Breite)
@@ -117,6 +101,22 @@ export default {
     &:hover {
       background-color: gray;
     }
+  }
+
+  // Responsive Anpassungen
+  @include respond(laptop) {
+    padding: 12px 35px;
+  }
+
+  @include respond(tablet) {
+    padding: 10px 30px;
+    font-size: $font-size-p-md;
+  }
+
+  @include respond(phone) {
+    padding: 8px 25px;
+    font-size: $font-size-p-sm;
+    display: none;
   }
 }
 </style>

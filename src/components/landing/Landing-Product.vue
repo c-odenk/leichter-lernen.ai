@@ -1,81 +1,143 @@
 <template>
-  <div class="landing-product">
-    <div class="landing-product_row">
-      <div class="landing-product_row_col-1" aria-hidden="true"></div>
-      <div class="landing-product_row_col-2">
-        <div class="features-grid">
-          <div
-            v-for="(feature, index) in workflowSteps"
-            :key="index"
-            class="feature-card"
-          >
-            <div class="feature-icon" v-html="feature.icon"></div>
-            <div class="feature-content">
-              <h3>{{ feature.title }}</h3>
-              <p>{{ feature.description }}</p>
-            </div>
+  <section class="landing-product">
+    <!-- Wiederverwendbare Überschrift-Komponente -->
+    <SectionHeading :heading="heading" :subheading="subheading" />
+
+    <div class="landing-product_grid">
+      <div class="landing-product_grid_col-1">
+        <div v-for="(step, index) in steps" :key="index" class="product_card">
+          <div class="step-icon">
+            <svg
+              v-if="index === 0"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M2 21a8 8 0 0 1 13.292-6" />
+              <circle cx="10" cy="8" r="5" />
+              <path d="M19 16v6" />
+              <path d="M22 19h-6" />
+            </svg>
+            <svg
+              v-if="index === 1"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
+              />
+              <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+              <path d="M9 15h6" />
+              <path d="M12 18v-6" />
+            </svg>
+            <svg
+              v-if="index === 2"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"
+              />
+              <path d="M22 10v6" />
+              <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" />
+            </svg>
+          </div>
+          <div class="step-content">
+            <h3>{{ step.title }}</h3>
+            <p>{{ step.text }}</p>
+            <router-link to="/product"
+              >Mehr erfahren <i class="fa-solid fa-arrow-right"></i
+            ></router-link>
           </div>
         </div>
       </div>
+
+      <div class="landing-product_grid_col-2">
+        <div
+          v-for="(box, i) in highlightBoxes"
+          :key="i"
+          :class="['highlight-box', box.position]"
+        >
+          <span class="highlight-icon">{{ box.icon }}</span>
+          <p>{{ box.text }}</p>
+        </div>
+
+        <!-- Mockup Platzhalter -->
+        <div class="img-platzhalter"></div>
+      </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
+import SectionHeading from "@/components/headings/Section-Heading.vue";
+
 export default {
   name: "ProductSection",
+  components: {
+    SectionHeading,
+  },
 
   data() {
     return {
-      workflowSteps: [
+      /*
+      heading: "🎯 Effizienter lernen mit KI",
+      subheading:
+        "leichter-lernen.ai verwandelt deine Dokumente in klare Zusammenfassungen, Quizze und Prüfungen – für nachhaltigen Lernerfolg.",
+      */
+      heading: "🚀 Mit KI-Unterstützung zu Bestnoten!",
+      subheading:
+        "Wir helfen dir, schneller zu verstehen, gezielt zu wiederholen und dein Wissen aktiv zu festigen. So lernst du nicht nur effektiver, sondern auch zeitsparender.",
+
+      steps: [
         {
-          title: "1. Auf der Lernplattform anmelden",
-          description:
-            "Erstelle in wenigen Sekunden dein Konto und erhalte Zugang zu unserem KI-basierten Lernangebot für effizienteres Studieren.",
-          icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 2a5 5 0 015 5v2a5 5 0 01-10 0V7a5 5 0 015-5z"></path>
-                  <path d="M19 9v1a7 7 0 01-14 0V9"></path>
-                  <rect x="5" y="14" width="14" height="5" rx="2"></rect>
-                  <path d="M12 14v3"></path>
-                  <path d="M12 19v2"></path>
-                </svg>`,
+          title: "Anmelden",
+          text: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
         },
         {
-          title: "2. Dokument hochladen",
-          description:
-            "Lade deine Skripte, Notizen oder Lernmaterialien in den üblichen Textformaten hoch und lass unsere KI die Analyse für dich übernehmen.",
-          icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M4 18a2 2 0 002 2h12a2 2 0 002-2V8h-4a2 2 0 01-2-2V2H6a2 2 0 00-2 2v14z"></path>
-                  <path d="M14 2v4a2 2 0 002 2h4"></path>
-                  <path d="M12 12v5"></path>
-                  <path d="M8 15l4-4 4 4"></path>
-                </svg>`,
+          title: "Dokumente hochladen",
+          text: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.",
         },
         {
-          title: "3. KI-Paket auswählen",
-          description:
-            "Wähle aus unseren verschiedenen KI-Paketen – vom günstigen Einstiegspaket bis zur Premium-Variante mit allen Lernfunktionen für deinen Erfolg.",
-          icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="2" y="6" width="20" height="12" rx="2"></rect>
-                  <circle cx="12" cy="12" r="3"></circle>
-                  <line x1="8.5" y1="19" x2="8.5" y2="21"></line>
-                  <line x1="15.5" y1="19" x2="15.5" y2="21"></line>
-                  <path d="M20 12h.01"></path>
-                  <path d="M3.95 12h.01"></path>
-                  <path d="M19 8l-2 2"></path>
-                  <path d="M5 8l2 2"></path>
-                </svg>`,
+          title: "Lernen & Bestehen",
+          text: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sd diam.",
+        },
+      ],
+      highlightBoxes: [
+        {
+          position: "highlight-box-1",
+          icon: "🚀",
+          text: "Blitzschnelle Zusammenfassungen",
         },
         {
-          title: "4. Optimierte Lernmaterialien erhalten",
-          description:
-            "Unsere KI erstellt dir deine optimierten Lernmaterialien. Je nach Paket erhälst du Zusammenfassungen, Multiple-Choice Quizzes, Probeklausuren oder Zugang zum KI-Tutor.",
-          icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                  <path d="M2 17l10 5 10-5"></path>
-                  <path d="M2 12l10 5 10-5"></path>
-                  <line x1="12" y1="12" x2="12" y2="22"></line>
-                </svg>`,
+          position: "highlight-box-2",
+          icon: "📚",
+          text: "Interaktive Lernkarten",
+        },
+        {
+          position: "highlight-box-3",
+          icon: "💡",
+          text: "Intelligenter KI-Tutor",
         },
       ],
     };
@@ -97,221 +159,316 @@ export default {
   margin: calc($spacing-lg + 50px) 0;
 
   @include respond(laptop) {
-    margin: 10px 0 $spacing-md 0;
+    margin: calc($spacing-lg + 50px) 0;
   }
 
-  @include respond(tablet) {
-    margin: $spacing-md 0;
+  @include respond(tablet-down) {
+    margin: $spacing-lg 0;
   }
 
   @include respond(phone) {
-    margin: $spacing-sm 0;
+    margin: $spacing-md 0;
   }
 
-  &_row {
+  &_grid {
     @include content-container;
-    @include flex-between;
+    display: flex;
+    gap: 2%;
     padding: 0;
+    align-items: stretch;
 
-    @include respond(laptop) {
-      height: 500px;
-    }
-
-    @include respond(tablet) {
+    @include respond(laptop-down) {
       flex-direction: column;
-      height: auto;
-    }
-
-    @include respond(phone) {
-      flex-direction: column;
-      height: auto;
+      gap: $spacing-md;
     }
 
     &_col-1 {
-      width: 36%;
-      height: 45vh;
-      // background-color: $color-dark-blue;
-      border-radius: $border-radius-lg;
+      flex: 0 0 44%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
 
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-image: url("~@/assets/product-hero.png");
+      @include respond(laptop-down) {
+        flex: 1;
+        width: 100%;
+      }
 
-      @include respond(phone) {
-        display: none; // Ausblenden auf Smartphone
+      & .product_card {
+        width: 100%;
+        padding: 40px;
+        background-color: $color-dark-blue;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 600'%3E%3Crect width='500' height='600' fill='%23172b4d' /%3E%3Cg opacity='0.25'%3E%3Cpath d='M0 50 Q125 100, 250 75 T 500 100' fill='none' stroke='%233083e9' stroke-width='0.9' /%3E%3Cpath d='M0 75 Q125 125, 250 100 T 500 125' fill='none' stroke='%233083e9' stroke-width='0.9' /%3E%3C/g%3E%3Cg opacity='0.18'%3E%3Cpath d='M0 150 Q200 100, 350 175 T 500 200' fill='none' stroke='%23ffffff' stroke-width='0.6' /%3E%3Cpath d='M0 175 Q200 125, 350 200 T 500 225' fill='none' stroke='%23ffffff' stroke-width='0.6' /%3E%3C/g%3E%3Cg opacity='0.25'%3E%3Cpath d='M500 400 Q375 450, 250 425 T 0 450' fill='none' stroke='%233083e9' stroke-width='0.9' /%3E%3Cpath d='M500 425 Q375 475, 250 450 T 0 475' fill='none' stroke='%233083e9' stroke-width='0.9' /%3E%3C/g%3E%3Cg opacity='0.18'%3E%3Cpath d='M500 500 Q300 525, 150 500 T 0 525' fill='none' stroke='%23ffffff' stroke-width='0.6' /%3E%3Cpath d='M500 525 Q300 550, 150 525 T 0 550' fill='none' stroke='%23ffffff' stroke-width='0.6' /%3E%3C/g%3E%3C/svg%3E");
+        background-size: cover;
+        border-radius: $border-radius-lg;
+        color: white;
+        display: flex;
+        align-items: flex-start;
+        gap: 25px;
+        position: relative;
+        overflow: hidden;
+
+        @include respond(laptop) {
+          padding: calc($spacing-md + 15px) $spacing-md;
+          gap: $spacing-sm;
+        }
+
+        @include respond(tablet-down) {
+          padding: $spacing-md;
+          gap: $spacing-sm;
+        }
+
+        @include respond(phone) {
+          padding: $spacing-sm;
+          gap: $spacing-xs;
+        }
+
+        &::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: radial-gradient(
+            circle at center,
+            rgba(48, 131, 233, 0.015) 0%,
+            rgba(23, 43, 77, 0.12) 100%
+          );
+          z-index: 1;
+        }
+
+        .step-icon {
+          flex-shrink: 0;
+          width: 42px;
+          height: 42px;
+          background-color: $color-light-blue;
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          position: relative;
+          z-index: 2;
+
+          @include respond(laptop) {
+            width: 38px;
+            height: 38px;
+          }
+
+          @include respond(tablet-down) {
+            width: 36px;
+            height: 36px;
+          }
+
+          @include respond(phone) {
+            width: 32px;
+            height: 32px;
+          }
+
+          svg {
+            width: 25px;
+            height: 25px;
+
+            @include respond(laptop) {
+              width: 20px;
+              height: 20px;
+            }
+
+            @include respond(tablet-down) {
+              width: 18px;
+              height: 18px;
+            }
+
+            @include respond(phone) {
+              width: 16px;
+              height: 16px;
+            }
+          }
+        }
+
+        .step-content {
+          flex: 1;
+          position: relative;
+          z-index: 2;
+          color: $color-text-white;
+          line-height: $line-height;
+          letter-spacing: $letter-spacing;
+
+          h3 {
+            margin: 0 0 10px 0;
+            padding: 0;
+            font-size: $font-size-h3-lg;
+
+            @include respond(laptop) {
+              font-size: calc($font-size-h2-lg - 0.1rem);
+            }
+
+            @include respond(tablet) {
+              font-size: $font-size-h2-md;
+              margin: 0 0 8px 0;
+            }
+
+            @include respond(phone) {
+              font-size: $font-size-h2-sm;
+              margin: 0 0 6px 0;
+            }
+          }
+
+          p {
+            margin: 0;
+            padding: 0;
+            font-size: $font-size-p-xl;
+
+            @include respond(laptop) {
+              font-size: $font-size-p-lg;
+            }
+
+            @include respond(tablet) {
+              font-size: $font-size-p-md;
+            }
+
+            @include respond(phone) {
+              font-size: $font-size-p-sm;
+              margin: 0 0 $spacing-xs 0;
+            }
+          }
+
+          a {
+            display: inline-block;
+            margin: $spacing-sm 0 0 0;
+            text-decoration: none;
+            font-size: $font-size-p-xl;
+            line-height: $line-height;
+            color: $color-text-white;
+
+            // display: none;
+
+            @include respond(laptop) {
+              font-size: $font-size-p-md;
+            }
+
+            @include respond(tablet) {
+              font-size: $font-size-p-md;
+            }
+
+            @include respond(phone) {
+              font-size: $font-size-p-sm;
+            }
+
+            & i {
+              margin: 0 0 0 5px;
+              font-size: 15px;
+            }
+          }
+        }
       }
     }
 
     &_col-2 {
-      width: 62.5%;
-      height: 45vh;
+      flex: 0 0 55%;
       background-color: $color-dark-blue;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 1200'%3E%3Crect width='800' height='1200' fill='%23172b4d' /%3E%3Cg opacity='0.25'%3E%3Cpath d='M0 150 Q250 220, 450 180 T 800 220' fill='none' stroke='%233083e9' stroke-width='1.2' /%3E%3Cpath d='M0 190 Q280 260, 420 220 T 800 260' fill='none' stroke='%233083e9' stroke-width='1.1' /%3E%3C/g%3E%3Cg opacity='0.18'%3E%3Cpath d='M0 380 Q320 330, 500 410 T 800 460' fill='none' stroke='%23ffffff' stroke-width='0.8' /%3E%3Cpath d='M0 420 Q290 370, 530 450 T 800 500' fill='none' stroke='%23ffffff' stroke-width='0.7' /%3E%3C/g%3E%3Cg opacity='0.25'%3E%3Cpath d='M800 680 Q600 750, 400 710 T 0 750' fill='none' stroke='%233083e9' stroke-width='1.2' /%3E%3Cpath d='M800 720 Q570 790, 450 750 T 0 790' fill='none' stroke='%233083e9' stroke-width='1.1' /%3E%3C/g%3E%3Cg opacity='0.18'%3E%3Cpath d='M800 900 Q600 960, 380 920 T 0 970' fill='none' stroke='%23ffffff' stroke-width='0.8' /%3E%3Cpath d='M800 940 Q620 1000, 350 960 T 0 1010' fill='none' stroke='%23ffffff' stroke-width='0.7' /%3E%3C/g%3E%3C/svg%3E");
+      background-size: cover;
       border-radius: $border-radius-lg;
-      padding: $spacing-md;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
       position: relative;
-      box-shadow: $shadow-md;
+      overflow: hidden;
 
-      @include respond(tablet) {
-        width: 100%;
-        height: auto;
-        min-height: 60vh;
+      @include respond(laptop) {
+        // display: none;
       }
 
-      @include respond(phone) {
+      &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
-        height: auto;
-        min-height: 80vh;
-        // padding: $spacing-sm;
-        padding: 0;
-        background-color: transparent; // Entfernt Hintergrundfarbe für Smartphones
-        box-shadow: none; // Entfernt Schatten für Smartphones
+        height: 100%;
+        background: radial-gradient(
+          circle at center,
+          rgba(48, 131, 233, 0.015) 0%,
+          rgba(23, 43, 77, 0.12) 100%
+        );
+        z-index: 1;
       }
-    }
-  }
-}
 
-.features-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: $spacing-md;
-  width: 100%;
-  height: 100%;
-  position: relative;
-  z-index: 1;
+      & .img-platzhalter {
+        width: 340px;
+        height: 560px;
+        background-color: $color-img-platzhalter;
+        position: relative;
+        bottom: -20%;
+        left: 50%;
+        transform: translate(-50%, 0);
+        z-index: 3;
+        border-radius: 30px;
+      }
 
-  @include respond(phone) {
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(4, 1fr);
-    gap: $spacing-sm;
-  }
-}
+      & .highlight-box {
+        margin: 0;
+        padding: 7.5px 12.5px;
+        display: flex;
+        align-items: center;
+        position: absolute;
+        background-color: white;
+        border-radius: $border-radius-lg;
 
-.feature-card {
-  display: flex;
-  flex-direction: column;
-  padding: $spacing-md;
-  // border-radius: $border-radius-md;
-  border-radius: $border-radius-lg;
-  transition: all $transition-speed-medium $transition-timing;
-  position: relative;
-  overflow: hidden;
-  background-color: rgba(48, 131, 233, 0.08);
-  border: 1px solid rgba(48, 131, 233, 0.15);
+        gap: 14px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        z-index: 4;
 
-  // Subtiler Glanz-Effekt
-  &::before {
-    content: "";
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-      to bottom right,
-      rgba(255, 255, 255, 0.03) 0%,
-      rgba(255, 255, 255, 0.02) 40%,
-      rgba(255, 255, 255, 0) 50%,
-      rgba(255, 255, 255, 0) 75%
-    );
-    transform: rotate(-45deg);
-    z-index: 0;
-  }
+        .highlight-icon {
+          width: 45px;
+          height: 45px;
+          background-color: $color-light-blue;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          font-size: 24px;
+        }
 
-  &:hover {
-    background-color: $color-light-blue;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        p {
+          margin: 0;
+          padding: 0;
+          color: $color-dark-blue;
+          font-size: 15px;
+          font-weight: 600;
+          line-height: 1.3;
+          white-space: nowrap;
+        }
+      }
 
-    .feature-icon {
-      background-color: rgba(255, 255, 255, 0.25);
-      transform: scale(1.05);
-    }
-  }
+      .highlight-box-1 {
+        top: 40%;
+        left: 5%;
+        z-index: 5;
 
-  @include respond(phone) {
-    background-color: $color-dark-blue; // Behalte dunkelblauen Hintergrund für Feature-Cards
-    margin-bottom: $spacing-xs; // Fügt zusätzlichen Abstand zwischen den Karten hinzu
-    padding: $spacing-sm;
-  }
-}
+        @include respond(laptop) {
+          // display: none;
+        }
+      }
 
-.feature-icon {
-  width: 70px;
-  height: 70px;
-  margin-bottom: $spacing-sm;
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: $border-radius-lg;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 15px;
-  position: relative;
-  z-index: 1;
-  transition: all $transition-speed-medium $transition-timing;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      .highlight-box-2 {
+        top: 55%;
+        left: 55%;
+        z-index: 5;
 
-  @include respond(laptop) {
-    width: 60px;
-    height: 60px;
-  }
+        @include respond(laptop) {
+          // display: none;
+        }
+      }
 
-  @include respond(tablet) {
-    width: 50px;
-    height: 50px;
-    padding: 12px;
-  }
+      .highlight-box-3 {
+        top: 70%;
+        left: 5%;
+        z-index: 5;
 
-  @include respond(phone) {
-    width: 45px;
-    height: 45px;
-    padding: 10px;
-  }
-
-  svg {
-    width: 100%;
-    height: 100%;
-    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));
-  }
-}
-
-.feature-content {
-  position: relative;
-  z-index: 1;
-
-  h3 {
-    color: $color-text-white;
-    font-size: $font-size-h3-lg;
-    margin: $spacing-xs 0;
-    letter-spacing: 0.3px;
-    font-weight: 600;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-
-    @include respond(laptop) {
-      font-size: $font-size-h3-md;
-    }
-
-    @include respond(phone) {
-      font-size: $font-size-h3-sm;
-    }
-  }
-
-  p {
-    color: rgba(255, 255, 255, 0.92);
-    font-size: $font-size-p-md;
-    line-height: 1.5;
-    margin: 0;
-
-    @include respond(laptop) {
-      font-size: $font-size-p-sm;
-    }
-
-    @include respond(phone) {
-      font-size: $font-size-p-xs;
+        @include respond(laptop) {
+          // display: none;
+        }
+      }
     }
   }
 }

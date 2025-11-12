@@ -2,7 +2,7 @@
   <div class="landing-faq">
     <div class="landing-faq_row">
       <div class="landing-faq_col-1">
-        <h2>{{ heading }}</h2>
+        <h2>💡 {{ heading }}</h2>
         <p>{{ subheading }}</p>
       </div>
       <div class="landing-faq_col-2">
@@ -99,17 +99,18 @@ export default {
 
 .landing-faq {
   width: 100%;
-  margin: calc($spacing-lg + 50px) 0 $spacing-xl 0;
+  margin: calc($spacing-lg + 100px) 0;
 
   @include respond(laptop) {
-  }
-
-  @include respond(tablet) {
     margin: calc($spacing-lg) 0 calc($spacing-lg + 50px) 0;
   }
 
+  @include respond(tablet) {
+    margin: calc($spacing-lg + 20px) 0;
+  }
+
   @include respond(phone) {
-    margin: $spacing-lg 0 calc($spacing-lg + 20px) 0;
+    margin: $spacing-lg 0;
   }
 
   &_row {
@@ -119,9 +120,6 @@ export default {
     flex-direction: row;
     justify-content: space-between;
     flex-wrap: wrap;
-
-    @include respond(tablet) {
-    }
   }
 
   &_col-1 {
@@ -143,11 +141,14 @@ export default {
       font-size: $font-size-h2-lg;
 
       @include respond(tablet) {
+        margin: 0 0 $spacing-xs 0;
         text-align: center;
         font-size: $font-size-h2-md;
       }
 
       @include respond(phone) {
+        margin: 0 0 $spacing-md 0;
+        text-align: center;
         font-size: $font-size-h2-sm;
       }
     }
@@ -156,33 +157,36 @@ export default {
       width: 80%;
       margin: 0;
       padding: 0;
-      font-size: $font-size-p-xl;
-      line-height: $line-height;
-      letter-spacing: $letter-spacing;
+      font-size: $font-size-p-desktop;
+      letter-spacing: $letter-spacing-p-desktop;
 
       @include respond(laptop) {
-        width: 70%;
-        font-size: $font-size-p-lg;
+        width: 90%;
+        font-size: $font-size-p-laptop;
+        letter-spacing: $letter-spacing-p-laptop;
       }
 
       @include respond(tablet) {
         width: 100%;
         text-align: center;
-        font-size: $font-size-p-md;
+        font-size: $font-size-p-tablet;
+        letter-spacing: $letter-spacing-p-tablet;
       }
 
       @include respond(phone) {
-        // width: 95%;
-        font-size: $font-size-p-sm;
+        width: 100%;
+        font-size: $font-size-p-phone;
+        letter-spacing: $letter-spacing-p-phone;
+        text-align: center;
       }
     }
   }
 
   &_col-2 {
-    width: 40%;
+    width: 50%;
     display: flex;
     flex-direction: column;
-    gap: $spacing-xs;
+    gap: 10px;
 
     @include respond(tablet) {
       width: 100%;
@@ -203,6 +207,10 @@ export default {
   transition: all $transition-speed-medium $transition-timing;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+  @include respond(tablet-down) {
+    padding: $spacing-sm;
+  }
 
   &:hover {
     border-color: #3b82f6;
@@ -239,7 +247,7 @@ export default {
     flex: 1;
 
     @include respond(laptop) {
-      font-size: calc($font-size-h3-lg - 1px);
+      font-size: calc($font-size-h3-lg - 2px);
     }
 
     @include respond(tablet) {
@@ -261,6 +269,11 @@ export default {
     justify-content: center;
     transition: all $transition-speed-medium $transition-timing;
     flex-shrink: 0;
+
+    @include respond(phone) {
+      width: 28px;
+      height: 28px;
+    }
   }
 
   &__icon {
@@ -269,8 +282,12 @@ export default {
     transition: all $transition-speed-medium $transition-timing;
     transform: rotate(0deg);
 
+    @include respond(phone) {
+      font-size: 12px;
+    }
+
     &--rotated {
-      transform: rotate(180deg); // Jetzt dreht der Pfeil korrekt
+      transform: rotate(180deg);
     }
   }
 
@@ -278,33 +295,37 @@ export default {
     margin-top: $spacing-md;
     padding-top: $spacing-md;
     border-top: 1px solid #f3f4f6;
+
+    @include respond(tablet) {
+      margin-top: $spacing-sm;
+      padding-top: $spacing-sm;
+    }
   }
 
   &__text {
     margin: 0;
     padding: 0;
-    font-size: $font-size-p-lg;
-    line-height: $line-height;
-    letter-spacing: $letter-spacing;
+    font-size: $font-size-p-desktop;
+    letter-spacing: $letter-spacing-p-desktop;
+    line-height: $line-height-p-desktop;
+
+    @include respond(laptop) {
+      font-size: $font-size-p-laptop;
+      letter-spacing: $letter-spacing-p-laptop;
+      line-height: $line-height-p-laptop;
+    }
 
     @include respond(tablet) {
-      font-size: $font-size-p-md;
+      font-size: $font-size-p-tablet;
+      letter-spacing: $letter-spacing-p-tablet;
+      line-height: $line-height-p-tablet;
     }
 
     @include respond(phone) {
-      font-size: $font-size-p-sm;
+      font-size: $font-size-p-phone;
+      letter-spacing: $letter-spacing-p-phone;
+      line-height: $line-height-p-phone;
     }
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }
 </style>

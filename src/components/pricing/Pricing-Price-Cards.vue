@@ -1,7 +1,7 @@
 <template>
   <div class="pricing-price-cards">
-    <div class="pricing-price-cards_row">
-      <!-- Iteration über alle Preispläne mit v-for -->
+    <div class="pricing-price-cards_row" ref="scrollContainer">
+      <!-- Iteration über alle Preispläne -->
       <div
         v-for="(plan, index) in productSortiment"
         :key="index"
@@ -13,7 +13,7 @@
         <p>
           <span class="preis">{{ plan.price }}</span> {{ plan.priceModel }}
         </p>
-        <!-- Call-to-Action Button mit der global registrierten LinkButtonBlue-Komponente -->
+
         <div class="button-container">
           <LinkButtonBlue
             to="/login"
@@ -23,7 +23,7 @@
             :block="true"
           />
         </div>
-        <!-- Liste der Features für diesen Preisplan -->
+
         <ul>
           <li v-for="(feature, idx) in plan.features" :key="idx">
             {{ feature }}
@@ -31,11 +31,15 @@
         </ul>
       </div>
     </div>
-    <!-- Scroll-Indikatoren nur für Tablet-Ansicht -->
-    <div class="scroll-indicators tablet-only">
-      <div class="scroll-dot active"></div>
-      <div class="scroll-dot"></div>
-      <div class="scroll-dot"></div>
+
+    <!-- Scroll-Indikatoren nur für Tablet -->
+    <div class="scroll-indicators tablet-only" v-if="indicatorCount > 1">
+      <div
+        v-for="n in indicatorCount"
+        :key="n"
+        class="scroll-dot"
+        :class="{ active: n - 1 === activeIndex }"
+      ></div>
     </div>
   </div>
 </template>
@@ -49,37 +53,81 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      activeIndex: 0,
+      indicatorCount: 0,
+      scrollHandler: null,
+      resizeHandler: null,
+    };
+  },
   mounted() {
-    // Nur für Tablet-Ansicht: Initialisiere Scroll-Indikatoren
-    this.initScrollIndicators();
+    this.scrollHandler = this.onScroll.bind(this);
+    this.resizeHandler = this.onResize.bind(this);
+
+    this.setupIfTablet();
+    window.addEventListener("resize", this.resizeHandler);
+  },
+  beforeUnmount() {
+    const container = this.$refs.scrollContainer;
+    if (container && this.scrollHandler) {
+      container.removeEventListener("scroll", this.scrollHandler);
+    }
+    window.removeEventListener("resize", this.resizeHandler);
   },
   methods: {
-    initScrollIndicators() {
-      // Prüfen, ob wir in der Tablet-Ansicht sind
-      const isTablet = window.matchMedia(
-        "(max-width: 1024px) and (min-width: 768px)"
-      ).matches;
+    isTablet() {
+      return window.matchMedia("(min-width: 481px) and (max-width: 1024px)")
+        .matches;
+    },
+    setupIfTablet() {
+      const container = this.$refs.scrollContainer;
+      if (!container) return;
 
-      if (isTablet) {
-        const container = this.$el.querySelector(".pricing-price-cards_row");
-        const dots = this.$el.querySelectorAll(".scroll-dot");
-
-        if (container && dots.length) {
-          container.addEventListener("scroll", () => {
-            // Berechne den Fortschritt des Scrollens (0 bis 1)
-            const scrollProgress =
-              container.scrollLeft /
-              (container.scrollWidth - container.clientWidth);
-
-            // Bestimme, welcher Indikator aktiv sein sollte
-            const activeIndex = Math.round(scrollProgress * (dots.length - 1));
-
-            // Setze die aktive Klasse auf den entsprechenden Indikator
-            dots.forEach((dot, index) => {
-              dot.classList.toggle("active", index === activeIndex);
-            });
-          });
-        }
+      if (this.isTablet()) {
+        this.computeIndicatorCount();
+        container.removeEventListener("scroll", this.scrollHandler);
+        container.addEventListener("scroll", this.scrollHandler);
+        this.onScroll();
+      } else {
+        container.removeEventListener("scroll", this.scrollHandler);
+        this.indicatorCount = 0;
+        this.activeIndex = 0;
+      }
+    },
+    computeIndicatorCount() {
+      const container = this.$refs.scrollContainer;
+      if (!container) {
+        this.indicatorCount = 0;
+        return;
+      }
+      const total = container.scrollWidth;
+      const view = container.clientWidth;
+      if (view <= 0) {
+        this.indicatorCount = 0;
+        return;
+      }
+      const pages = Math.max(1, Math.ceil(total / view));
+      this.indicatorCount = pages;
+      if (this.activeIndex >= this.indicatorCount) {
+        this.activeIndex = this.indicatorCount - 1;
+      }
+    },
+    onScroll() {
+      const container = this.$refs.scrollContainer;
+      if (!container || this.indicatorCount <= 1) return;
+      const maxScroll = container.scrollWidth - container.clientWidth;
+      const progress = maxScroll > 0 ? container.scrollLeft / maxScroll : 0;
+      const idx = Math.round(progress * (this.indicatorCount - 1));
+      this.activeIndex = Math.min(Math.max(0, idx), this.indicatorCount - 1);
+    },
+    onResize() {
+      this.setupIfTablet();
+      if (this.isTablet()) {
+        this.computeIndicatorCount();
+        this.onScroll();
+      } else {
+        this.activeIndex = 0;
       }
     },
   },
@@ -89,6 +137,7 @@ export default {
 <style lang="scss" scoped>
 @use "../../variables/variables.scss" as *;
 
+/* ensure padding doesn't add to width */
 *,
 *::before,
 *::after {
@@ -97,38 +146,41 @@ export default {
 
 .pricing-price-cards {
   width: 100%;
+  overflow: visible; // <-- Fix: Sichtbarkeit nach oben erlauben!
 
   &_row {
     width: 62%;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-start;
     margin: 0 auto 50px auto;
+    gap: 24px;
     scroll-behavior: smooth;
+    overflow: visible; // <-- ebenfalls sichtbar, damit Badge nicht abgeschnitten wird!
 
     @include respond(laptop) {
       @include content-container;
       margin: 0 auto;
+      overflow: visible; // wichtig für Badge
+    }
+
+    @include respond(desktop) {
+      @include content-container;
+      overflow: visible; // Badge sichtbar auf großen Bildschirmen
     }
 
     @include respond(tablet) {
       @include content-container;
       overflow-x: auto;
-      overflow-y: hidden;
+      overflow-y: visible; // Badge sichtbar auf Tablet
       flex-wrap: nowrap;
-      justify-content: flex-start;
-      gap: 20px;
-      padding: 20px 0;
-      margin: 0 auto 0 auto;
+      padding: 40px 0 20px 0;
+      position: relative;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
       -ms-overflow-style: none;
       &::-webkit-scrollbar {
         display: none;
-      }
-
-      &::after {
-        content: "";
       }
     }
 
@@ -136,15 +188,17 @@ export default {
       @include content-container;
       flex-direction: column;
       align-items: center;
-      overflow-x: visible;
-      margin: 0 auto;
+      overflow: visible;
+      gap: 20px;
+      margin-bottom: 30px;
     }
 
-    & .price-card {
+    /* price-card basics */
+    .price-card {
+      flex: 0 0 auto;
       width: 31.5%;
       margin: 0;
       padding: 40px 25px;
-      box-sizing: border-box;
       border: 1px solid rgba(0, 0, 0, 0.07);
       border-radius: $border-radius-lg;
       box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);
@@ -157,10 +211,9 @@ export default {
       }
 
       @include respond(tablet) {
-        min-width: 280px;
-        max-width: 500px;
-        width: 60%;
-        flex: 0 0 auto;
+        min-width: 300px;
+        max-width: 520px;
+        width: auto;
       }
 
       @include respond(phone) {
@@ -172,54 +225,59 @@ export default {
         box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.15);
       }
 
-      & h3 {
-        min-height: 40px;
-        margin: 0 0 25px 0;
-        padding: 0;
+      h3 {
+        margin: 0 0 20px 0;
         font-size: $font-size-h3-lg;
-
-        @include respond(phone) {
-          font-size: $font-size-h3-sm;
-        }
       }
 
-      & p {
-        margin: 0;
-        padding: 0;
-        font-size: $font-size-p-lg;
-        line-height: $line-height;
-        letter-spacing: $letter-spacing;
+      p {
+        margin: 0 0 10px 0;
+        font-size: $font-size-p-desktop;
+        letter-spacing: $letter-spacing-p-desktop;
+        line-height: $line-height-p-desktop;
+
+        @include respond(laptop) {
+          font-size: $font-size-p-laptop;
+          letter-spacing: $letter-spacing-p-laptop;
+          line-height: $line-height-p-laptop;
+        }
+
+        @include respond(tablet) {
+          font-size: $font-size-p-tablet;
+          letter-spacing: $letter-spacing-p-tablet;
+          line-height: $line-height-p-tablet;
+        }
+
+        @include respond(phone) {
+          font-size: $font-size-p-phone;
+          letter-spacing: $letter-spacing-p-phone;
+          line-height: $line-height-p-phone;
+        }
 
         &:first-of-type {
-          margin: 0 0 20px 0;
+          margin-bottom: 20px;
           min-height: 95px;
 
           @include respond(tablet) {
             min-height: 67px;
           }
-
-          @include respond(phone) {
-            min-height: auto;
-          }
         }
 
-        &:last-of-type {
-          font-size: $font-size-p-lg;
-        }
-
-        & .preis {
-          margin: 0;
-          padding: 0;
+        .preis {
           font-size: 2.8125rem;
           font-weight: 500;
 
           @include respond(tablet) {
-            font-size: 2.2rem;
+            font-size: 2rem;
+          }
+
+          @include respond(phone) {
+            font-size: 1.6rem;
           }
         }
       }
 
-      & .button-container {
+      .button-container {
         width: 100%;
         margin: 20px 0 50px 0;
 
@@ -228,18 +286,37 @@ export default {
         }
       }
 
-      & ul {
+      ul {
         margin: 0;
         padding: 0;
         list-style: none;
 
-        & li {
+        li {
           margin: 0;
           padding: 0 0 20px 25px;
-          font-size: $font-size-p-lg;
-          line-height: $line-height;
-          letter-spacing: $letter-spacing;
+          font-size: $font-size-p-desktop;
+          letter-spacing: $letter-spacing-p-desktop;
+          line-height: $line-height-p-desktop;
           position: relative;
+          word-break: break-word;
+
+          @include respond(laptop) {
+            font-size: $font-size-p-laptop;
+            letter-spacing: $letter-spacing-p-laptop;
+            line-height: $line-height-p-laptop;
+          }
+
+          @include respond(tablet) {
+            font-size: $font-size-p-tablet;
+            letter-spacing: $letter-spacing-p-tablet;
+            line-height: $line-height-p-tablet;
+          }
+
+          @include respond(phone) {
+            font-size: $font-size-p-phone;
+            letter-spacing: $letter-spacing-p-phone;
+            line-height: $line-height-p-phone;
+          }
 
           &::before {
             content: "\f00c";
@@ -259,14 +336,14 @@ export default {
       }
     }
 
-    & .mostWantedBody {
+    .mostWantedBody {
       background-color: $color-dark-blue;
       color: $color-text-white;
 
       &::before {
         content: "Beliebt";
         position: absolute;
-        top: -20px;
+        top: -20px; // ragt über den Container
         left: 50%;
         transform: translateX(-50%);
         background-color: $color-warning;
@@ -276,14 +353,16 @@ export default {
         font-size: calc($font-size-p-lg - 3px);
         letter-spacing: 0.5px;
         font-weight: 600;
+        z-index: 2; // sicherstellen, dass es über anderen Elementen liegt
       }
     }
   }
 
-  /* Scroll-Indikatoren (nur für Tablets) */
+  /* Scroll-Indikatoren */
   .scroll-indicators {
     display: none;
     justify-content: center;
+    margin-top: 12px;
 
     @include respond(tablet) {
       display: flex;
@@ -297,21 +376,21 @@ export default {
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      margin: 0 5px;
-      background-color: rgba(0, 0, 0, 0.2);
-      transition: background-color 0.3s ease;
+      margin: 0 6px;
+      background-color: rgba(0, 0, 0, 0.18);
+      transition: background-color 0.25s ease, transform 0.2s ease;
 
       &.active {
         background-color: $color-light-blue;
+        transform: scale(1.05);
       }
     }
   }
 
-  /* Hilfsklasse für Elemente, die nur auf Tablets angezeigt werden */
   .tablet-only {
     display: none;
 
-    @include respond(tablet-only) {
+    @include respond(tablet) {
       display: flex;
     }
   }

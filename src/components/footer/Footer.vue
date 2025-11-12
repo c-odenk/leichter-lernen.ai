@@ -73,6 +73,15 @@ export default {
     margin: 0;
   }
 
+  @include respond(tablet) {
+    margin: 0;
+  }
+
+  @include respond(phone) {
+    margin: 0;
+    padding: calc($spacing-md + 10px) 0;
+  }
+
   &__container {
     @include content-container;
   }
@@ -85,8 +94,12 @@ export default {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
     @include respond(tablet) {
-      flex-direction: column;
       gap: calc($spacing-sm - 10px);
+    }
+
+    @include respond(phone) {
+      gap: calc($spacing-sm) 0;
+      flex-direction: column;
     }
   }
 
@@ -102,36 +115,34 @@ export default {
   }
 
   &__link {
-    color: $color-text-white;
     text-decoration: none;
-    font-size: $font-size-p-xl;
+    font-size: $font-size-p-desktop;
+    letter-spacing: $letter-spacing-p-desktop;
+    line-height: $line-height-p-desktop;
+    color: $color-text-white;
     transition: color $transition-speed-medium $transition-timing;
     position: relative;
 
-    &:hover {
-      color: $color-light-blue-lighter;
-      /*
-      &::after {
-        width: 100%;
-      }
-      */
+    @include respond(laptop) {
+      font-size: $font-size-p-laptop;
+      letter-spacing: $letter-spacing-p-laptop;
+      line-height: $line-height-p-laptop;
     }
 
-    /*
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background-color: $color-light-blue-lighter;
-      transition: width $transition-speed-medium $transition-timing;
+    @include respond(tablet) {
+      font-size: $font-size-p-tablet;
+      letter-spacing: $letter-spacing-p-tablet;
+      line-height: $line-height-p-tablet;
     }
-    */
 
     @include respond(phone) {
-      font-size: $font-size-p-sm;
+      font-size: $font-size-p-phone;
+      letter-spacing: $letter-spacing-p-phone;
+      line-height: $line-height-p-phone;
+    }
+
+    &:hover {
+      color: $color-light-blue-lighter;
     }
   }
 
@@ -146,16 +157,22 @@ export default {
 
   &__social-icon {
     color: $color-text-white;
-    font-size: calc($font-size-p-xl + 3px);
-    transition: color $transition-speed-medium $transition-timing,
-      transform $transition-speed-medium $transition-timing;
+    font-size: calc($font-size-p-desktop + 5px);
 
     &:hover {
       color: $color-light-blue-lighter;
     }
 
+    @include respond(laptop) {
+      font-size: calc($font-size-p-laptop + 5px);
+    }
+
+    @include respond(tablet) {
+      font-size: calc($font-size-p-tablet + 5px);
+    }
+
     @include respond(phone) {
-      font-size: $font-size-p-lg;
+      font-size: calc($font-size-p-phone + 5px);
     }
   }
 
@@ -165,11 +182,27 @@ export default {
 
     p {
       margin: 0;
-      font-size: $font-size-p-lg;
+      font-size: $font-size-p-desktop;
+      letter-spacing: $letter-spacing-p-desktop;
+      line-height: $line-height-p-desktop;
       color: rgba(255, 255, 255, 0.7);
 
+      @include respond(laptop) {
+        font-size: $font-size-p-laptop;
+        letter-spacing: $letter-spacing-p-laptop;
+        line-height: $line-height-p-laptop;
+      }
+
+      @include respond(tablet) {
+        font-size: $font-size-p-tablet;
+        letter-spacing: $letter-spacing-p-tablet;
+        line-height: $line-height-p-tablet;
+      }
+
       @include respond(phone) {
-        font-size: calc(#{$font-size-p-sm} - 2px);
+        font-size: $font-size-p-phone;
+        letter-spacing: $letter-spacing-p-phone;
+        line-height: $line-height-p-phone;
       }
     }
   }

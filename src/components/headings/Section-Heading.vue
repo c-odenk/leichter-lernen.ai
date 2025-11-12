@@ -1,19 +1,22 @@
 <template>
-  <div class="blog-widget">
+  <div class="section-heading">
     <h2>{{ heading }}</h2>
-    <p>{{ paragraph }}</p>
+    <p>{{ subheading }}</p>
   </div>
 </template>
 
 <script>
 export default {
-  name: "BlogWidget",
-  data() {
-    return {
-      heading: "Willkommen auf unserem Blog!",
-      paragraph:
-        "In unseren Beiträgen gehen wir auf die Herausforderungen ein, mit denen Studierende während der Prüfungsphase konfrontiert sind und zeigen, wie mit KI-gestützten Lösungen bessere Lernerfolge erzielt werden können.",
-    };
+  name: "SectionHeading",
+  props: {
+    heading: {
+      type: String,
+      required: true,
+    },
+    subheading: {
+      type: String,
+      default: "",
+    },
   },
 };
 </script>
@@ -21,32 +24,37 @@ export default {
 <style lang="scss" scoped>
 @use "../../variables/variables.scss" as *;
 
-.blog-widget {
-  width: 100%;
-  padding: $spacing-md $spacing-lg;
-  box-shadow: $shadow-md;
+*,
+*::before,
+*::after {
   box-sizing: border-box;
-  border-radius: $border-radius-md;
-  background-color: $color-text-white;
+}
+
+.section-heading {
+  @include content-container;
+  margin-bottom: $spacing-lg;
 
   @include respond(laptop) {
-    padding: $spacing-md calc($spacing-md - 5px);
+    margin-bottom: $spacing-md;
   }
 
   @include respond(tablet) {
-    padding: $spacing-md;
+    margin-bottom: $spacing-sm;
   }
 
   @include respond(phone) {
-    padding: $spacing-sm;
+    margin-bottom: $spacing-sm;
   }
 
   & h2 {
-    margin: 0 0 $spacing-sm 0;
-    padding: 0 0 $spacing-xs 0;
-    border-bottom: solid 1px #ddd;
+    margin: 0 0 calc($spacing-xs) 0;
+    padding: 0;
+    text-align: center;
     font-size: $font-size-h2-lg;
-    color: $color-dark-blue;
+
+    @include respond(laptop) {
+      font-size: calc($font-size-h2-lg - 0.1rem);
+    }
 
     @include respond(tablet) {
       font-size: $font-size-h2-md;
@@ -58,26 +66,31 @@ export default {
   }
 
   & p {
-    margin: 0;
+    width: 60%;
+    margin: 0 auto;
     padding: 0;
     font-size: $font-size-p-desktop;
     letter-spacing: $letter-spacing-p-desktop;
     line-height: $line-height-p-desktop;
-    color: $color-text-dark;
+    text-align: center;
 
     @include respond(laptop) {
+      width: 70%;
       font-size: $font-size-p-laptop;
       letter-spacing: $letter-spacing-p-laptop;
       line-height: $line-height-p-laptop;
     }
 
     @include respond(tablet) {
-      font-size: $font-size-p-tablet;
-      letter-spacing: $letter-spacing-p-tablet;
-      line-height: $line-height-p-tablet;
+      width: 85%;
+      font-size: $font-size-p-laptop;
+      letter-spacing: $letter-spacing-p-laptop;
+      line-height: $line-height-p-laptop;
     }
 
     @include respond(phone) {
+      width: 95%;
+      margin-bottom: $spacing-md;
       font-size: $font-size-p-phone;
       letter-spacing: $letter-spacing-p-phone;
       line-height: $line-height-p-phone;

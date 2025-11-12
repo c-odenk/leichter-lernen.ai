@@ -16,29 +16,29 @@
           </router-link>
         </div>
 
-        <!-- Hamburger Menu Button für mobile Ansicht -->
+        <!-- Hamburger Menu Button -->
         <div
           class="menu-button"
           @click="toggleMenu"
           :class="{ active: menuOpen }"
+          :aria-expanded="menuOpen"
+          aria-label="Menu"
         >
           <span></span>
         </div>
 
         <!-- Desktop Navigation -->
-        <nav class="header_row_navigation desktop-nav">
+        <nav class="header_row_navigation">
           <ul>
-            <li>
-              <router-link to="/" class="nav-link"> Home</router-link>
-            </li>
+            <li><router-link to="/" class="nav-link">Home</router-link></li>
             <li>
               <router-link
-                to=""
+                to="#"
                 @click="handleDisabledClick"
                 class="disabled-link nav-link"
               >
-                ✨ Produkt</router-link
-              >
+                ✨ Produkt
+              </router-link>
             </li>
             <li>
               <router-link to="/pricing" class="nav-link">Preise</router-link>
@@ -47,16 +47,23 @@
           </ul>
         </nav>
 
-        <div class="header_row_cta desktop-cta">
-          <LinkButtonBlue text="Anmelden" to="/login" />
+        <div class="header_row_cta">
+          <LinkButtonBlue to="/login">
+            Anmelden <i class="fa-solid fa-arrow-right"></i>
+          </LinkButtonBlue>
         </div>
       </div>
     </div>
 
-    <!-- Mobiles Menü - Mit Animation von rechts und angepasster Breite -->
-    <div class="mobile-menu" :class="{ open: menuOpen }">
-      <div class="mobile-menu__container">
-        <nav class="mobile-menu__nav">
+    <!-- Mobiles Menü -->
+    <div
+      class="mobile-menu"
+      :class="{ open: menuOpen }"
+      role="dialog"
+      :aria-hidden="!menuOpen"
+    >
+      <div class="mobile-menu__container" @click.self="closeMenu">
+        <nav class="mobile-menu__nav" aria-label="Mobile Navigation">
           <router-link to="/" class="mobile-menu__link" @click="closeMenu">
             <span class="mobile-menu__icon">🏠</span>
             <span>Home</span>
@@ -128,55 +135,56 @@ export default {
     };
   },
   created() {
-    // Logo URL vorbereiten
-    // this.logoSrc = require("@/assets/leichter-lernen-logo.png");
     this.logoSrc = require("@/assets/logo-2.png");
   },
   mounted() {
-    // Bild im Hintergrund vorladen
     const img = new Image();
     img.onload = () => {
       this.imageLoaded = true;
     };
     img.src = this.logoSrc;
 
-    // Cache Header in sessionStorage für schnellere Wiederbesuche
     if (sessionStorage.getItem("headerLoaded") === "true") {
       this.imageLoaded = true;
     } else {
       sessionStorage.setItem("headerLoaded", "true");
     }
 
-    // Event-Listener für Fenstergröße, um das Menü zu schließen beim Resize
     window.addEventListener("resize", this.handleResize);
   },
   beforeUnmount() {
-    // Event-Listener entfernen
     window.removeEventListener("resize", this.handleResize);
+    // restore body overflow
+    document.body.style.overflow = "";
+    document.documentElement.style.overflow = "";
+    document.body.style.overflowX = "";
+    document.documentElement.style.overflowX = "";
   },
   methods: {
     handleDisabledClick(event) {
-      if (event) event.preventDefault(); // Verhindert das Standardverhalten
-      alert("Die Seite ist in Kürze verfügbar!"); // Zeigt eine Meldung an
+      if (event) event.preventDefault();
+      alert("Die Seite ist in Kürze verfügbar!");
       this.closeMenu();
     },
     toggleMenu() {
       this.menuOpen = !this.menuOpen;
-
-      // Scroll verhindern, wenn Menü offen ist
-      if (this.menuOpen) {
-        document.body.style.overflow = "hidden";
-      } else {
-        document.body.style.overflow = "";
-      }
+      const overflowValue = this.menuOpen ? "hidden" : "";
+      // block both vertical and horizontal scroll on background when menu is open
+      document.body.style.overflow = overflowValue;
+      document.documentElement.style.overflow = overflowValue;
+      document.body.style.overflowX = overflowValue;
+      document.documentElement.style.overflowX = overflowValue;
     },
     closeMenu() {
       this.menuOpen = false;
       document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+      document.body.style.overflowX = "";
+      document.documentElement.style.overflowX = "";
     },
     handleResize() {
-      // Menü schließen, wenn Bildschirm größer als Tablet wird
-      if (window.innerWidth > 1024) {
+      // close the mobile menu when resizing past mobile breakpoint
+      if (window.innerWidth > 850) {
         this.closeMenu();
       }
     },
@@ -184,16 +192,16 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @use "../../variables/variables.scss" as *;
 
+/* ensure box-sizing inside this component */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
-// Visibility handling for loading
 [v-cloak] {
   display: none;
 }
@@ -206,15 +214,18 @@ export default {
   border-radius: $border-radius-sm;
 }
 
+/* -------------------------
+   HEADER STYLES
+   ------------------------- */
 .header {
   width: 100%;
   padding: $spacing-md 0;
+  background-color: $color-text-white;
   position: relative;
-  z-index: 1002; // Höherer z-index als das mobile Menü
-  background-color: $color-text-white; // Hintergrund hinzufügen, um sichtbar zu bleiben
+  z-index: 3000;
 
   @include respond(laptop) {
-    padding: calc($spacing-md - 20px) 0;
+    padding: calc($spacing-md - 10px) 0;
   }
 
   @include respond(tablet) {
@@ -227,29 +238,24 @@ export default {
 
   &_row {
     @include content-container;
-    display: flex;
+    @include flex-between;
     align-items: center;
-    position: relative;
-
-    @include respond(tablet) {
-      justify-content: space-between;
-    }
 
     &_logo {
       width: 20%;
-      z-index: 1002; // Höherer z-index als das mobile Menü
-
-      @include respond(laptop) {
-        width: 25%;
-      }
+      flex-shrink: 0;
+      z-index: 3002;
 
       @include respond(tablet) {
         width: auto;
         flex: 1;
+        max-width: calc(100% - 60px);
       }
 
       @include respond(phone) {
         width: auto;
+        flex: 1;
+        max-width: calc(100% - 60px);
       }
 
       a {
@@ -257,22 +263,15 @@ export default {
         align-items: center;
         text-decoration: none;
         color: $color-text-dark;
-        transition: color $transition-speed-medium $transition-timing;
 
         img {
-          height: 80px;
+          height: 70px;
           width: auto;
           display: block;
-          margin: 0 0 0 -25px;
-
-          @include respond(laptop) {
-            height: 70px;
-            margin: 0 0 0 -15px;
-          }
+          margin-right: 5px;
 
           @include respond(tablet) {
             height: 60px;
-            margin: 0;
           }
 
           @include respond(phone) {
@@ -281,10 +280,7 @@ export default {
         }
 
         h2 {
-          margin-left: 5px;
-          font-size: 25px;
-          line-height: $line-height;
-          letter-spacing: $letter-spacing;
+          font-size: 24px;
           color: $color-dark-blue;
           white-space: nowrap;
 
@@ -294,7 +290,6 @@ export default {
 
           @include respond(phone) {
             font-size: 18px;
-            // margin-left: $spacing-md;
           }
         }
       }
@@ -305,11 +300,11 @@ export default {
       display: flex;
       justify-content: center;
 
-      @include respond(laptop) {
-        width: 55%;
+      @include respond(tablet) {
+        display: none;
       }
 
-      @include respond(tablet) {
+      @include respond(phone) {
         display: none;
       }
 
@@ -318,34 +313,31 @@ export default {
         list-style: none;
         margin: 0;
         padding: 0;
-        justify-content: center;
+        align-items: center;
 
         li {
           margin: 0 $spacing-xs;
+          display: flex;
+          align-items: center;
 
           a {
             padding: 0 $spacing-sm;
-            font-size: $font-size-p-xl;
+            font-size: $font-size-p-desktop;
             font-weight: 500;
-            line-height: $line-height;
-            letter-spacing: $letter-spacing;
-            text-decoration: none;
             text-transform: uppercase;
+            text-decoration: none;
             color: $color-text-dark;
             transition: color $transition-speed-medium $transition-timing;
+            display: inline-flex;
+            align-items: center;
 
             &.disabled-link {
               cursor: not-allowed;
               opacity: 0.7;
             }
 
-            // Neuer Hover-Effekt für die Navigationslinks (nur für Desktop und Laptop)
-            &.nav-link {
-              @media (min-width: 1025px) {
-                &:hover {
-                  color: $color-light-blue;
-                }
-              }
+            &:hover {
+              color: $color-light-blue;
             }
           }
         }
@@ -356,60 +348,49 @@ export default {
       width: 20%;
       display: flex;
       justify-content: flex-end;
-
-      @include respond(laptop) {
-        width: 20%;
-      }
+      flex-shrink: 0;
 
       @include respond(tablet) {
+        display: none;
+      }
+
+      @include respond(phone) {
         display: none;
       }
     }
   }
 }
 
-// Menu Button (Hamburger)
+/* -------------------------
+   HAMBURGER-BUTTON
+   ------------------------- */
 .menu-button {
-  width: 36px;
-  height: 36px;
-  position: relative;
-  border-radius: $border-radius-md;
-  cursor: pointer;
-  margin-left: $spacing-sm;
-  z-index: 1002; // Höherer z-index als das mobile Menü
+  width: 40px;
+  height: 40px;
   display: none;
   justify-content: center;
   align-items: center;
+  border-radius: $border-radius-md;
+  cursor: pointer;
   transition: background-color $transition-speed-medium $transition-timing;
+  z-index: 3100;
 
   @include respond(tablet) {
     display: flex;
   }
 
-  &:hover {
-    background-color: rgba($color-light-blue, 0.1);
+  @include respond(phone) {
+    display: flex;
   }
 
-  &.active {
-    span {
-      background-color: transparent;
-
-      &:before {
-        transform: rotate(45deg);
-        top: 0;
-      }
-
-      &:after {
-        transform: rotate(-45deg);
-        bottom: 0;
-      }
-    }
+  &:hover {
+    background-color: rgba($color-light-blue, 0.08);
   }
 
   span {
     position: relative;
     display: block;
-    width: 20px;
+    width: 22px;
     height: 2px;
     background-color: $color-dark-blue;
     transition: all $transition-speed-medium $transition-timing;
@@ -419,101 +400,115 @@ export default {
       content: "";
       position: absolute;
       width: 100%;
-      height: 100%;
+      height: 2px;
       background-color: $color-dark-blue;
-      transition: all $transition-speed-medium $transition-timing;
       left: 0;
+      transition: all $transition-speed-medium $transition-timing;
     }
 
     &:before {
       top: -6px;
     }
-
     &:after {
       bottom: -6px;
     }
   }
+
+  &.active span {
+    background-color: transparent;
+
+    &:before {
+      transform: rotate(45deg);
+      top: 0;
+    }
+
+    &:after {
+      transform: rotate(-45deg);
+      bottom: 0;
+    }
+  }
 }
 
-// Mobiles Menü - Mit Animation von rechts - neu strukturiert
+/* -------------------------
+   MOBILE MENU
+   ------------------------- */
 .mobile-menu {
   position: fixed;
-  top: 0;
-  right: -100vw;
+  inset: 0; /* shorthand for top:0; right:0; bottom:0; left:0; */
   width: 100vw;
-  height: 100%; // Statt 100vh für iOS-Kompatibilität
-  z-index: 1001;
-  transition: right $transition-speed-medium $transition-timing;
+  max-width: 100vw;
+  height: 100%;
+  z-index: 2000;
+  overflow-x: hidden; /* prevent horizontal scroll */
   display: none;
-  pointer-events: none; // Damit Klicks durch den transparenten Bereich durchgehen
+  pointer-events: none;
 
   @include respond(tablet) {
     display: block;
   }
 
+  @include respond(phone) {
+    display: block;
+  }
+
   &.open {
-    right: 0;
     pointer-events: auto;
   }
 
   &__container {
     position: absolute;
     top: 0;
-    right: -100%;
-    width: 100%;
-    height: 100%; // Statt 100vh für iOS-Kompatibilität
+    left: 0;
+    width: 100vw;
+    max-width: 100vw;
+    height: 100%;
     background-color: $color-text-white;
     display: flex;
     flex-direction: column;
-    transition: right $transition-speed-medium $transition-timing;
+    /* slide in/out with transform for stable animation */
+    transform: translateX(100%);
+    transition: transform $transition-speed-medium $transition-timing;
     overflow-y: auto;
+    overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
-    padding: $spacing-sm;
-    padding-top: calc($spacing-md + 70px);
+    padding: $spacing-md;
+    padding-top: calc($spacing-md + 85px);
+    box-sizing: border-box;
 
     @include respond(phone) {
-      padding-top: calc($spacing-md + 55px);
+      padding: $spacing-sm;
+      padding-top: calc($spacing-md + 60px);
     }
+  }
 
-    .open & {
-      right: 0;
-    }
+  /* bring container into view when open */
+  &.open .mobile-menu__container {
+    transform: translateX(0);
   }
 
   &__nav {
     display: flex;
     flex-direction: column;
     flex: 1;
-
-    @include respond(tablet) {
-      padding: 20px 0 0 20px;
-    }
-
-    @include respond(phone) {
-      padding: 3.5px 0 0 4px;
-    }
+    min-height: min-content;
   }
 
   &__link {
     display: flex;
     align-items: center;
-    padding: $spacing-xs;
-    margin-bottom: 2px;
+    padding: $spacing-sm;
+    margin-bottom: 4px;
     border-radius: $border-radius-sm;
     text-decoration: none;
     color: $color-dark-blue;
-    font-size: $font-size-p-lg;
+    font-size: $font-size-p-xl;
     font-weight: 500;
     position: relative;
     transition: background-color $transition-speed-medium $transition-timing;
-    cursor: pointer;
-
-    @include respond(tablet) {
-      font-size: $font-size-p-xl;
-    }
 
     @include respond(phone) {
-      font-size: $font-size-p-md;
+      padding: $spacing-xs;
+      font-size: $font-size-p-lg;
     }
 
     &:hover {
@@ -524,12 +519,16 @@ export default {
 
   &__icon {
     margin-right: $spacing-xs;
-    font-size: 18px;
+    font-size: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
-    text-align: center;
+    width: 28px;
+
+    @include respond(phone) {
+      font-size: 18px;
+      width: 24px;
+    }
   }
 
   &__badge {
@@ -541,13 +540,24 @@ export default {
     padding: 2px 8px;
     border-radius: 12px;
     font-weight: 600;
+
+    @include respond(phone) {
+      font-size: 11px;
+      padding: 2px 6px;
+      right: $spacing-xs;
+    }
   }
 
   &__footer {
     margin-top: auto;
-    margin-bottom: 20px;
-    padding-top: $spacing-sm;
+    padding-top: $spacing-md;
+    padding-bottom: 0;
     border-top: 1px solid rgba($color-dark-blue, 0.1);
+    flex-shrink: 0;
+
+    @include respond(phone) {
+      padding-top: $spacing-sm;
+    }
   }
 
   &__cta {
@@ -555,7 +565,11 @@ export default {
     display: block;
     width: 100%;
     text-align: center;
-    margin-bottom: $spacing-sm;
+    margin-bottom: $spacing-md;
+
+    @include respond(phone) {
+      margin-bottom: $spacing-sm;
+    }
   }
 
   &__social {
@@ -563,10 +577,18 @@ export default {
     justify-content: center;
     gap: $spacing-md;
 
+    @include respond(phone) {
+      gap: $spacing-sm;
+    }
+
     a {
       color: $color-dark-blue;
       font-size: $font-size-p-xl;
       transition: color $transition-speed-medium $transition-timing;
+
+      @include respond(phone) {
+        font-size: $font-size-p-lg;
+      }
 
       &:hover {
         color: $color-light-blue;

@@ -191,7 +191,7 @@ export default {
     }
   }
 
-  @include respond(tablet-only) {
+  @include respond(tablet) {
     padding: $spacing-sm;
     background-color: transparent;
   }
@@ -207,7 +207,7 @@ export default {
   overflow: hidden;
   position: relative;
 
-  @include respond(tablet-only) {
+  @include respond(tablet) {
     max-width: 460px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     border-radius: $border-radius-md;
@@ -238,24 +238,54 @@ export default {
   margin-bottom: $spacing-md;
   color: $color-text-dark;
   text-align: center;
-  line-height: 1.5;
-  font-size: calc($font-size-p-lg - 2px);
+  font-size: $font-size-p-desktop;
+  letter-spacing: $letter-spacing-p-desktop;
+  line-height: $line-height-p-desktop;
+
+  @include respond(laptop) {
+    font-size: $font-size-p-laptop;
+    letter-spacing: $letter-spacing-p-laptop;
+    line-height: $line-height-p-laptop;
+  }
+
+  @include respond(tablet) {
+    font-size: $font-size-p-tablet;
+    letter-spacing: $letter-spacing-p-tablet;
+    line-height: $line-height-p-tablet;
+  }
 
   @include respond(phone) {
-    font-size: $font-size-p-sm;
+    font-size: $font-size-p-phone;
+    letter-spacing: $letter-spacing-p-phone;
+    line-height: $line-height-p-phone;
   }
 }
 
 // Form - angepasst an den Login-Style
 .form {
-  padding: $spacing-lg calc($spacing-lg - 10px);
+  padding: calc($spacing-lg + 10px) calc($spacing-lg);
+  font-size: $font-size-p-desktop;
+  letter-spacing: $letter-spacing-p-desktop;
+  line-height: $line-height-p-desktop;
 
-  @include respond(tablet-only) {
+  @include respond(laptop) {
+    font-size: $font-size-p-laptop;
+    letter-spacing: $letter-spacing-p-laptop;
+    line-height: $line-height-p-laptop;
+  }
+
+  @include respond(tablet) {
     padding: $spacing-md $spacing-lg;
+    font-size: $font-size-p-tablet;
+    letter-spacing: $letter-spacing-p-tablet;
+    line-height: $line-height-p-tablet;
   }
 
   @include respond(phone) {
     padding: $spacing-md;
+    font-size: $font-size-p-phone;
+    letter-spacing: $letter-spacing-p-phone;
+    line-height: $line-height-p-phone;
   }
 
   &-group {

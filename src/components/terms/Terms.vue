@@ -78,6 +78,43 @@ export default {
 
   &_row {
     @include content-container;
+
+    & h2 {
+      line-height: $line-height;
+      letter-spacing: $letter-spacing;
+    }
+
+    & h3 {
+      line-height: $line-height;
+      letter-spacing: $letter-spacing;
+    }
+
+    & p {
+      font-size: $font-size-p-desktop;
+      letter-spacing: $letter-spacing-p-desktop;
+      line-height: $line-height-p-desktop;
+
+      @include respond(laptop) {
+        font-size: $font-size-p-laptop;
+        letter-spacing: $letter-spacing-p-laptop;
+        line-height: $line-height-p-laptop;
+      }
+
+      @include respond(tablet) {
+        font-size: $font-size-p-tablet;
+        letter-spacing: $letter-spacing-p-tablet;
+        line-height: $line-height-p-tablet;
+      }
+
+      @include respond(phone) {
+        font-size: $font-size-p-phone;
+        letter-spacing: $letter-spacing-p-phone;
+        line-height: $line-height-p-phone;
+      }
+
+      & b {
+      }
+    }
   }
 }
 </style>

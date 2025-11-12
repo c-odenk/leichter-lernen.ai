@@ -2,10 +2,11 @@
   BREAKPOINTS VARIABLES
 ========================================================================== */
 
-$breakpoint-smartphone: 480px; // Kleine Smartphones
-$breakpoint-tablet: 850px; // Tablets Portrait
-$breakpoint-laptop: 1600px; // Laptops & kleine Desktops (angepasst für moderne Laptops)
-$breakpoint-desktop: 1920px; // Große Desktops
+// Basierend auf modernen Device-Klassen (angepasst für iPads)
+$breakpoint-phone: 480px; // Kleine Smartphones
+$breakpoint-tablet: 1024px; // Tablets (inkl. iPad Air / Pro Portrait)
+$breakpoint-laptop: 1600px; // Laptops & kleinere Desktops
+$breakpoint-desktop: 1920px; // Große Desktops & Monitore
 
 /* ==========================================================================
   SCREEN WIDTH VARIABLES
@@ -25,28 +26,56 @@ $width-modal-laptop: 62vw;
 
 @mixin respond($breakpoint) {
   @if $breakpoint == phone {
-    @media (max-width: #{$breakpoint-smartphone}) {
+    @media (max-width: #{$breakpoint-phone}) {
       @content;
     }
     // MAX = 480px
   }
+
   @if $breakpoint == tablet {
-    @media (min-width: #{$breakpoint-smartphone + 1px}) and (max-width: #{$breakpoint-tablet}) {
+    @media (min-width: #{$breakpoint-phone + 1px}) and (max-width: #{$breakpoint-tablet}) {
       @content;
     }
-    // MIN = 481px, MAX = 768px
+    // MIN = 481px, MAX = 1024px (inkl. iPad Air / Pro Portrait)
   }
+
   @if $breakpoint == laptop {
     @media (min-width: #{$breakpoint-tablet + 1px}) and (max-width: #{$breakpoint-laptop}) {
       @content;
     }
-    // MIN = 769px, MAX = 1480px
+    // MIN = 1025px, MAX = 1600px (iPad Landscape bis kleine Desktops)
   }
+
   @if $breakpoint == desktop {
     @media (min-width: #{$breakpoint-laptop + 1px}) and (max-width: #{$breakpoint-desktop}) {
       @content;
     }
-    // MIN = 1481px, MAX = 1920px
+    // MIN = 1601px, MAX = 1920px
+  }
+}
+
+/* ==========================================================================
+  LAYOUT UTILITIES
+========================================================================== */
+
+@mixin content-container {
+  width: $width-desktop;
+  margin: 0 auto;
+
+  @include respond(desktop) {
+    width: $width-desktop;
+  }
+
+  @include respond(laptop) {
+    width: $width-laptop;
+  }
+
+  @include respond(tablet) {
+    width: $width-tablet;
+  }
+
+  @include respond(phone) {
+    width: $width-phone;
   }
 }
 
@@ -143,12 +172,6 @@ $font-size-h2-sm: 1.16rem; // Unterüberschriften auf Smartphone
 $font-size-h3-lg: 1.2rem; // Abschnittsüberschriften auf Desktop
 $font-size-h3-md: 1.1rem; // Abschnittsüberschriften auf Tablet
 $font-size-h3-sm: 1.1rem; // Abschnittsüberschriften auf Smartphone
-
-$font-size-p-xl: 19px; // 20
-$font-size-p-lg: 17px;
-$font-size-p-md: 16px;
-$font-size-p-sm: 1rem;
-$font-size-p-xs: 1rem;
 
 // Zeilenabstand
 $line-height: 1.3;

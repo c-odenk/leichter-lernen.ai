@@ -35,9 +35,11 @@ export default {
   methods: {
     getImageUrl(image) {
       return require(`@/assets/${image}`);
+      // Bei Vite:
+      // return new URL(`@/assets/${image}`, import.meta.url).href;
     },
     showAlertMessage() {
-      alert("Die vollständigen Blogposts werden in kürze bereitgestellt.");
+      alert("Die vollständigen Blogposts werden in Kürze bereitgestellt.");
     },
   },
 };
@@ -45,6 +47,9 @@ export default {
 
 <style lang="scss" scoped>
 @use "../../variables/variables.scss" as *;
+
+// Component specific variable
+$blog-post-border-accent: 7.5px;
 
 .blog-post-prev {
   margin: 0 0 $spacing-lg 0;
@@ -54,79 +59,114 @@ export default {
   background-color: $color-text-white;
   transition: box-shadow $transition-speed-medium $transition-timing;
 
-  @include respond(tablet) {
+  &:hover {
+    box-shadow: $shadow-lg;
+  }
+
+  @include respond(laptop) {
     margin: 0 0 $spacing-lg 0;
+    padding: 0 0 $spacing-lg 0;
+  }
+
+  @include respond(tablet) {
+    margin: 0 0 $spacing-md 0;
     padding: 0 0 $spacing-md 0;
+    border-radius: $border-radius-md;
   }
 
   @include respond(phone) {
     margin: 0 0 $spacing-md 0;
-    padding: 0 0 calc($spacing-md + 7.5px) 0;
+    padding: 0 0 $spacing-md 0;
+    border-radius: $border-radius-md;
   }
 
+  /* ================================
+     IMAGE CONTAINER & IMAGE STYLES
+  ================================= */
   .image-container {
     position: relative;
     width: 100%;
-    height: 0;
-    padding-bottom: 50%;
+    aspect-ratio: 16 / 8.5; // Etwas flacher als zuvor (Desktop & Laptop)
     overflow: hidden;
-    background-color: #f0f0f0; /* Leichte Hintergrundfarbe für den Placeholder */
-    border-top-left-radius: $border-radius-md;
-    border-top-right-radius: $border-radius-md;
+    background-color: #f0f0f0;
+    border-top-left-radius: $border-radius-lg;
+    border-top-right-radius: $border-radius-lg;
 
     @include respond(laptop) {
-      padding-bottom: 48%;
+      aspect-ratio: 16 / 8.5;
+      border-top-left-radius: $border-radius-lg;
+      border-top-right-radius: $border-radius-lg;
     }
 
     @include respond(tablet) {
-      padding-bottom: 45%;
+      aspect-ratio: 16 / 7; // Kompakter auf Tablets
+      border-top-left-radius: $border-radius-md;
+      border-top-right-radius: $border-radius-md;
+    }
+
+    @include respond(phone) {
+      aspect-ratio: 4 / 3;
+      border-top-left-radius: $border-radius-md;
+      border-top-right-radius: $border-radius-md;
     }
   }
 
   .image-placeholder {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     background-color: #f0f0f0;
+    z-index: 1;
   }
 
   & img {
     position: absolute;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-bottom: $blog-post-border-accent solid $color-dark-blue-lighter;
-    border-top-left-radius: $border-radius-md;
-    border-top-right-radius: $border-radius-md;
+    /* Der blaue Rand unter dem Bild wurde entfernt */
+    border-top-left-radius: $border-radius-lg;
+    border-top-right-radius: $border-radius-lg;
     will-change: transform;
-    opacity: 0; /* Bild ist standardmäßig transparent */
-    transition: opacity 0.3s ease; /* Sanfter Übergang beim Laden */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: block;
+    z-index: 2;
+
+    @include respond(laptop) {
+      border-top-left-radius: $border-radius-lg;
+      border-top-right-radius: $border-radius-lg;
+    }
+
+    @include respond(tablet) {
+      border-top-left-radius: $border-radius-md;
+      border-top-right-radius: $border-radius-md;
+    }
+
+    @include respond(phone) {
+      border-top-left-radius: $border-radius-md;
+      border-top-right-radius: $border-radius-md;
+    }
   }
 
   & img.image-loaded {
-    opacity: 1; /* Bild wird sichtbar, wenn geladen */
+    opacity: 1;
   }
 
+  /* ================================
+     TEXT & LINK STYLES
+  ================================= */
   & h2 {
     margin: 0;
     padding: $spacing-lg $spacing-lg 0 $spacing-lg;
     text-align: left;
     font-size: $font-size-h2-lg;
-    @include themed(color, heading);
-
-    @include respond(laptop) {
-      padding: $spacing-md $spacing-lg 0 $spacing-lg;
-      font-size: $font-size-h2-lg;
-    }
+    color: $color-dark-blue;
+    font-weight: 700;
 
     @include respond(tablet) {
-      padding: $spacing-lg $spacing-md 0 $spacing-md;
+      padding: $spacing-md $spacing-md 0 $spacing-md;
       font-size: $font-size-h2-md;
-      margin-top: 0; /* Keine zusätzliche Anpassung nötig bei 51% */
     }
 
     @include respond(phone) {
@@ -136,65 +176,69 @@ export default {
   }
 
   & p {
-    margin: $spacing-lg 0;
+    margin: $spacing-md 0;
     padding: 0 $spacing-lg;
     text-align: justify;
-    font-size: $font-size-p-xl;
-    line-height: $line-height;
-    letter-spacing: $letter-spacing;
-    @include themed(color, text);
+    font-size: $font-size-p-desktop;
+    letter-spacing: $letter-spacing-p-desktop;
+    line-height: $line-height-p-desktop;
+    color: $color-text-dark;
 
     @include respond(laptop) {
-      margin: $spacing-md 0;
-      font-size: $font-size-p-xl;
+      font-size: $font-size-p-laptop;
+      letter-spacing: $letter-spacing-p-laptop;
+      line-height: $line-height-p-laptop;
     }
 
     @include respond(tablet) {
-      margin: $spacing-md 0;
+      margin: $spacing-sm 0;
       padding: 0 $spacing-md;
-      font-size: $font-size-p-md;
+      font-size: $font-size-p-tablet;
+      letter-spacing: $letter-spacing-p-tablet;
+      line-height: $line-height-p-tablet;
     }
 
     @include respond(phone) {
+      margin: $spacing-sm 0;
       padding: 0 $spacing-sm;
-      font-size: $font-size-p-sm;
+      font-size: $font-size-p-phone;
+      letter-spacing: $letter-spacing-p-phone;
+      line-height: $line-height-p-phone;
       text-align: left;
     }
   }
 
   .read-more {
     display: inline-block;
-    margin: 0;
-    padding: 0 $spacing-lg $spacing-md $spacing-lg;
+    padding: 0 $spacing-lg;
     text-decoration: none;
-    font-size: $font-size-p-xl;
-    line-height: $line-height;
-    letter-spacing: $letter-spacing;
-    font-weight: 500;
-    @include themed(color, accent);
+    font-size: $font-size-p-desktop;
+    font-weight: 600;
+    color: $color-light-blue;
     transition: color $transition-speed-medium $transition-timing;
 
     &:hover {
-      opacity: 0.8;
-    }
-
-    @include respond(laptop) {
-      padding: 0 $spacing-lg 0 $spacing-lg;
-      font-size: $font-size-p-xl;
+      color: $color-light-blue-darker;
     }
 
     @include respond(tablet) {
-      padding: 0 $spacing-md $spacing-md $spacing-md;
-      font-size: $font-size-p-md;
+      padding: 0 $spacing-md;
+      font-size: $font-size-p-tablet;
     }
 
     @include respond(phone) {
       padding: 0 $spacing-sm;
-      font-size: $font-size-p-sm;
+      font-size: $font-size-p-phone;
     }
 
     & i {
-      margin: 0 15px 0 0;
+      margin: 0 10px 0 0;
+      font-size: 14px;
+
+      @include respond(phone) {
+        font-size: 12px;
+        margin: 0 6px 0 0;
+      }
     }
   }
 }

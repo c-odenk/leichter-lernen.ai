@@ -1,7 +1,7 @@
 <template>
   <section class="benefits">
     <div class="benefits_header">
-      <h2>⚡ {{ heading }}</h2>
+      <h2>🚀 {{ heading }}</h2>
       <p>{{ subheading }}</p>
     </div>
 
@@ -49,10 +49,6 @@ export default {
       subheading:
         "Wir helfen dir, schneller zu verstehen, gezielt zu wiederholen und dein Wissen aktiv zu festigen. So lernst du nicht nur effektiver, sondern auch zeitsparender.",
 
-      /*
-       * Array mit den drei Hauptvorteilen/Funktionen
-       * Jeder Vorteil enthält einen Titel mit Emoji, eine Beschreibung und ein Hintergrundbild
-       */
       benefits: [
         {
           title: "🚀 Schnelle Zusammenfassungen in wenigen Sekunden",
@@ -75,60 +71,52 @@ export default {
       ],
       activeIndex: 0,
       isMobile: false,
-      isTablet: false,
+      isLaptopDown: false,
     };
   },
 
   mounted() {
-    // Viewport-Größe prüfen
     this.checkViewport();
-
-    // Nach dem Mounting der Komponente Scroll-Indikatoren initialisieren
     this.initScrollIndicators();
-
-    // Event-Listener für Resize-Events hinzufügen
     window.addEventListener("resize", this.handleResize);
   },
 
   beforeUnmount() {
-    // Event-Listener beim Unmount entfernen
     window.removeEventListener("resize", this.handleResize);
   },
 
   methods: {
-    // Prüft die Viewport-Größe und setzt entsprechende Flags
     checkViewport() {
       const width = window.innerWidth;
-      this.isMobile = width < 768;
-      this.isTablet = width >= 768 && width < 1024;
+      // Basierend auf den Breakpoints in variables.scss
+      this.isMobile = width <= 480; // phone
+      this.isLaptopDown = width <= 1280; // laptop-down (inkl. tablet + phone)
     },
 
-    // Behandelt Resize-Events mit Debounce
     handleResize() {
       clearTimeout(this.resizeTimer);
       this.resizeTimer = setTimeout(() => {
-        // Aktuelle Zustände speichern
         const wasMobile = this.isMobile;
-        const wasTablet = this.isTablet;
+        const wasLaptopDown = this.isLaptopDown;
 
-        // Viewport überprüfen
         this.checkViewport();
 
-        // Prüfen, ob sich etwas geändert hat
-        if (wasMobile !== this.isMobile || wasTablet !== this.isTablet) {
+        if (
+          wasMobile !== this.isMobile ||
+          wasLaptopDown !== this.isLaptopDown
+        ) {
           this.initScrollIndicators();
         }
       }, 200);
     },
 
-    // Scrollt zu einem bestimmten Benefit
     scrollToBenefit(index) {
       const container = this.$el.querySelector(".benefits__grid");
       const cards = this.$el.querySelectorAll(".benefits__card");
 
       if (container && cards.length > index) {
         const cardWidth = cards[0].offsetWidth;
-        const gapWidth = this.isMobile ? 16 : 24; // $spacing-sm oder $spacing-md je nach Viewport
+        const gapWidth = this.isMobile ? 16 : 24;
         const scrollPosition = index * (cardWidth + gapWidth);
 
         container.scrollTo({
@@ -141,29 +129,26 @@ export default {
     },
 
     initScrollIndicators() {
-      // Nach dem DOM-Update warten
       this.$nextTick(() => {
-        // Nur für Tablet- und Phone-Ansicht: Initialisiere Scroll-Indikatoren
-        if (this.isMobile || this.isTablet) {
+        // Nur für laptop-down (≤1280px): Initialisiere Scroll-Indikatoren
+        if (this.isLaptopDown) {
           const container = this.$el.querySelector(".benefits__grid");
           const dots = this.$el.querySelectorAll(".scroll-dot");
           const cards = this.$el.querySelectorAll(".benefits__card");
 
           if (container && dots.length && cards.length) {
-            // Initial ersten Dot aktivieren
             this.activeIndex = 0;
 
             container.addEventListener("scroll", () => {
-              // Berechne den Fortschritt des Scrollens
               const scrollPosition = container.scrollLeft;
 
               if (this.isMobile) {
-                // Für Mobile: Berechne, welche Karte am sichtbarsten ist basierend auf Kartenposition
-                const cardWidth = cards[0].offsetWidth + 16; // Kartenbreite + gap
+                // Phone: Snap-basierte Berechnung
+                const cardWidth = cards[0].offsetWidth + 16;
                 const currentCardIndex = Math.round(scrollPosition / cardWidth);
                 this.activeIndex = Math.min(currentCardIndex, cards.length - 1);
               } else {
-                // Für Tablet: Bisherige Logik beibehalten
+                // Laptop & Tablet: Proportionale Berechnung
                 const totalWidth = container.scrollWidth;
                 const viewportWidth = container.clientWidth;
                 const activeIndex = Math.round(
@@ -173,7 +158,6 @@ export default {
                 this.activeIndex = activeIndex;
               }
 
-              // Setze die aktive Klasse auf den entsprechenden Indikator
               dots.forEach((dot, index) => {
                 dot.classList.toggle("active", index === this.activeIndex);
               });
@@ -203,19 +187,19 @@ export default {
     margin: calc($spacing-lg + 25px) 0;
   }
 
-  @include respond(tablet) {
-    margin: calc($spacing-lg + 25px) 0;
+  @include respond(tablet-down) {
+    margin: $spacing-lg 0;
   }
 
   @include respond(phone) {
-    margin: $spacing-md 0 $spacing-md 0;
+    margin: $spacing-md 0;
   }
 
   &_header {
     @include content-container;
     margin-bottom: $spacing-lg;
 
-    @include respond(tablet) {
+    @include respond(laptop-down) {
       margin-bottom: $spacing-md;
     }
 
@@ -228,6 +212,10 @@ export default {
       padding: 0;
       text-align: center;
       font-size: $font-size-h2-lg;
+
+      @include respond(laptop) {
+        font-size: calc($font-size-h2-lg - 0.1rem);
+      }
 
       @include respond(tablet) {
         font-size: $font-size-h2-md;
@@ -245,15 +233,18 @@ export default {
       font-size: $font-size-p-xl;
       line-height: $line-height;
       letter-spacing: $letter-spacing;
-      text-align: center; /* Immer zentriert */
+      text-align: center;
 
       @include respond(laptop) {
         width: 70%;
         font-size: $font-size-p-lg;
       }
 
+      @include respond(tablet-down) {
+        width: 85%;
+      }
+
       @include respond(tablet) {
-        width: 80%;
         font-size: $font-size-p-md;
       }
 
@@ -271,7 +262,7 @@ export default {
     flex-wrap: wrap;
     justify-content: space-between;
 
-    @include respond(tablet) {
+    @include respond(laptop-down) {
       flex-wrap: nowrap;
       overflow-x: auto;
       overflow-y: hidden;
@@ -282,30 +273,17 @@ export default {
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
       -ms-overflow-style: none;
+
       &::-webkit-scrollbar {
         display: none;
       }
     }
 
     @include respond(phone) {
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      overflow-y: hidden;
-      justify-content: flex-start;
       gap: $spacing-sm;
       padding: 5px 0 15px;
       margin-bottom: 5px;
-      scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch;
 
-      /* Verstecke die Scrollbar auch für Smartphones */
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-      &::-webkit-scrollbar {
-        display: none;
-      }
-
-      /* Snap-Scrolling nur für Mobile */
       &.snap-scroll {
         scroll-snap-type: x mandatory;
         scroll-padding: 0 16px;
@@ -316,7 +294,6 @@ export default {
   &__card {
     width: 32%;
     height: 440px;
-    // padding: $spacing-sm;
     border-radius: $border-radius-lg;
     box-sizing: border-box;
     position: relative;
@@ -330,30 +307,31 @@ export default {
     transition: $transition-speed-medium $transition-timing;
     overflow: hidden;
 
-    /* Snap-Item für Mobile View */
     &.snap-item {
       scroll-snap-align: center;
     }
 
     @include respond(laptop) {
-      height: 340px;
-      padding: calc($spacing-md - 10px);
+      height: 380px;
+    }
+
+    @include respond(laptop-down) {
+      min-width: 300px;
+      width: 75%;
+      flex: 0 0 auto;
+      margin: 0;
     }
 
     @include respond(tablet) {
       min-width: 280px;
       width: 70%;
       height: 350px;
-      flex: 0 0 auto;
-      margin: 0;
-      padding: $spacing-sm;
     }
 
     @include respond(phone) {
       min-width: 260px;
       width: 100%;
       height: 300px;
-      flex: 0 0 auto;
       margin-bottom: 0;
       padding: calc($spacing-sm - 4.5px);
     }
@@ -428,7 +406,7 @@ export default {
     z-index: 1;
 
     @include respond(laptop) {
-      font-size: $font-size-h3-md;
+      font-size: calc($font-size-h3-lg - 0.05rem);
     }
 
     @include respond(tablet) {
@@ -468,16 +446,12 @@ export default {
     }
   }
 
-  /* Scroll-Indikatoren */
   &__scroll-indicators {
     display: none;
     justify-content: center;
+    margin-top: $spacing-sm;
 
-    @include respond(tablet) {
-      display: flex;
-    }
-
-    @include respond(phone) {
+    @include respond(laptop-down) {
       display: flex;
     }
 
@@ -488,11 +462,15 @@ export default {
       margin: 0 5px;
       background-color: rgba(0, 0, 0, 0.2);
       transition: background-color 0.3s ease, transform 0.2s ease;
-      cursor: pointer; /* Zeigt an, dass die Punkte klickbar sind */
+      cursor: pointer;
 
       &.active {
         background-color: $color-light-blue;
         transform: scale(1.3);
+      }
+
+      &:hover {
+        background-color: rgba($color-light-blue, 0.5);
       }
     }
   }

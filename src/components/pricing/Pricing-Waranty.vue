@@ -47,12 +47,15 @@ export default {
     }
 
     @include respond(tablet) {
+      @include content-container;
       padding: calc($spacing-lg + 20px) $spacing-md;
       margin: $spacing-md auto;
     }
 
     @include respond(phone) {
-      margin: -20px auto $spacing-sm auto;
+      @include content-container;
+      // margin: -20px auto $spacing-sm auto;
+      margin: 20px auto $spacing-sm auto;
       padding: calc($spacing-md + 20px) $spacing-md calc($spacing-md + 25px)
         $spacing-md;
     }
@@ -79,6 +82,7 @@ export default {
       font-size: $font-size-h2-lg;
       position: relative;
       z-index: 2;
+      text-align: center;
 
       @include respond(tablet) {
         font-size: $font-size-h2-md;
@@ -95,24 +99,31 @@ export default {
     & p {
       margin: 0;
       padding: 0;
-      font-size: $font-size-p-xl;
-      line-height: $line-height;
-      letter-spacing: $letter-spacing;
+      font-size: $font-size-p-desktop;
+      letter-spacing: $letter-spacing-p-desktop;
+      line-height: $line-height-p-desktop;
       color: $color-text-white;
       position: relative;
       z-index: 2;
+      text-align: center;
 
       @include respond(laptop) {
-        font-size: $font-size-p-lg;
+        font-size: $font-size-p-laptop;
+        letter-spacing: $letter-spacing-p-laptop;
+        line-height: $line-height-p-laptop;
       }
 
       @include respond(tablet) {
-        font-size: $font-size-p-md;
+        font-size: $font-size-p-tablet;
+        letter-spacing: $letter-spacing-p-tablet;
+        line-height: $line-height-p-tablet;
         text-align: left;
       }
 
       @include respond(phone) {
-        font-size: $font-size-p-sm;
+        font-size: $font-size-p-phone;
+        letter-spacing: $letter-spacing-p-phone;
+        line-height: $line-height-p-phone;
         text-align: center;
       }
     }

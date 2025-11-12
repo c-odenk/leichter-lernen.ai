@@ -10,7 +10,7 @@
 
 <script>
 import Header from "@/components/header/Header.vue";
-import PricingHero from "@/components/base/Hero-Section.vue";
+import PricingHero from "@/components/headings/Page-Heading.vue";
 import PricingPriceCards from "@/components/pricing/Pricing-Price-Cards.vue";
 import PricingWaranty from "@/components/pricing/Pricing-Waranty.vue";
 import Footer from "@/components/footer/Footer.vue";
