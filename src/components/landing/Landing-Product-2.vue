@@ -1,5 +1,10 @@
 <template>
   <section class="landing-product">
+    <!-- Badge -->
+    <div class="badge">
+      <p>Unsere Lösung</p>
+    </div>
+
     <!-- Wiederverwendbare Überschrift-Komponente -->
     <SectionHeading :heading="heading" :subheading="subheading" />
 
@@ -164,6 +169,49 @@ export default {
 
   @include respond(phone) {
     margin: $spacing-lg 0;
+  }
+
+  .badge {
+    display: block;
+    width: fit-content;
+    background-color: #e6f2ff;
+    color: #3083e9;
+    padding: 12px 50px;
+    border-radius: 50px;
+    font-size: $font-size-p-desktop;
+    letter-spacing: $letter-spacing-p-desktop;
+    line-height: 1;
+    font-weight: 500;
+    margin: 0 auto calc($spacing-xs + 10px) auto;
+    text-align: center;
+
+    // display: none;
+
+    @include respond(laptop) {
+      margin: 0 auto calc($spacing-md - 4px) auto;
+      padding: 7px 18px;
+      font-size: $font-size-p-laptop;
+      letter-spacing: $letter-spacing-p-laptop;
+    }
+
+    @include respond(tablet) {
+      margin: 0 auto calc($spacing-sm + 4px) auto;
+      padding: 7px 16px;
+      font-size: $font-size-p-tablet;
+      letter-spacing: $letter-spacing-p-tablet;
+    }
+
+    @include respond(phone) {
+      margin: 0 auto $spacing-sm auto;
+      padding: 6px 14px;
+      font-size: $font-size-p-phone;
+      letter-spacing: $letter-spacing-p-phone;
+    }
+
+    p {
+      margin: 0;
+      padding: 0;
+    }
   }
 
   &_grid {

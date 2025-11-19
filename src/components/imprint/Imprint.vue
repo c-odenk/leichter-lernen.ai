@@ -127,7 +127,7 @@ export default {
 
 .imprint {
   width: 100%;
-  margin: 5vh 0;
+  margin: 7.5vh auto;
 
   &_row {
     @include content-container;

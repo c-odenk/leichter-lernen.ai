@@ -4,14 +4,28 @@
       <div class="header_row">
         <div class="header_row_logo">
           <router-link to="/">
-            <div v-if="!imageLoaded" class="logo-placeholder"></div>
-            <img
-              v-show="imageLoaded"
-              :src="logoSrc"
-              width="100"
-              height="100"
-              alt="leichter-lernen Logo"
-            />
+            <div class="logo-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M12 18V5" />
+                <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" />
+                <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" />
+                <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" />
+                <path d="M18 18a4 4 0 0 0 2-7.464" />
+                <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" />
+                <path d="M6 18a4 4 0 0 1-2-7.464" />
+                <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" />
+              </svg>
+            </div>
             <h2>leichter-lernen.ai</h2>
           </router-link>
         </div>
@@ -129,32 +143,14 @@ export default {
   name: "HeaderSection",
   data() {
     return {
-      imageLoaded: false,
-      logoSrc: null,
       menuOpen: false,
     };
   },
-  created() {
-    this.logoSrc = require("@/assets/logo-2.png");
-  },
   mounted() {
-    const img = new Image();
-    img.onload = () => {
-      this.imageLoaded = true;
-    };
-    img.src = this.logoSrc;
-
-    if (sessionStorage.getItem("headerLoaded") === "true") {
-      this.imageLoaded = true;
-    } else {
-      sessionStorage.setItem("headerLoaded", "true");
-    }
-
     window.addEventListener("resize", this.handleResize);
   },
   beforeUnmount() {
     window.removeEventListener("resize", this.handleResize);
-    // restore body overflow
     document.body.style.overflow = "";
     document.documentElement.style.overflow = "";
     document.body.style.overflowX = "";
@@ -169,7 +165,6 @@ export default {
     toggleMenu() {
       this.menuOpen = !this.menuOpen;
       const overflowValue = this.menuOpen ? "hidden" : "";
-      // block both vertical and horizontal scroll on background when menu is open
       document.body.style.overflow = overflowValue;
       document.documentElement.style.overflow = overflowValue;
       document.body.style.overflowX = overflowValue;
@@ -183,7 +178,6 @@ export default {
       document.documentElement.style.overflowX = "";
     },
     handleResize() {
-      // close the mobile menu when resizing past mobile breakpoint
       if (window.innerWidth > 850) {
         this.closeMenu();
       }
@@ -195,7 +189,6 @@ export default {
 <style lang="scss">
 @use "../../variables/variables.scss" as *;
 
-/* ensure box-sizing inside this component */
 *,
 *::before,
 *::after {
@@ -206,17 +199,6 @@ export default {
   display: none;
 }
 
-.logo-placeholder {
-  width: 100px;
-  height: 100px;
-  background-color: $color-body-background;
-  display: inline-block;
-  border-radius: $border-radius-sm;
-}
-
-/* -------------------------
-   HEADER STYLES
-   ------------------------- */
 .header {
   width: 100%;
   padding: $spacing-md 0;
@@ -263,19 +245,64 @@ export default {
         align-items: center;
         text-decoration: none;
         color: $color-text-dark;
+        gap: 12px;
 
-        img {
-          height: 70px;
-          width: auto;
-          display: block;
-          margin-right: 5px;
+        @include respond(phone) {
+          gap: 10px;
+        }
+
+        .logo-icon {
+          width: 50px;
+          height: 50px;
+          background: linear-gradient(
+            135deg,
+            $color-light-blue 0%,
+            #2571d4 100%
+          );
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          box-shadow: 0 4px 15px rgba(48, 131, 233, 0.3);
+          flex-shrink: 0;
+
+          @include respond(laptop) {
+            width: 45px;
+            height: 45px;
+            border-radius: 11px;
+          }
 
           @include respond(tablet) {
-            height: 60px;
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
           }
 
           @include respond(phone) {
-            height: 45px;
+            width: 38px;
+            height: 38px;
+            border-radius: 9px;
+          }
+
+          svg {
+            width: 30px;
+            height: 30px;
+
+            @include respond(laptop) {
+              width: 23px;
+              height: 23px;
+            }
+
+            @include respond(tablet) {
+              width: 21px;
+              height: 21px;
+            }
+
+            @include respond(phone) {
+              width: 19px;
+              height: 19px;
+            }
           }
         }
 
@@ -283,6 +310,7 @@ export default {
           font-size: 24px;
           color: $color-dark-blue;
           white-space: nowrap;
+          margin: 0;
 
           @include respond(tablet) {
             font-size: 22px;
@@ -361,9 +389,6 @@ export default {
   }
 }
 
-/* -------------------------
-   HAMBURGER-BUTTON
-   ------------------------- */
 .menu-button {
   width: 40px;
   height: 40px;
@@ -429,17 +454,14 @@ export default {
   }
 }
 
-/* -------------------------
-   MOBILE MENU
-   ------------------------- */
 .mobile-menu {
   position: fixed;
-  inset: 0; /* shorthand for top:0; right:0; bottom:0; left:0; */
+  inset: 0;
   width: 100vw;
   max-width: 100vw;
   height: 100%;
   z-index: 2000;
-  overflow-x: hidden; /* prevent horizontal scroll */
+  overflow-x: hidden;
   display: none;
   pointer-events: none;
 
@@ -465,7 +487,6 @@ export default {
     background-color: $color-text-white;
     display: flex;
     flex-direction: column;
-    /* slide in/out with transform for stable animation */
     transform: translateX(100%);
     transition: transform $transition-speed-medium $transition-timing;
     overflow-y: auto;
@@ -481,7 +502,6 @@ export default {
     }
   }
 
-  /* bring container into view when open */
   &.open .mobile-menu__container {
     transform: translateX(0);
   }

@@ -36,7 +36,7 @@
             <i class="fa-solid fa-users"></i>
           </div>
           <div class="badge-content">
-            <p class="badge-number">2.500+</p>
+            <p class="badge-number">X</p>
             <p class="badge-text">Aktive Nutzer</p>
           </div>
         </div>

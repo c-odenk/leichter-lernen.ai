@@ -263,7 +263,8 @@ export default {
 
 // Form - angepasst an den Login-Style
 .form {
-  padding: calc($spacing-lg + 10px) calc($spacing-lg);
+  padding: calc($spacing-md) calc($spacing-lg) calc($spacing-lg)
+    calc($spacing-lg);
   font-size: $font-size-p-desktop;
   letter-spacing: $letter-spacing-p-desktop;
   line-height: $line-height-p-desktop;
@@ -296,6 +297,9 @@ export default {
       margin-bottom: $spacing-xs / 2;
       font-weight: 500;
       color: $color-text-dark;
+      font-size: $font-size-p-desktop;
+      letter-spacing: $letter-spacing-p-desktop;
+      line-height: $line-height-p-desktop;
     }
 
     input[type="email"] {
@@ -323,15 +327,16 @@ export default {
 
   input[type="checkbox"] {
     margin-right: $spacing-xs;
-    margin-top: 3px;
+    margin-top: 6px;
     cursor: pointer;
   }
 
   label {
     cursor: pointer;
     user-select: none;
-    font-size: 14px;
-    line-height: 1.4;
+    font-size: $font-size-p-tablet;
+    letter-spacing: $letter-spacing-p-desktop;
+    line-height: $line-height-p-desktop;
   }
 }
 
@@ -348,7 +353,6 @@ export default {
   font-weight: 500;
 }
 
-// Zurück-Link - angepasst an den Login-Style
 .back-link-container {
   margin-top: calc($spacing-md - 5px);
   text-align: center;
@@ -359,7 +363,8 @@ export default {
   align-items: center;
   color: $color-light-blue;
   text-decoration: none;
-  font-size: 14px;
+  font-size: $font-size-p-laptop;
+  letter-spacing: $letter-spacing-p-tablet;
   font-weight: 500;
   transition: color $transition-speed-fast;
 
@@ -368,13 +373,14 @@ export default {
   }
 }
 
-// Buttons - angepasst an den Login-Style
 .btn {
   width: 100%;
   padding: $spacing-xs;
   border: none;
   border-radius: $border-radius-sm;
   font-weight: 600;
+  font-size: $font-size-p-laptop;
+  letter-spacing: $letter-spacing-p-tablet;
   cursor: pointer;
   transition: all $transition-speed-medium;
   position: relative;

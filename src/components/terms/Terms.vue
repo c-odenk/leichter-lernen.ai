@@ -75,6 +75,7 @@ export default {
 
 .terms {
   width: 100%;
+  margin: 7.5vh auto;
 
   &_row {
     @include content-container;

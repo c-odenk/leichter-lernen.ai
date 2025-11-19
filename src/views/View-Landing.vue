@@ -13,6 +13,7 @@ import { ref } from "vue";
 import Header from "@/components/header/Header.vue";
 import Footer from "@/components/footer/Footer.vue";
 import LandingHero from "@/components/landing/Landing-Hero-4.vue";
+import LandingStats from "@/components/landing/Landing-Stats.vue";
 import LandingProduct from "@/components/landing/Landing-Product-2.vue";
 import LandingBenefits from "@/components/landing/Landing-Benefits-3.vue";
 import LandingTestimonials from "@/components/landing/Landing-Testimonials.vue";
@@ -34,6 +35,7 @@ export default {
   setup() {
     const sections = ref([
       { key: "hero", component: LandingHero },
+      { key: "stats", component: LandingStats },
       { key: "benefits", component: LandingBenefits },
       { key: "product", component: LandingProduct },
       { key: "testimonials", component: LandingTestimonials },
