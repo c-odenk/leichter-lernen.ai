@@ -11,10 +11,10 @@ $breakpoint-desktop: 1920px; // Große Desktops
   SCREEN WIDTH VARIABLES
 ========================================================================== */
 
-$width-desktop: 1950px;
+$width-desktop: 1800px;
 $width-laptop: 90vw;
 $width-tablet: 92.5vw;
-$width-phone: 94vw;
+$width-phone: 92.5vw;
 
 $width-modal-desktop: 38vw;
 $width-modal-laptop: 62vw;
@@ -103,7 +103,7 @@ $color-danger: #dc3545;
 ========================================================================== */
 
 $font-family: "Montserrat", sans-serif;
-$font-family2: "Helvetica Neue", Helvetica, Arial, sans-serif;
+// $font-family2: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
 // NEUE FONTSIZE VARIABLEN
 
@@ -204,15 +204,6 @@ $shadow-lg: 0 10px 30px 0 rgba(0, 0, 0, 0.15);
   align-items: center;
 }
 
-/*
-@mixin card-base {
-  border-radius: $border-radius-lg;
-  box-shadow: $shadow-md;
-  padding: $spacing-lg $spacing-md;
-  box-sizing: border-box;
-}
-  */
-
 @mixin button-base {
   display: inline-block;
   padding: 12.5px 18px;
@@ -223,22 +214,6 @@ $shadow-lg: 0 10px 30px 0 rgba(0, 0, 0, 0.15);
   cursor: pointer;
 }
 
-/* ==========================================================================
-  MIXINS FÜR KOMPONENTEN
-========================================================================== */
-/*
-@mixin text-content-responsive {
-  @include respond(tablet) {
-    padding: 0 $spacing-md;
-    font-size: $font-size-p-md;
-  }
-
-  @include respond(phone) {
-    padding: 0 $spacing-sm;
-    font-size: $font-size-p-sm;
-  }
-}
-*/
 /* ==========================================================================
   MIXINS FÜR LINK IN BLAUEM BUTTON STYLE
 ========================================================================== */

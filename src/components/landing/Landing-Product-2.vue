@@ -2,6 +2,25 @@
   <section class="landing-product">
     <!-- Badge -->
     <div class="badge">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="lucide lucide-sparkles-icon lucide-sparkles"
+      >
+        <path
+          d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"
+        />
+        <path d="M20 2v4" />
+        <path d="M22 4h-4" />
+        <circle cx="4" cy="20" r="2" />
+      </svg>
       <p>Unsere Lösung</p>
     </div>
 
@@ -19,8 +38,6 @@
           <p>{{ box.text }}</p>
         </div>
 
-        <!-- Mockup Platzhalter -->
-        <div class="img-platzhalter"></div>
         <img src="@/assets/ipad-mockup.png" alt="Lernplattform Vorschau" />
       </div>
 
@@ -172,7 +189,10 @@ export default {
   }
 
   .badge {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     width: fit-content;
     background-color: #e6f2ff;
     color: #3083e9;
@@ -183,9 +203,14 @@ export default {
     line-height: 1;
     font-weight: 500;
     margin: 0 auto calc($spacing-xs + 10px) auto;
-    text-align: center;
 
     // display: none;
+
+    svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
 
     @include respond(laptop) {
       margin: 0 auto calc($spacing-md - 4px) auto;
@@ -274,36 +299,6 @@ export default {
           rgba(23, 43, 77, 0.12) 100%
         );
         z-index: 1;
-      }
-
-      & .img-platzhalter {
-        width: 420px;
-        height: 560px;
-        background-color: $color-img-platzhalter;
-        position: absolute;
-        bottom: -20%;
-        left: 50%;
-        transform: translate(-50%, 0);
-        z-index: 3;
-        border-radius: 30px;
-
-        display: none;
-
-        @include respond(tablet) {
-          width: 320px;
-          height: 440px;
-          border-radius: 25px;
-          bottom: -15%;
-        }
-
-        @include respond(phone) {
-          width: 240px;
-          height: 300px;
-          border-radius: 20px;
-          bottom: -5%;
-          left: 50%;
-          transform: translate(-50%, 0);
-        }
       }
 
       & img {
