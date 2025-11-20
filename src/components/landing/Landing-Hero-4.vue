@@ -73,7 +73,7 @@ export default {
   }
 
   @include respond(phone) {
-    margin: calc($spacing-lg + 100px) auto calc($spacing-lg + 80px) auto;
+    margin: calc($spacing-lg + 100px) auto calc($spacing-lg + 70px) auto;
   }
 
   &_container {
