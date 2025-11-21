@@ -409,19 +409,19 @@ export default {
 
         @include respond(laptop) {
           top: 40%;
-          left: 52%;
-          transform: translate(-110%, 0);
+          left: 40%;
+          transform: translate(-120%, 0);
         }
 
         @include respond(tablet) {
           top: 35%;
           left: 50%;
-          transform: translate(-110%, 0);
+          transform: translate(-120%, 0);
         }
 
         @include respond(phone) {
           top: 35%;
-          left: 40%;
+          left: 30%;
           transform: translate(-50%, 0);
         }
       }
@@ -440,7 +440,7 @@ export default {
 
         @include respond(phone) {
           top: 55%;
-          right: 8%;
+          right: 5%;
           left: auto;
           transform: translate(0, 0);
         }
@@ -521,7 +521,7 @@ export default {
         }
 
         @include respond(phone) {
-          padding: $spacing-sm;
+          padding: $spacing-sm 0;
           gap: $spacing-xs;
           flex: 0 0 auto;
         }
