@@ -112,14 +112,15 @@ export default {
 
 .landing-stats {
   width: 100%;
-  margin: calc($spacing-lg + 100px) 0;
+  // margin: calc($spacing-lg + 100px) 0;
+  margin: $spacing-lg 0 calc($spacing-lg + 100px) 0;
 
   @include respond(laptop) {
-    margin: calc($spacing-lg + 50px) 0;
+    margin: $spacing-lg 0 calc($spacing-lg + 50px) 0;
   }
 
   @include respond(tablet) {
-    margin: calc($spacing-lg + 20px) 0;
+    margin: $spacing-md 0 calc($spacing-lg + 20px) 0;
   }
 
   @include respond(phone) {

@@ -59,7 +59,6 @@ export default {
   padding: 14px 40px;
   font-size: $font-size-p-desktop;
   letter-spacing: $letter-spacing-p-desktop;
-  line-height: $line-height-p-desktop;
   font-weight: 500;
   text-align: center;
   text-decoration: none;
@@ -75,25 +74,22 @@ export default {
     padding: 12px 35px;
     font-size: $font-size-p-laptop;
     letter-spacing: $letter-spacing-p-laptop;
-    line-height: $line-height-p-laptop;
   }
 
   @include respond(tablet) {
     padding: 10px 30px;
     font-size: $font-size-p-tablet;
     letter-spacing: $letter-spacing-p-tablet;
-    line-height: $line-height-p-tablet;
   }
 
   @include respond(phone) {
     padding: 8px 25px;
     font-size: $font-size-p-phone;
     letter-spacing: $letter-spacing-p-phone;
-    line-height: $line-height-p-phone;
   }
 
   &:deep(i) {
-    margin: 0 0 0 16px;
+    margin: 4px 0 0 16px;
     font-size: 15px;
   }
 

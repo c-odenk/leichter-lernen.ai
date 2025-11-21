@@ -39,7 +39,7 @@ export default {
   }
 
   @include respond(tablet) {
-    margin-bottom: $spacing-sm;
+    margin-bottom: $spacing-md;
   }
 
   @include respond(phone) {

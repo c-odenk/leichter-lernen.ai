@@ -124,6 +124,23 @@ export default {
   data() {
     return {
       heading: "🚀 Mit KI-Unterstützung zu Bestnoten!",
+      highlightBoxes: [
+        {
+          position: "highlight-box-1",
+          icon: "🚀",
+          text: "Zusammenfassungen",
+        },
+        {
+          position: "highlight-box-2",
+          icon: "📚",
+          text: "Interaktive Lernkarten",
+        },
+        {
+          position: "highlight-box-3",
+          icon: "💡",
+          text: "Intelligenter KI-Tutor",
+        },
+      ],
       subheading:
         "Wir helfen dir, schneller zu verstehen, gezielt zu wiederholen und dein Wissen aktiv zu festigen. So lernst du nicht nur effektiver, sondern auch zeitsparender.",
 
@@ -139,23 +156,6 @@ export default {
         {
           title: "Lernen & Bestehen",
           text: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sd diam.",
-        },
-      ],
-      highlightBoxes: [
-        {
-          position: "highlight-box-1",
-          icon: "🚀",
-          text: "Blitzschnelle Zusammenfassungen",
-        },
-        {
-          position: "highlight-box-2",
-          icon: "📚",
-          text: "Interaktive Lernkarten",
-        },
-        {
-          position: "highlight-box-3",
-          icon: "💡",
-          text: "Intelligenter KI-Tutor",
         },
       ],
     };
@@ -203,8 +203,6 @@ export default {
     line-height: 1;
     font-weight: 500;
     margin: 0 auto calc($spacing-xs + 10px) auto;
-
-    // display: none;
 
     svg {
       width: 20px;
@@ -405,8 +403,8 @@ export default {
 
       .highlight-box-1 {
         top: 40%;
-        left: 50%;
-        transform: translate(-135%, 0);
+        left: 45%;
+        transform: translate(-145%, 0);
         z-index: 5;
 
         @include respond(laptop) {
@@ -450,7 +448,7 @@ export default {
 
       .highlight-box-3 {
         top: 70%;
-        left: 50%;
+        left: 45%;
         transform: translate(-145%, 0);
         z-index: 5;
 
@@ -475,16 +473,18 @@ export default {
     }
 
     &_col-2 {
-      width: 47%;
+      width: 45%;
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      justify-content: space-between;
+      gap: 0;
 
       @include respond(tablet) {
         order: 2;
         flex: 1;
         width: 100%;
         gap: 12px;
+        justify-content: flex-start;
       }
 
       @include respond(phone) {
@@ -492,15 +492,14 @@ export default {
         flex: 1;
         width: 100%;
         gap: 10px;
+        justify-content: flex-start;
       }
 
       & .product_card {
+        flex: 1;
         width: 100%;
         padding: 30px 30px;
         background: white;
-        border-radius: 12px;
-        border: 1px solid #e5e7eb;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
         color: $color-dark-blue;
         display: flex;
         align-items: flex-start;
@@ -518,13 +517,13 @@ export default {
         @include respond(tablet) {
           padding: $spacing-md;
           gap: $spacing-sm;
-          border-radius: 10px;
+          flex: 0 0 auto;
         }
 
         @include respond(phone) {
           padding: $spacing-sm;
           gap: $spacing-xs;
-          border-radius: 8px;
+          flex: 0 0 auto;
         }
 
         .step-icon {

@@ -5,8 +5,6 @@
 
     <!-- Content Layer -->
     <div class="shader-hero__content">
-      <div class="welcome-badge">✨ Willkommen bei deinem KI-Tutor</div>
-
       <h1>
         Effizienter <span class="highlight">lernen mit KI</span> – schneller
         verstehen, besser merken!
@@ -18,16 +16,28 @@
         <b>Lerne schneller, effektiver und ohne Umwege!</b>
       </p>
 
-      <div class="button-group">
-        <LinkButtonBlue class="button" to="/login"
-          >Jetzt ausprobieren <i className="fa-solid fa-arrow-right"></i
-        ></LinkButtonBlue>
-        <LinkButtonWhite class="button" to="/login"
-          >Mehr erfahren <i class="fa-solid fa-circle-info"></i
-        ></LinkButtonWhite>
-
-        <!-- <LinkButtonBlue text="Jetzt ausprobieren" to="/login" /> -->
-        <!-- <LinkButtonWhite text="Mehr erfahren" to="/produkt" /> -->
+      <div class="link-group">
+        <LinkButtonBlue to="/login">
+          Jetzt ausprobieren <i class="fa-solid fa-arrow-right"></i>
+        </LinkButtonBlue>
+        <router-link to="/produkt" class="text-link">
+          Mehr erfahren
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-search-icon lucide-search"
+          >
+            <path d="m21 21-4.34-4.34" />
+            <circle cx="11" cy="11" r="8" />
+          </svg>
+        </router-link>
       </div>
     </div>
   </section>
@@ -119,7 +129,7 @@ onMounted(() => {
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(container.clientWidth, container.clientHeight);
-  renderer.setClearColor(0xffffff, 1); // Hintergrund explizit weiß
+  renderer.setClearColor(0xffffff, 1);
   container.appendChild(renderer.domElement);
 
   const onWindowResize = () => {
@@ -168,12 +178,23 @@ onMounted(() => {
 .shader-hero {
   position: relative;
   width: 100%;
-  height: 85vh;
+  height: 60vh;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #fff;
+
+  @include respond(laptop) {
+  }
+
+  @include respond(tablet) {
+    height: 40vh;
+  }
+
+  @include respond(phone) {
+    height: 80vh;
+  }
 
   .shader-canvas {
     position: absolute;
@@ -192,78 +213,127 @@ onMounted(() => {
     color: $color-text-dark;
 
     @include respond(tablet) {
-      width: 90%;
+      width: 90vw;
     }
 
-    .welcome-badge {
-      background: #fff;
-      padding: 8px 20px;
-      border-radius: 100px;
-      font-size: $font-size-p-md;
-      font-weight: 500;
-      color: $color-text-dark;
-      margin-bottom: $spacing-md;
-      letter-spacing: $letter-spacing;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    @include respond(phone) {
+      width: 90vw;
     }
 
     h1 {
-      margin: 0 0 $spacing-md 0;
-      font-size: 60px;
+      margin: 0;
+      padding: 0;
+      font-size: 35px;
       line-height: 1.1;
-      letter-spacing: $letter-spacing;
-      font-weight: 700;
-      color: $color-text-dark;
+      color: $color-dark-blue;
+
+      @include respond(laptop) {
+        font-size: 28px;
+      }
+
+      @include respond(tablet) {
+        font-size: 32px;
+      }
+
+      @include respond(phone) {
+        font-size: 26px;
+        line-height: 1.35;
+      }
 
       .highlight {
         color: $color-light-blue;
       }
-
-      @include respond(laptop) {
-        font-size: 40px;
-      }
-
-      @include respond(phone) {
-        font-size: 32px;
-      }
     }
 
     p {
-      max-width: 700px;
-      margin: 0 auto $spacing-lg auto;
-      font-size: $font-size-p-xl;
-      line-height: $line-height;
-      letter-spacing: $letter-spacing;
+      margin: $spacing-md 0 calc($spacing-md + 10px) 0;
+      font-size: $font-size-p-desktop;
+      letter-spacing: $letter-spacing-p-desktop;
+      line-height: $line-height-p-desktop;
       color: $color-text-dark;
 
-      b {
-        font-weight: 600;
+      @include respond(laptop) {
+        margin: calc($spacing-xs + 5px) 0 calc($spacing-xs + 10px) 0;
+        font-size: $font-size-p-laptop;
+        letter-spacing: $letter-spacing-p-laptop;
+        line-height: $line-height-p-laptop;
       }
 
-      @include respond(laptop) {
-        margin-bottom: $spacing-md;
-        font-size: $font-size-p-lg;
+      @include respond(tablet) {
+        font-size: $font-size-p-tablet;
+        letter-spacing: $letter-spacing-p-tablet;
+        line-height: $line-height-p-tablet;
+        margin: $spacing-sm 0 $spacing-md 0;
       }
 
       @include respond(phone) {
-        font-size: $font-size-p-sm;
+        font-size: $font-size-p-phone;
+        letter-spacing: $letter-spacing-p-phone;
+        line-height: $line-height-p-phone;
+        margin: $spacing-sm 0 $spacing-md 0;
       }
     }
 
-    .button-group {
+    .link-group {
       display: flex;
       gap: $spacing-sm;
-      justify-content: center;
       flex-wrap: wrap;
       align-items: center;
+      justify-content: center;
 
       @include respond(phone) {
         flex-direction: column;
         width: 100%;
+        gap: $spacing-xs;
       }
-      & .button i {
-        margin: 0 0 0 5px;
-        font-size: 14px;
+
+      .text-link {
+        margin: 0 0 0 10px;
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+        font-size: $font-size-p-desktop;
+        letter-spacing: $letter-spacing-p-desktop;
+        font-weight: 600;
+        color: $color-dark-blue;
+
+        @include respond(laptop) {
+          font-size: $font-size-p-laptop;
+          letter-spacing: $letter-spacing-p-laptop;
+        }
+
+        @include respond(tablet) {
+          font-size: $font-size-p-tablet;
+          letter-spacing: $letter-spacing-p-tablet;
+        }
+
+        @include respond(phone) {
+          font-size: $font-size-p-phone;
+          letter-spacing: $letter-spacing-p-phone;
+          margin: 0;
+        }
+
+        svg {
+          width: 16px;
+          height: 16px;
+          margin: 0 0 0 10px;
+
+          @include respond(laptop) {
+            width: 15px;
+            height: 15px;
+          }
+
+          @include respond(tablet) {
+            width: 14px;
+            height: 14px;
+          }
+
+          @include respond(phone) {
+            width: 13px;
+            height: 13px;
+            margin: 0 0 0 8px;
+          }
+        }
       }
     }
   }
