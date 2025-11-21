@@ -203,7 +203,7 @@ onMounted(() => {
   }
 
   &__content {
-    width: 45vw;
+    width: 40vw;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -223,7 +223,7 @@ onMounted(() => {
     h1 {
       margin: 0;
       padding: 0;
-      font-size: 35px;
+      font-size: 50px;
       line-height: 1.1;
       color: $color-dark-blue;
 
