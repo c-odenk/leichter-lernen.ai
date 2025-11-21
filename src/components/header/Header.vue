@@ -245,7 +245,7 @@ export default {
         align-items: center;
         text-decoration: none;
         color: $color-text-dark;
-        gap: 12px;
+        gap: 10px;
 
         @include respond(phone) {
           gap: 10px;

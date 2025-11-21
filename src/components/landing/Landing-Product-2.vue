@@ -147,15 +147,15 @@ export default {
       steps: [
         {
           title: "Anmelden",
-          text: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
+          text: "Erstelle in wenigen Sekunden deinen Account und starte direkt mit deinem persönlichen Lernbereich. Alles ist darauf ausgelegt, dich ohne Umwege zur effizienten Prüfungsvorbereitung zu führen.",
         },
         {
           title: "Dokumente hochladen",
-          text: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.",
+          text: "Lade deine Unterlagen hoch und unsere KI analysiert sofort die Inhalte. Sie erkennt zentrale Themen, strukturiert das Wissen und erstellt automatisch Zusammenfassungen sowie interaktive Lernkarten.",
         },
         {
           title: "Lernen & Bestehen",
-          text: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sd diam.",
+          text: "Trainiere aktiv mit automatisch generierten Quizzen und Probeklausuren, erkenne Wissenslücken und nutze den KI-Tutor für sofortige Hilfe. So lernst du schneller, gezielter und mit deutlich weniger Stress.",
         },
       ],
     };
